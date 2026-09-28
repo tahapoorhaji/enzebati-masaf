@@ -3,15 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="app-version" content="4.0.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>سامانه مدیریت انضباطی مدرسه</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#04060c;--panel:rgba(14,18,30,.78);--border:rgba(110,150,220,.14);
-  --border-2:rgba(0,229,255,.4);--text:#e7eefc;--text-dim:#8d97b0;--text-mute:#5b6478;
-  --cyan:#00e5ff;--magenta:#ff2bd6;--green:#00ff9d;--yellow:#ffd60a;
-  --orange:#ff8c1a;--red:#ff3a5e;--purple:#a855f7;--r:14px;
-}
+:root{--bg:#04060c;--panel:rgba(14,18,30,.78);--border:rgba(110,150,220,.14);--border-2:rgba(0,229,255,.4);--text:#e7eefc;--text-dim:#8d97b0;--text-mute:#5b6478;--cyan:#00e5ff;--magenta:#ff2bd6;--green:#00ff9d;--yellow:#ffd60a;--orange:#ff8c1a;--red:#ff3a5e;--purple:#a855f7;--r:14px}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -21,13 +20,13 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 .app{display:grid;grid-template-columns:262px 1fr;min-height:100vh;position:relative;z-index:1}
 .sidebar{background:linear-gradient(180deg,rgba(10,13,22,.92),rgba(8,10,18,.86));border-left:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;backdrop-filter:blur(20px)}
 .brand{display:flex;align-items:center;gap:12px;padding:4px 6px 18px;border-bottom:1px solid var(--border)}
-.brand-mark{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:22px;color:#04060c;background:linear-gradient(135deg,var(--cyan),var(--magenta));box-shadow:0 0 20px rgba(0,229,255,.5),0 0 40px rgba(255,43,214,.25)}
+.brand-mark{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:22px;color:#04060c;background:linear-gradient(135deg,var(--cyan),var(--magenta));box-shadow:0 0 20px rgba(0,229,255,.5)}
 .brand-text{display:flex;flex-direction:column;line-height:1.25}
 .brand-text strong{font-size:15px}
 .brand-text span{font-size:11px;color:var(--text-dim)}
 .nav{display:flex;flex-direction:column;gap:4px;flex:1}
 .nav a{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;border:1px solid transparent;transition:all .18s;position:relative;cursor:pointer}
-.nav a:hover{color:var(--text);background:rgba(255,255,255,.03);border-color:var(--border)}
+.nav a:hover{color:var(--text);background:rgba(255,255,255,.03)}
 .nav a.active{color:var(--cyan);background:linear-gradient(90deg,rgba(0,229,255,.10),rgba(0,229,255,.01));border-color:rgba(0,229,255,.30)}
 .nav a.active::before{content:'';position:absolute;right:-17px;top:8px;bottom:8px;width:3px;background:var(--cyan);border-radius:3px;box-shadow:0 0 12px var(--cyan)}
 .nav-ico{width:22px;text-align:center;font-size:14px;opacity:.85}
@@ -35,8 +34,8 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 .year-badge{font-size:12px;color:var(--cyan);padding:8px 12px;border-radius:8px;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.20);text-align:center}
 .storage-badge{font-size:11px;padding:7px 12px;border-radius:8px;text-align:center;border:1px solid;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
 .storage-badge.local{color:var(--text-dim);background:rgba(255,255,255,.03);border-color:var(--border)}
-.storage-badge.file{color:var(--yellow);background:rgba(255,214,10,.08);border-color:rgba(255,214,10,.30)}
 .storage-badge.cloud{color:var(--green);background:rgba(0,255,157,.08);border-color:rgba(0,255,157,.30)}
+.storage-badge.file{color:var(--yellow);background:rgba(255,214,10,.08);border-color:rgba(255,214,10,.30)}
 .storage-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
 .hint{font-size:10.5px;color:var(--text-mute);text-align:center}
 .main{display:flex;flex-direction:column;min-width:0}
@@ -46,7 +45,7 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 .search-wrap{position:relative}
 .search-ico{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-mute);font-size:16px;pointer-events:none}
 .search-wrap input{width:290px;padding:10px 38px 10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:13px;outline:none}
-.search-wrap input:focus{border-color:var(--border-2);background:rgba(0,229,255,.03)}
+.search-wrap input:focus{border-color:var(--border-2)}
 .search-results{position:absolute;top:calc(100% + 8px);right:0;left:0;background:rgba(12,16,26,.98);border:1px solid var(--border-2);border-radius:12px;max-height:340px;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);z-index:30}
 .search-results.hidden{display:none}
 .search-item{padding:11px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -56,17 +55,17 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:all .18s;text-decoration:none}
 .btn:hover{background:rgba(255,255,255,.07)}
 .btn-primary{background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(0,229,255,.04));border-color:rgba(0,229,255,.55);color:var(--cyan)}
-.btn-primary:hover{background:linear-gradient(135deg,rgba(0,229,255,.25),rgba(0,229,255,.08))}
 .btn-danger{border-color:rgba(255,58,94,.5);color:#ff8ba3;background:rgba(255,58,94,.06)}
 .btn-ghost{background:transparent}
 .btn-sm{padding:6px 11px;font-size:11.5px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .icon-btn{background:transparent;border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
 .only-mobile{display:none}
 .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
 .card-title{font-size:13px;font-weight:600;color:var(--text-dim);letter-spacing:.4px;text-transform:uppercase;margin:0 0 16px;display:flex;align-items:center;gap:8px}
 .card-title::before{content:'';width:3px;height:14px;background:var(--cyan);border-radius:2px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative}
 .stat::after{content:'';position:absolute;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.5}
 .stat.s-mag::after{background:linear-gradient(90deg,transparent,var(--magenta),transparent)}
 .stat.s-grn::after{background:linear-gradient(90deg,transparent,var(--green),transparent)}
@@ -112,6 +111,7 @@ tbody tr:last-child td{border-bottom:none}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .modal-mask{position:fixed;inset:0;background:rgba(2,4,8,.72);backdrop-filter:blur(6px);z-index:100;display:grid;place-items:center;padding:24px}
 .modal{background:linear-gradient(160deg,rgba(14,18,30,.98),rgba(10,13,22,.98));border:1px solid var(--border-2);border-radius:18px;width:min(640px,100%);max-height:88vh;overflow:auto;box-shadow:0 30px 100px rgba(0,0,0,.7)}
+.modal.wide{width:min(900px,100%)}
 .modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .modal-head h3{margin:0;font-size:16px}
 .modal-close{background:transparent;border:none;color:var(--text-dim);font-size:22px;cursor:pointer;padding:4px 8px;border-radius:8px}
@@ -120,13 +120,13 @@ tbody tr:last-child td{border-bottom:none}
 .modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
 .field{display:flex;flex-direction:column;gap:7px}
 .field label{font-size:12px;color:var(--text-dim)}
-.field input,.field textarea{padding:10px 13px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:13.5px;outline:none}
+.field input,.field textarea,.field select{padding:10px 13px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:13.5px;outline:none}
 .field textarea{resize:vertical;min-height:70px}
-.field input:focus,.field textarea:focus{border-color:var(--border-2);background:rgba(0,229,255,.03)}
+.field input:focus,.field textarea:focus{border-color:var(--border-2)}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:6px}
 .type-tile{padding:12px 14px;border-radius:10px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.02);display:flex;justify-content:space-between;gap:10px;align-items:center;transition:all .15s;text-align:right}
-.type-tile:hover{border-color:rgba(0,229,255,.35);background:rgba(0,229,255,.04)}
+.type-tile:hover{border-color:rgba(0,229,255,.35)}
 .type-tile.selected{border-color:var(--cyan);background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(0,229,255,.02))}
 .type-tile .tt-label{font-size:12.5px;line-height:1.5}
 .type-tile .tt-pts{font-weight:800;font-size:15px;color:var(--cyan);background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);padding:4px 10px;border-radius:8px;white-space:nowrap}
@@ -144,7 +144,7 @@ tbody tr:last-child td{border-bottom:none}
 .rung .thr-big{font-size:26px;font-weight:900;text-align:center}
 .rung h4{margin:0 0 4px;font-size:14.5px}
 .rung p{margin:0;font-size:12px;color:var(--text-dim)}
-.toast{position:fixed;bottom:26px;left:26px;padding:13px 20px;border-radius:12px;background:rgba(12,16,26,.98);border:1px solid var(--border-2);color:var(--text);font-size:13px;box-shadow:0 10px 40px rgba(0,0,0,.5);transform:translateY(120%);transition:transform .35s;z-index:200;max-width:380px}
+.toast{position:fixed;bottom:26px;left:26px;padding:13px 20px;border-radius:12px;background:rgba(12,16,26,.98);border:1px solid var(--border-2);color:var(--text);font-size:13px;box-shadow:0 10px 40px rgba(0,0,0,.5);transform:translateY(120%);transition:transform .35s;z-index:200;max-width:420px}
 .toast.show{transform:translateY(0)}
 .toast.success{border-color:rgba(0,255,157,.5)}
 .toast.error{border-color:rgba(255,58,94,.6)}
@@ -163,7 +163,10 @@ tbody tr:last-child td{border-bottom:none}
 #boot .spin{width:44px;height:44px;border:3px solid rgba(0,229,255,.15);border-top-color:var(--cyan);border-radius:50%;animation:sp 1s linear infinite;margin:0 auto 14px}
 @keyframes sp{to{transform:rotate(360deg)}}
 #errBox{display:none;position:fixed;top:0;right:0;left:0;background:#ff3a5e;color:#fff;padding:14px 20px;font-family:'Vazirmatn',sans-serif;z-index:9999;font-size:13px;direction:rtl}
-@media (max-width: 900px){
+#updateBanner{display:none;position:fixed;top:0;right:0;left:0;background:linear-gradient(90deg,#00e5ff,#00ff9d);color:#04060c;padding:12px 20px;font-family:'Vazirmatn',sans-serif;z-index:9998;direction:rtl;font-weight:700;font-size:13px;display:none;align-items:center;gap:14px;justify-content:center;box-shadow:0 4px 20px rgba(0,229,255,.4)}
+#updateBanner.show{display:flex}
+#updateBanner button{background:#04060c;color:#00e5ff;border:none;padding:8px 16px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:12px}
+@media (max-width:900px){
   .app{grid-template-columns:1fr}
   .sidebar{position:fixed;right:0;top:0;bottom:0;width:260px;z-index:50;transform:translateX(100%);transition:transform .25s}
   .sidebar.open{transform:translateX(0)}
@@ -183,8 +186,11 @@ tbody tr:last-child td{border-bottom:none}
 <body>
 
 <div id="errBox"></div>
+<div id="updateBanner">
+  <span>🚀 نسخه جدید سامانه آماده است</span>
+  <button onclick="location.reload(true)">به‌روزرسانی کن</button>
+</div>
 <div id="boot"><div><div class="spin"></div><div>در حال بارگذاری…</div></div></div>
-
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
 
@@ -202,6 +208,7 @@ tbody tr:last-child td{border-bottom:none}
       <a data-route="students"><span class="nav-ico">◉</span><span>دانش‌آموزان</span></a>
       <a data-route="quick"><span class="nav-ico">✦</span><span>ثبت تخلف</span></a>
       <a data-route="stations"><span class="nav-ico">⚑</span><span>ایستگاه‌ها</span></a>
+      <a data-route="import"><span class="nav-ico">📥</span><span>ورود از اکسل</span></a>
       <a data-route="settings"><span class="nav-ico">⚙</span><span>تنظیمات</span></a>
       <a data-route="backup"><span class="nav-ico">⤓</span><span>پشتیبان‌گیری</span></a>
     </nav>
@@ -210,7 +217,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="storage-badge local" id="storageBadge" onclick="location.hash='#/settings'">
         <span class="dot"></span><span id="storageText">لوکال</span>
       </div>
-      <div class="hint">نسخه ۳.۰</div>
+      <div class="hint" id="verHint">نسخه ۴.۰.۰</div>
     </div>
   </aside>
 
@@ -235,56 +242,59 @@ tbody tr:last-child td{border-bottom:none}
 <div id="modalRoot"></div>
 
 <script>
-/* ============================================================
-   نمایش خطا به‌صورت زنده
-   ============================================================ */
+var APP_VERSION = '4.0.0';
+var BIN_NAME = 'school-discipline-main';
+var PENDING_UPDATE_KEY = 'sd-pending-update';
+
 function showError(msg){
-  const el = document.getElementById('errBox');
+  var el = document.getElementById('errBox');
+  if (!el) return;
   el.style.display = 'block';
   el.textContent = '⚠ خطا: ' + msg;
+  setTimeout(function(){ el.style.display = 'none'; }, 8000);
 }
-window.addEventListener('error', (e) => showError(e.message || String(e)));
-window.addEventListener('unhandledrejection', (e) => showError(e.reason?.message || String(e.reason)));
+window.addEventListener('error', function(e){ showError(e.message || String(e)); });
+window.addEventListener('unhandledrejection', function(e){ showError(e.reason && e.reason.message || String(e.reason)); });
 
 /* ============================================================
    تقویم شمسی
    ============================================================ */
 var Jalali = (function(){
-  const gdm = [0,31,59,90,120,151,181,212,243,273,304,334];
+  var gdm = [0,31,59,90,120,151,181,212,243,273,304,334];
   function toJalali(gy, gm, gd){
-    let jy = (gy <= 1600) ? 0 : 979;
+    var jy = (gy <= 1600) ? 0 : 979;
     gy -= (gy <= 1600) ? 621 : 1600;
-    const gy2 = (gm > 2) ? (gy + 1) : gy;
-    let days = (365*gy) + Math.floor((gy2+3)/4) - Math.floor((gy2+99)/100) + Math.floor((gy2+399)/400) - 80 + gd + gdm[gm-1];
+    var gy2 = (gm > 2) ? (gy + 1) : gy;
+    var days = (365*gy) + Math.floor((gy2+3)/4) - Math.floor((gy2+99)/100) + Math.floor((gy2+399)/400) - 80 + gd + gdm[gm-1];
     jy += 33 * Math.floor(days/12053); days %= 12053;
     jy += 4 * Math.floor(days/1461); days %= 1461;
     if (days > 365){ jy += Math.floor((days-1)/365); days = (days-1) % 365; }
-    const jm = (days < 186) ? 1 + Math.floor(days/31) : 7 + Math.floor((days-186)/30);
-    const jd = 1 + ((days < 186) ? (days%31) : ((days-186)%30));
+    var jm = (days < 186) ? 1 + Math.floor(days/31) : 7 + Math.floor((days-186)/30);
+    var jd = 1 + ((days < 186) ? (days%31) : ((days-186)%30));
     return [jy, jm, jd];
   }
-  const FA = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-  function fa(n){ return String(n).replace(/\d/g, d => FA[+d]); }
+  var FA = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  function fa(n){ return String(n).replace(/\d/g, function(d){ return FA[+d]; }); }
   function fmt(iso, opts){
     opts = opts || {};
     if (!iso) return '—';
-    const d = new Date(iso);
-    const j = toJalali(d.getFullYear(), d.getMonth()+1, d.getDate());
-    const date = fa(j[0])+'/'+fa(String(j[1]).padStart(2,'0'))+'/'+fa(String(j[2]).padStart(2,'0'));
+    var d = new Date(iso);
+    var j = toJalali(d.getFullYear(), d.getMonth()+1, d.getDate());
+    var date = fa(j[0])+'/'+fa(String(j[1]).padStart(2,'0'))+'/'+fa(String(j[2]).padStart(2,'0'));
     if (opts.dateOnly) return date;
     return date + ' — ' + fa(String(d.getHours()).padStart(2,'0')) + ':' + fa(String(d.getMinutes()).padStart(2,'0'));
   }
   function relative(iso){
     if (!iso) return '';
-    const diff = Date.now() - new Date(iso).getTime();
-    const min = Math.floor(diff/60000);
+    var diff = Date.now() - new Date(iso).getTime();
+    var min = Math.floor(diff/60000);
     if (min < 1) return 'همین حالا';
     if (min < 60) return fa(min) + ' دقیقه پیش';
-    const h = Math.floor(min/60);
+    var h = Math.floor(min/60);
     if (h < 24) return fa(h) + ' ساعت پیش';
-    const d = Math.floor(h/24);
+    var d = Math.floor(h/24);
     if (d < 30) return fa(d) + ' روز پیش';
-    const mo = Math.floor(d/30);
+    var mo = Math.floor(d/30);
     if (mo < 12) return fa(mo) + ' ماه پیش';
     return fa(Math.floor(mo/12)) + ' سال پیش';
   }
@@ -297,7 +307,7 @@ var fa = Jalali.fa, fmt = Jalali.fmt, relative = Jalali.relative;
    ============================================================ */
 var DEFAULT_TYPES = [
   { id:'t01', label:'عدم رعایت آراستگی ظاهری (مو)', points:1 },
-  { id:'t02', label:'تأخیر در ورود به کلاس (بعد از اتمام زنگ تفریح و نماز)', points:1 },
+  { id:'t02', label:'تأخیر در ورود به کلاس (بعد از زنگ تفریح و نماز)', points:1 },
   { id:'t03', label:'تأخیر در ورود به مدرسه (مراسم صبحگاه)', points:2 },
   { id:'t04', label:'اخراج از کلاس توسط دبیر به دلیل اخلال در نظم', points:3 },
   { id:'t05', label:'عدم تحویل تلفن همراه', points:4 },
@@ -308,11 +318,11 @@ var DEFAULT_TYPES = [
   { id:'t10', label:'نزاع، درگیری فیزیکی و ایجاد تنش در مدرسه', points:15 }
 ];
 var DEFAULT_STATIONS = [
-  { id:'s1', threshold:15,  name:'ایستگاه اول — هشدار', sports:'محرومیت از زنگ ورزش', actions:['کسر ۰.۵ نمره انضباط','ایستادن رو به دیوار در زنگ تفریح','رونویسی با خودکار از آیین‌نامه'] },
+  { id:'s1', threshold:15,  name:'ایستگاه اول — هشدار', sports:'محرومیت از زنگ ورزش', actions:['کسر ۰.۵ نمره انضباط','ایستادن رو به دیوار','رونویسی از آیین‌نامه'] },
   { id:'s2', threshold:30,  name:'ایستگاه دوم — احضار ولی', sports:'محرومیت از اولین اردوی پیش‌رو', actions:['احضار قطعی اولیا','کسر ۱ نمره انضباط','اخذ تعهد کتبی','رونویسی'] },
-  { id:'s3', threshold:45,  name:'ایستگاه سوم — بایکوت', sports:'محرومیت کامل از ورزش تا یک ماه', actions:['بایکوت محیطی (۱ روز کامل در حیاط/راهرو)','رونویسی دو مرتبه'] },
-  { id:'s4', threshold:65,  name:'ایستگاه چهارم — ضمانت اول', sports:'لغو تمامی امتیازات تفریحی و ورزشی به مدت ۲ ماه', actions:['وصول چک/سفته ضمانت اول','کسر ۱.۵ نمره انضباط','رونویسی'] },
-  { id:'s5', threshold:80,  name:'ایستگاه پنجم — ضمانت دوم', sports:'محرومیت از تمامی اردوهای سال تحصیلی', actions:['وصول چک/سفته ضمانت دوم','۲ روز بایکوت','رونویسی','عدم احراز صلاحیت ثبت‌نام سال آینده (دوازدهم)','محرومیت از باشگاه فارغ‌التحصیلان'] },
+  { id:'s3', threshold:45,  name:'ایستگاه سوم — بایکوت', sports:'محرومیت کامل از ورزش تا یک ماه', actions:['بایکوت محیطی ۱ روز کامل','رونویسی دو مرتبه'] },
+  { id:'s4', threshold:65,  name:'ایستگاه چهارم — ضمانت اول', sports:'لغو امتیازات تفریحی/ورزشی به مدت ۲ ماه', actions:['وصول چک ضمانت اول','کسر ۱.۵ نمره انضباط','رونویسی'] },
+  { id:'s5', threshold:80,  name:'ایستگاه پنجم — ضمانت دوم', sports:'محرومیت از تمامی اردوهای سال', actions:['وصول چک ضمانت دوم','۲ روز بایکوت','رونویسی','عدم احراز صلاحیت ثبت‌نام سال آینده','محرومیت از باشگاه فارغ‌التحصیلان'] },
   { id:'s6', threshold:100, name:'ایستگاه ششم — کمیسیون', sports:'تحویل پرونده به کمیسیون انضباطی', actions:['وصول چک ضمانت سوم','تحویل پرونده به کمیسیون'] }
 ];
 function defaultDB(){
@@ -321,36 +331,22 @@ function defaultDB(){
     students: [], violations: [],
     violationTypes: JSON.parse(JSON.stringify(DEFAULT_TYPES)),
     stations: JSON.parse(JSON.stringify(DEFAULT_STATIONS)),
-    settings: {
-      schoolName: 'دبیرستان نمونه',
-      academicYear: '۱۴۰۴-۱۴۰۵',
-      yearStartISO: new Date(now.getFullYear(), 2, 21).toISOString(),
-      resetMonths: 2
-    },
-    meta: { version:3, lastModified: new Date().toISOString(), lastModifiedBy:'', pendingSync:false }
+    settings: { schoolName:'دبیرستان نمونه', academicYear:'۱۴۰۴-۱۴۰۵', yearStartISO: new Date(now.getFullYear(),2,21).toISOString(), resetMonths:2 },
+    meta: { version:4, lastModified: new Date().toISOString(), lastModifiedBy:'', pendingSync:false }
   };
 }
 
 /* ============================================================
    ذخیره‌سازی
    ============================================================ */
-var STORAGE_KEY = 'sd-v3';
-var BACKUP_KEY  = 'sd-backups-v3';
-var CFG_KEY     = 'sd-cfg-v3';
-var MAX_BACKUPS = 5;
-
+var STORAGE_KEY = 'sd-v3', BACKUP_KEY = 'sd-backups-v3', CFG_KEY = 'sd-cfg-v3', MAX_BACKUPS = 5;
 var CFG = {};
 try { CFG = JSON.parse(localStorage.getItem(CFG_KEY) || '{}') || {}; } catch(e){ CFG = {}; }
 function saveCFG(){ try { localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); } catch(e){} }
 
-var DB = null;
-var fileHandle = null;
-var cloudOnline = false;
-var pollTimer = null;
-var setupMode = null;
+var DB = null, fileHandle = null, cloudOnline = false, pollTimer = null, setupMode = null;
 var quickSelection = { studentId:null, typeId:null };
 
-/* IndexedDB ساده */
 var IDB = {
   _db: null,
   open: function(){
@@ -382,17 +378,18 @@ function normalizeDB(db){
   db.violationTypes = Array.isArray(db.violationTypes) && db.violationTypes.length ? db.violationTypes : JSON.parse(JSON.stringify(DEFAULT_TYPES));
   db.stations = Array.isArray(db.stations) && db.stations.length ? db.stations : JSON.parse(JSON.stringify(DEFAULT_STATIONS));
   db.settings = db.settings || defaultDB().settings;
-  db.meta = db.meta || { version:3 };
+  db.meta = db.meta || { version:4 };
   return db;
 }
 
-function saveLocalBackup(db){
+function saveLocalBackup(db, tag){
   try {
     var backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]');
     var last = backups[0];
-    if (!last || (last.meta && last.meta.lastModified) !== (db.meta && db.meta.lastModified)){
+    if (!last || (last.meta && last.meta.lastModified) !== (db.meta && db.meta.lastModified) || tag){
       var clone = JSON.parse(JSON.stringify(db));
       clone._backedUpAt = new Date().toISOString();
+      if (tag) clone._tag = tag;
       backups.unshift(clone);
       while (backups.length > MAX_BACKUPS) backups.pop();
       localStorage.setItem(BACKUP_KEY, JSON.stringify(backups));
@@ -414,36 +411,25 @@ function loadDB(){
         if (local && local.meta && local.meta.pendingSync){ DB = normalizeDB(local); }
         else { DB = remote; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){} }
       })
-      .catch(function(e){
+      .catch(function(){
         cloudOnline = false;
         try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
         catch(x){ DB = defaultDB(); }
       });
   } else if (mode === 'file' && fileHandle){
     promise = fileHandle.queryPermission({ mode:'readwrite' })
-      .then(function(p){
-        if (p === 'granted') return;
-        return fileHandle.requestPermission({ mode:'readwrite' }).then(function(p2){ if (p2 !== 'granted') throw new Error('اجازه داده نشد'); });
-      })
+      .then(function(p){ if (p === 'granted') return; return fileHandle.requestPermission({ mode:'readwrite' }).then(function(p2){ if (p2 !== 'granted') throw new Error('اجازه داده نشد'); }); })
       .then(function(){ return fileHandle.getFile(); })
       .then(function(f){ return f.text(); })
-      .then(function(text){
-        if (text && text.trim()) DB = normalizeDB(JSON.parse(text));
-        else DB = defaultDB();
-      })
-      .catch(function(e){
-        try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
-        catch(x){ DB = defaultDB(); }
-      });
+      .then(function(text){ DB = (text && text.trim()) ? normalizeDB(JSON.parse(text)) : defaultDB(); })
+      .catch(function(){ try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); } catch(x){ DB = defaultDB(); } });
   } else {
     promise = Promise.resolve().then(function(){
       try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
       catch(e){ DB = defaultDB(); }
     });
   }
-  return promise.then(function(){
-    if (!DB) DB = defaultDB();
-  });
+  return promise.then(function(){ if (!DB) DB = defaultDB(); });
 }
 
 function pushToCloud(){
@@ -468,7 +454,7 @@ function saveDB(){
   if (mode === 'cloud'){
     return pushToCloud().then(function(ok){
       DB.meta.pendingSync = !ok;
-      if (!ok) toast('اینترنت قطع — داده محلی ذخیره شد', 'info');
+      if (!ok) toast('اینترنت قطع — داده محلی ذخیره شد، بعداً همگام می‌شود', 'info');
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
       updateStorageBadge();
     });
@@ -484,116 +470,85 @@ function saveDB(){
   return Promise.resolve();
 }
 
+/* ============================================================
+   همگام‌سازی ابری سراسری
+   ============================================================ */
 function startPolling(){
   if (pollTimer) clearInterval(pollTimer);
   if (activeMode() !== 'cloud') return;
-  pollTimer = setInterval(function(){
-    if (DB && DB.meta && DB.meta.pendingSync){
-      pushToCloud().then(function(ok){
-        if (ok){ DB.meta.pendingSync = false; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){} toast('همگام شد','success'); }
-        updateStorageBadge();
-      });
-      return;
-    }
-    fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId+'/latest', { headers:{ 'X-Master-Key': CFG.cloud.apiKey } })
-      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
-      .then(function(j){
-        cloudOnline = true;
-        var remote = normalizeDB(j.record || j);
-        if (remote.meta && DB.meta && remote.meta.lastModified !== DB.meta.lastModified){
-          DB = remote;
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
+  pollTimer = setInterval(pullFromCloud, 10000);
+}
+
+function pullFromCloud(silent){
+  if (activeMode() !== 'cloud') return Promise.resolve();
+  return fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId+'/latest', { headers:{ 'X-Master-Key': CFG.cloud.apiKey } })
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(function(j){
+      cloudOnline = true;
+      var remote = normalizeDB(j.record || j);
+      if (remote.meta && DB.meta && remote.meta.lastModified !== DB.meta.lastModified){
+        DB = remote;
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
+        if (!silent){
           render();
-          toast('داده توسط کاربر دیگری به‌روز شد','info');
+          toast('داده‌ها از دستگاه دیگری به‌روز شد', 'info');
         }
-        updateStorageBadge();
-      })
-      .catch(function(){ cloudOnline = false; updateStorageBadge(); });
-  }, 15000);
+      }
+      updateStorageBadge();
+    })
+    .catch(function(){ cloudOnline = false; updateStorageBadge(); });
 }
 
-function updateStorageBadge(){
-  var badge = document.getElementById('storageBadge');
-  var text  = document.getElementById('storageText');
-  if (!badge) return;
-  var m = activeMode();
-  var pending = DB && DB.meta && DB.meta.pendingSync;
-  badge.className = 'storage-badge ' + m;
-  var label;
-  if (m === 'cloud') label = pending ? 'ابری — در صف' : (cloudOnline ? 'ابری — متصل' : 'ابری — قطع (محلی)');
-  else if (m === 'file') label = pending ? 'فایل — خطا' : 'فایل روی دیسک';
-  else label = 'لوکال (مرورگر)';
-  text.textContent = label;
-}
+// همگام‌سازی وقتی کاربر به تب برمی‌گردد
+document.addEventListener('visibilitychange', function(){
+  if (!document.hidden) pullFromCloud(true);
+});
+window.addEventListener('focus', function(){ pullFromCloud(true); });
 
-/* اتصال به فایل */
-function connectFile(){
-  if (!window.showSaveFilePicker){
-    toast('مرورگر پشتیبانی نمی‌کند — از Chrome یا Edge استفاده کن','error');
-    return Promise.resolve();
-  }
-  var pick;
-  if (window.showOpenFilePicker){
-    pick = window.showOpenFilePicker({
-      types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }],
-      multiple:false
-    }).then(function(arr){ return arr[0]; })
-    .catch(function(e){
-      if (e.name === 'AbortError') throw e;
-      return window.showSaveFilePicker({
-        suggestedName:'discipline-data.json',
-        types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }]
-      });
+/* ============================================================
+   پیدا کردن خودکار Bin
+   ============================================================ */
+function listBins(apiKey){
+  return fetch('https://api.jsonbin.io/v3/b', { headers:{ 'X-Master-Key': apiKey } })
+    .then(function(r){ if (!r.ok) throw new Error('کلید نامعتبر (HTTP '+r.status+')'); return r.json(); })
+    .then(function(data){
+      var arr = Array.isArray(data) ? data : (data.bins || data.records || data.data || []);
+      return arr.map(function(b){
+        var m = b.metadata || b;
+        return { id: m.id || b.id, name: m.name || b.name || '', createdAt: m.createdAt || b.createdAt || '' };
+      }).filter(function(x){ return x.id; });
     });
-  } else {
-    pick = window.showSaveFilePicker({ suggestedName:'discipline-data.json' });
-  }
-  return pick.then(function(h){
-    fileHandle = h;
-    return IDB.set('fileHandle', fileHandle);
-  }).then(function(){
-    CFG.mode = 'file'; saveCFG();
-    return loadDB();
-  }).then(function(){
-    return saveDB();
-  }).then(function(){
-    setupMode = null;
-    toast('فایل متصل شد','success');
-    render();
-  }).catch(function(e){
-    if (e.name !== 'AbortError') toast('خطا: '+e.message,'error');
+}
+
+function findSharedBin(apiKey){
+  return listBins(apiKey).then(function(bins){
+    var matches = bins.filter(function(b){ return b.name === BIN_NAME; });
+    if (!matches.length) return null;
+    matches.sort(function(a,b){ return new Date(b.createdAt||0) - new Date(a.createdAt||0); });
+    return matches[0];
   });
 }
 
-function disconnectFile(){
-  fileHandle = null;
-  return IDB.del('fileHandle').then(function(){
-    if (CFG.mode === 'file'){ delete CFG.mode; saveCFG(); }
-    toast('اتصال فایل قطع شد','success');
-    render();
-  });
-}
-
-function tryRestoreFileHandle(){
-  return IDB.get('fileHandle').then(function(h){ if (h) fileHandle = h; }).catch(function(){});
-}
-
-/* JSONBin */
-function testCloud(apiKey, binId){
-  return fetch('https://api.jsonbin.io/v3/b/'+binId+'/latest', { headers:{ 'X-Master-Key': apiKey } })
-    .then(function(r){ if (!r.ok) throw new Error('کلید یا Bin نامعتبر (HTTP '+r.status+')'); return true; });
-}
-function createBin(apiKey){
+function createSharedBin(apiKey){
   return fetch('https://api.jsonbin.io/v3/b', {
     method:'POST',
-    headers:{ 'Content-Type':'application/json', 'X-Master-Key':apiKey, 'X-Bin-Name':'school-discipline', 'X-Bin-Private':'true' },
+    headers:{ 'Content-Type':'application/json', 'X-Master-Key':apiKey, 'X-Bin-Name':BIN_NAME, 'X-Bin-Private':'true' },
     body: JSON.stringify(DB || defaultDB())
-  }).then(function(r){ if(!r.ok) throw new Error('خطا در ساخت Bin (HTTP '+r.status+')'); return r.json(); })
+  }).then(function(r){ if (!r.ok) throw new Error('خطا در ساخت (HTTP '+r.status+')'); return r.json(); })
     .then(function(j){ return j.metadata.id; });
 }
-function connectCloud(apiKey, binId){
-  return testCloud(apiKey, binId).then(function(){
-    CFG.cloud = { apiKey:apiKey, binId:binId };
+
+// اتصال خودکار: فقط با کلید
+function connectCloudAuto(apiKey){
+  return listBins(apiKey).then(function(bins){
+    var matches = bins.filter(function(b){ return b.name === BIN_NAME; });
+    if (matches.length > 0){
+      matches.sort(function(a,b){ return new Date(b.createdAt||0) - new Date(a.createdAt||0); });
+      return { id: matches[0].id, created: false };
+    }
+    return createSharedBin(apiKey).then(function(id){ return { id: id, created: true }; });
+  }).then(function(res){
+    CFG.cloud = { apiKey:apiKey, binId:res.id, binName:BIN_NAME };
     CFG.mode = 'cloud';
     saveCFG();
     return loadDB();
@@ -602,18 +557,52 @@ function connectCloud(apiKey, binId){
   }).then(function(){
     setupMode = null;
     startPolling();
-    toast('اتصال ابری برقرار شد','success');
+    toast('☁️ اتصال ابری برقرار شد — داده‌ها روی همه دستگاه‌ها همگام می‌شوند', 'success');
     render();
   });
 }
+
 function disconnectCloud(){
   delete CFG.cloud;
   if (CFG.mode === 'cloud') CFG.mode = 'local';
   saveCFG();
   if (pollTimer) clearInterval(pollTimer);
   cloudOnline = false;
-  toast('اتصال ابری قطع شد','success');
+  toast('اتصال ابری قطع شد', 'success');
   render();
+}
+
+/* ============================================================
+   فایل لوکال
+   ============================================================ */
+function connectFile(){
+  if (!window.showSaveFilePicker){ toast('مرورگر پشتیبانی نمی‌کند — از Chrome یا Edge استفاده کن','error'); return Promise.resolve(); }
+  var pick;
+  if (window.showOpenFilePicker){
+    pick = window.showOpenFilePicker({ types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }], multiple:false })
+      .then(function(arr){ return arr[0]; })
+      .catch(function(e){
+        if (e.name === 'AbortError') throw e;
+        return window.showSaveFilePicker({ suggestedName:'discipline-data.json', types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }] });
+      });
+  } else {
+    pick = window.showSaveFilePicker({ suggestedName:'discipline-data.json' });
+  }
+  return pick.then(function(h){ fileHandle = h; return IDB.set('fileHandle', fileHandle); })
+    .then(function(){ CFG.mode = 'file'; saveCFG(); return loadDB(); })
+    .then(function(){ return saveDB(); })
+    .then(function(){ setupMode = null; toast('فایل متصل شد','success'); render(); })
+    .catch(function(e){ if (e.name !== 'AbortError') toast('خطا: '+e.message,'error'); });
+}
+function disconnectFile(){
+  fileHandle = null;
+  return IDB.del('fileHandle').then(function(){
+    if (CFG.mode === 'file'){ delete CFG.mode; saveCFG(); }
+    toast('اتصال فایل قطع شد','success'); render();
+  });
+}
+function tryRestoreFileHandle(){
+  return IDB.get('fileHandle').then(function(h){ if (h) fileHandle = h; }).catch(function(){});
 }
 
 /* ============================================================
@@ -625,13 +614,12 @@ function applyAutoReset(){
   var resetMs = months * 30 * 24 * 60 * 60 * 1000;
   var now = Date.now();
   var groups = {};
-  for (var i=0; i<DB.violations.length; i++){
-    var v = DB.violations[i];
-    if (v.archived) continue;
+  DB.violations.forEach(function(v){
+    if (v.archived) return;
     var key = v.studentId + '|' + v.typeId;
     if (!groups[key]) groups[key] = [];
     groups[key].push(v);
-  }
+  });
   var changed = false;
   for (var k in groups){
     var list = groups[k];
@@ -644,21 +632,16 @@ function applyAutoReset(){
   return changed;
 }
 function yearStartMs(){ return DB.settings.yearStartISO ? new Date(DB.settings.yearStartISO).getTime() : 0; }
-function activeViolationsOf(studentId){
+function activeViolationsOf(sid){
   var ys = yearStartMs();
-  return DB.violations.filter(function(v){
-    return v.studentId === studentId && !v.archived && new Date(v.occurredAt).getTime() >= ys;
-  }).sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); });
+  return DB.violations.filter(function(v){ return v.studentId === sid && !v.archived && new Date(v.occurredAt).getTime() >= ys; })
+    .sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); });
 }
-function totalPointsOf(studentId){
-  return activeViolationsOf(studentId).reduce(function(s,v){ return s + v.pointsApplied; }, 0);
+function totalPointsOf(sid){ return activeViolationsOf(sid).reduce(function(s,v){ return s + v.pointsApplied; }, 0); }
+function typeCountsOf(sid){
+  var m = {}; activeViolationsOf(sid).forEach(function(v){ m[v.typeId] = (m[v.typeId]||0)+1; }); return m;
 }
-function typeCountsOf(studentId){
-  var m = {};
-  activeViolationsOf(studentId).forEach(function(v){ m[v.typeId] = (m[v.typeId] || 0) + 1; });
-  return m;
-}
-function countPriorOccurrences(studentId, typeId){ return typeCountsOf(studentId)[typeId] || 0; }
+function countPriorOccurrences(sid, tid){ return typeCountsOf(sid)[tid] || 0; }
 function multiplierFor(prior){
   var k = prior + 1;
   if (k <= 2) return 1;
@@ -667,34 +650,14 @@ function multiplierFor(prior){
   return 4;
 }
 function currentStation(points){
-  var cur = null;
-  DB.stations.forEach(function(s){ if (points >= s.threshold) cur = s; });
-  return cur;
+  var cur = null; DB.stations.forEach(function(s){ if (points >= s.threshold) cur = s; }); return cur;
 }
 function nextStation(points){
-  for (var i=0; i<DB.stations.length; i++) if (points < DB.stations[i].threshold) return DB.stations[i];
+  for (var i=0;i<DB.stations.length;i++) if (points < DB.stations[i].threshold) return DB.stations[i];
   return null;
 }
-function scoreColor(points){
-  if (points === 0) return 'var(--green)';
-  if (points < 15) return 'var(--cyan)';
-  if (points < 30) return 'var(--yellow)';
-  if (points < 45) return 'var(--orange)';
-  if (points < 65) return 'var(--red)';
-  if (points < 80) return '#ff1f4d';
-  if (points < 100) return 'var(--magenta)';
-  return 'var(--purple)';
-}
-function scorePillClass(points){
-  if (points === 0) return 'pill-green';
-  if (points < 15) return 'pill-cyan';
-  if (points < 30) return 'pill-yellow';
-  if (points < 45) return 'pill-orange';
-  if (points < 65) return 'pill-red';
-  if (points < 80) return 'pill-red';
-  if (points < 100) return 'pill-mag';
-  return 'pill-purple';
-}
+function scoreColor(p){ if (p===0) return 'var(--green)'; if (p<15) return 'var(--cyan)'; if (p<30) return 'var(--yellow)'; if (p<45) return 'var(--orange)'; if (p<65) return 'var(--red)'; if (p<80) return '#ff1f4d'; if (p<100) return 'var(--magenta)'; return 'var(--purple)'; }
+function scorePillClass(p){ if (p===0) return 'pill-green'; if (p<15) return 'pill-cyan'; if (p<30) return 'pill-yellow'; if (p<45) return 'pill-orange'; if (p<65) return 'pill-red'; if (p<80) return 'pill-red'; if (p<100) return 'pill-mag'; return 'pill-purple'; }
 
 /* ============================================================
    ابزار
@@ -704,15 +667,14 @@ function $$(s, r){ return Array.prototype.slice.call((r||document).querySelector
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function fullName(s){ return [s.firstName, s.lastName].filter(Boolean).join(' ') || 'بی‌نام'; }
 function uid(p){ return p + '_' + Math.random().toString(36).slice(2,10); }
-
 function toast(msg, kind){
   var el = document.getElementById('toast');
+  if (!el) return;
   el.className = 'toast show ' + (kind==='success'?'success':kind==='error'?'error':'');
   el.textContent = msg;
   clearTimeout(toast._t);
-  toast._t = setTimeout(function(){ el.classList.remove('show'); }, 3400);
+  toast._t = setTimeout(function(){ el.classList.remove('show'); }, 3800);
 }
-
 function openModal(opts){
   var root = document.getElementById('modalRoot');
   root.innerHTML = '<div class="modal-mask" id="modalMask"><div class="modal '+(opts.wide?'wide':'')+'"><div class="modal-head"><h3>'+esc(opts.title)+'</h3><button class="modal-close" id="modalClose">✕</button></div><div class="modal-body">'+opts.body+'</div>'+(opts.footer?'<div class="modal-foot">'+opts.footer+'</div>':'')+'</div></div>';
@@ -726,19 +688,16 @@ function openModal(opts){
    Router
    ============================================================ */
 function getRoute(){
-  var h = location.hash.replace(/^#\/?/, '');
-  var parts = h.split('/');
-  return { route: parts[0] || 'dashboard', param: parts[1] };
+  var h = location.hash.replace(/^#\/?/, ''); var p = h.split('/');
+  return { route: p[0] || 'dashboard', param: p[1] };
 }
-function navigate(route, param){
-  location.hash = param ? '#/'+route+'/'+param : '#/'+route;
-}
+function navigate(r, p){ location.hash = p ? '#/'+r+'/'+p : '#/'+r; }
 function render(){
-  if (!DB){ document.getElementById('view').innerHTML = '<div class="empty">در حال بارگذاری…</div>'; return; }
+  if (!DB){ var v = document.getElementById('view'); if (v) v.innerHTML = '<div class="empty">در حال بارگذاری…</div>'; return; }
   if (applyAutoReset()) saveDB();
   var r = getRoute();
   $$('.nav a').forEach(function(a){ a.classList.toggle('active', a.dataset.route === r.route); });
-  var titles = { dashboard:'داشبورد', students:'دانش‌آموزان', student:'پرونده دانش‌آموز', quick:'ثبت تخلف', stations:'ایستگاه‌های تنبیهی', settings:'تنظیمات', backup:'پشتیبان‌گیری' };
+  var titles = { dashboard:'داشبورد', students:'دانش‌آموزان', student:'پرونده دانش‌آموز', quick:'ثبت تخلف', stations:'ایستگاه‌های تنبیهی', import:'ورود گروهی از اکسل', settings:'تنظیمات', backup:'پشتیبان‌گیری' };
   document.getElementById('pageTitle').textContent = titles[r.route] || 'داشبورد';
   document.getElementById('brandSchool').textContent = DB.settings.schoolName || 'دبیرستان';
   document.getElementById('yearBadge').textContent = 'سال تحصیلی ' + (DB.settings.academicYear || '—');
@@ -747,8 +706,7 @@ function render(){
 
   if (r.route === 'student' && r.param) return renderStudentDetail(r.param);
   if (r.route === 'quick' && r.param){ quickSelection.studentId = r.param; return renderQuick(); }
-
-  var views = { dashboard:renderDashboard, students:renderStudents, quick:renderQuick, stations:renderStations, settings:renderSettings, backup:renderBackup };
+  var views = { dashboard:renderDashboard, students:renderStudents, quick:renderQuick, stations:renderStations, import:renderImport, settings:renderSettings, backup:renderBackup };
   (views[r.route] || renderDashboard)();
 }
 
@@ -760,11 +718,7 @@ function renderDashboard(){
   var activeVios = DB.violations.filter(function(v){ return !v.archived; }).length;
   var inDanger = DB.students.filter(function(s){ return totalPointsOf(s.id) >= 15; }).length;
   var topScore = DB.students.reduce(function(m,s){ return Math.max(m, totalPointsOf(s.id)); }, 0);
-  var dist = DB.stations.map(function(st){
-    return Object.assign({}, st, {
-      count: DB.students.filter(function(s){ var c = currentStation(totalPointsOf(s.id)); return c && c.id === st.id; }).length
-    });
-  });
+  var dist = DB.stations.map(function(st){ return Object.assign({}, st, { count: DB.students.filter(function(s){ var c = currentStation(totalPointsOf(s.id)); return c && c.id === st.id; }).length }); });
   var recent = DB.violations.slice().sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); }).slice(0,8);
 
   var html = '<div class="stats">'
@@ -779,8 +733,7 @@ function renderDashboard(){
     html += '<div class="rung '+(st.count?'active':'')+'">'
       + '<div class="thr-big" style="color:'+scoreColor(st.threshold)+'">−'+fa(st.threshold)+'</div>'
       + '<div><h4>'+esc(st.name)+'</h4><p>'+esc(st.sports)+'</p></div>'
-      + '<div class="pill '+(st.count?'pill-cyan':'pill-dim')+'">'+fa(st.count)+' نفر</div>'
-      + '</div>';
+      + '<div class="pill '+(st.count?'pill-cyan':'pill-dim')+'">'+fa(st.count)+' نفر</div></div>';
   });
   html += '</div></div>';
 
@@ -801,7 +754,6 @@ function renderDashboard(){
     html += '</div>';
   } else html += '<div class="empty"><div class="e-ico">◌</div><div class="e-txt">هنوز تخلفی ثبت نشده</div></div>';
   html += '</div></div>';
-
   document.getElementById('view').innerHTML = html;
 }
 
@@ -810,39 +762,36 @@ function renderDashboard(){
    ============================================================ */
 function renderStudents(){
   var list = DB.students.slice().sort(function(a,b){ return totalPointsOf(b.id) - totalPointsOf(a.id); });
-  var grades = [];
-  DB.students.forEach(function(s){ if (s.grade && grades.indexOf(s.grade) < 0) grades.push(s.grade); });
-  grades.sort();
+  var grades = []; DB.students.forEach(function(s){ if (s.grade && grades.indexOf(s.grade) < 0) grades.push(s.grade); }); grades.sort();
 
   var html = '<div class="card" style="margin-bottom:20px"><div class="row">'
     + '<input id="filterInput" placeholder="جستجو…" style="flex:1;min-width:200px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">'
-    + '<select id="gradeFilter" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">'
-    + '<option value="">همه پایه‌ها</option>'
-    + grades.map(function(g){ return '<option>'+esc(g)+'</option>'; }).join('')
-    + '</select></div></div>';
+    + '<select id="gradeFilter" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none"><option value="">همه پایه‌ها</option>'
+    + grades.map(function(g){ return '<option>'+esc(g)+'</option>'; }).join('') + '</select>'
+    + '<button class="btn" id="goImportBtn" style="margin-right:auto">📥 ورود از اکسل</button></div></div>';
 
   if (list.length){
-    html += '<div class="table-wrap"><table><thead><tr><th>نام</th><th>کد ملی</th><th>پایه/کلاس</th><th>امتیاز</th><th>ایستگاه</th><th>آخرین تخلف</th><th></th></tr></thead><tbody id="studentsTbody"></tbody></table></div>';
-  } else {
-    html += '<div class="empty"><div class="e-ico">◉</div><div class="e-txt">هنوز دانش‌آموزی ثبت نشده</div></div>';
-  }
+    html += '<div class="table-wrap"><table><thead><tr><th>نام</th><th>کد ملی</th><th>کلاس</th><th>امتیاز</th><th>ایستگاه</th><th>آخرین تخلف</th><th></th></tr></thead><tbody id="studentsTbody"></tbody></table></div>';
+  } else html += '<div class="empty"><div class="e-ico">◉</div><div class="e-txt">هنوز دانش‌آموزی ثبت نشده — از «ورود از اکسل» استفاده کن</div></div>';
   document.getElementById('view').innerHTML = html;
 
   var tbody = document.getElementById('studentsTbody');
-  if (!tbody) return;
-  function apply(){
-    var q = document.getElementById('filterInput').value.trim().toLowerCase();
-    var g = document.getElementById('gradeFilter').value;
-    var filtered = list.filter(function(s){
-      if (g && s.grade !== g) return false;
-      if (!q) return true;
-      return (fullName(s)+' '+s.nationalId+' '+(s.className||'')).toLowerCase().indexOf(q) >= 0;
-    });
-    tbody.innerHTML = filtered.map(studentRow).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-mute);padding:30px">نتیجه‌ای یافت نشد</td></tr>';
+  if (tbody){
+    var apply = function(){
+      var q = document.getElementById('filterInput').value.trim().toLowerCase();
+      var g = document.getElementById('gradeFilter').value;
+      var filtered = list.filter(function(s){
+        if (g && s.grade !== g) return false;
+        if (!q) return true;
+        return (fullName(s)+' '+s.nationalId+' '+(s.className||'')).toLowerCase().indexOf(q) >= 0;
+      });
+      tbody.innerHTML = filtered.map(studentRow).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-mute);padding:30px">نتیجه‌ای یافت نشد</td></tr>';
+    };
+    document.getElementById('filterInput').addEventListener('input', apply);
+    document.getElementById('gradeFilter').addEventListener('change', apply);
+    apply();
   }
-  document.getElementById('filterInput').addEventListener('input', apply);
-  document.getElementById('gradeFilter').addEventListener('change', apply);
-  apply();
+  if (document.getElementById('goImportBtn')) document.getElementById('goImportBtn').onclick = function(){ navigate('import'); };
 }
 function studentRow(s){
   var pts = totalPointsOf(s.id);
@@ -852,12 +801,11 @@ function studentRow(s){
   return '<tr>'
     + '<td><span class="row-name" onclick="navigate(\'student\',\''+s.id+'\')">'+esc(fullName(s))+'</span></td>'
     + '<td class="mono">'+esc(s.nationalId || '—')+'</td>'
-    + '<td>'+esc(s.grade||'—')+(s.className?' / '+esc(s.className):'')+'</td>'
+    + '<td>'+esc(s.className||'—')+(s.classType?' / '+esc(s.classType):'')+'</td>'
     + '<td><span class="pill '+scorePillClass(pts)+'" style="font-size:13px;font-weight:800;padding:5px 12px">−'+fa(pts)+'</span></td>'
     + '<td>'+(cur ? '<span class="pill pill-mag">'+esc(cur.name.split('—')[0].trim())+'</span>' : '<span class="pill pill-green">پاک</span>')+'</td>'
     + '<td style="color:var(--text-dim);font-size:12px">'+(last ? relative(last.occurredAt) : '—')+'</td>'
-    + '<td><button class="btn btn-sm" onclick="navigate(\'student\',\''+s.id+'\')">مشاهده</button></td>'
-    + '</tr>';
+    + '<td><button class="btn btn-sm" onclick="navigate(\'student\',\''+s.id+'\')">مشاهده</button></td></tr>';
 }
 
 /* ============================================================
@@ -879,19 +827,27 @@ function renderStudentDetail(id){
     + '<button class="btn btn-ghost btn-sm" onclick="navigate(\'students\')">→ بازگشت</button>'
     + '<button class="btn btn-sm" id="editStudentBtn">✎ ویرایش</button>'
     + '<button class="btn btn-primary btn-sm" id="quickForStudentBtn">✦ ثبت تخلف</button>'
-    + '<button class="btn btn-danger btn-sm" id="deleteStudentBtn" style="margin-right:auto">حذف</button>'
-    + '</div>';
+    + '<button class="btn btn-danger btn-sm" id="deleteStudentBtn" style="margin-right:auto">حذف</button></div>';
+
+  var meta = [];
+  if (s.studentNumber) meta.push('شماره: '+esc(s.studentNumber));
+  if (s.nationalId) meta.push('کد ملی: '+esc(s.nationalId));
+  if (s.grade) meta.push('پایه: '+esc(s.grade));
+  if (s.className) meta.push('کلاس: '+esc(s.className));
+  if (s.classType) meta.push(esc(s.classType));
+
+  var contacts = [];
+  if (s.parentPhone) contacts.push('<span>📞 پدر: '+esc(s.parentPhone)+'</span>');
+  if (s.motherPhone) contacts.push('<span>📞 مادر: '+esc(s.motherPhone)+'</span>');
+  if (s.studentPhone) contacts.push('<span>📱 دانش‌آموز: '+esc(s.studentPhone)+'</span>');
+  if (s.address) contacts.push('<span>📍 '+esc(s.address)+'</span>');
 
   html += '<div class="card score-card" style="border-color:'+scoreColor(pts)+'33">'
     + '<div class="score-num" style="color:'+scoreColor(pts)+'">−'+fa(pts)+'<small>امتیاز</small></div>'
-    + '<div class="score-meta"><div class="score-label">'+esc(fullName(s))+' · '+esc(s.grade||'—')+(s.className?' / '+esc(s.className):'')+(s.nationalId?' · '+esc(s.nationalId):'')+'</div>'
+    + '<div class="score-meta"><div class="score-label">'+esc(fullName(s))+(meta.length?' · '+meta.join(' · '):'')+'</div>'
     + '<div class="progress"><div class="progress-fill" style="width:'+pct+'%;background:linear-gradient(90deg,var(--cyan),'+scoreColor(pts)+')"></div></div>'
     + '<div class="progress-marks"><span>'+(cur?esc(cur.name):'بدون ایستگاه')+'</span><span>'+(nxt ? 'ایستگاه بعدی: −'+fa(nxt.threshold) : 'بالاترین ایستگاه')+'</span></div>'
-    + ((s.parentPhone||s.studentPhone||s.address) ? '<div style="font-size:11.5px;color:var(--text-dim);display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">'
-      + (s.parentPhone?'<span>📞 ولی: '+esc(s.parentPhone)+'</span>':'')
-      + (s.studentPhone?'<span>📱 دانش‌آموز: '+esc(s.studentPhone)+'</span>':'')
-      + (s.address?'<span>📍 '+esc(s.address)+'</span>':'')
-      + '</div>' : '')
+    + (contacts.length?'<div style="font-size:11.5px;color:var(--text-dim);display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">'+contacts.join('')+'</div>':'')
     + '</div></div>';
 
   html += '<div class="grid-2"><div class="stack"><div class="card"><h3 class="card-title">تفکیک تخلفات</h3>';
@@ -899,8 +855,7 @@ function renderStudentDetail(id){
   if (keys.length){
     html += '<div style="display:flex;flex-direction:column;gap:8px">';
     DB.violationTypes.forEach(function(t){
-      var c = tcounts[t.id] || 0;
-      if (!c) return;
+      var c = tcounts[t.id] || 0; if (!c) return;
       var nm = multiplierFor(c);
       var sum = viols.filter(function(v){ return v.typeId === t.id; }).reduce(function(a,v){ return a + v.pointsApplied; }, 0);
       html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;gap:10px">'
@@ -917,7 +872,7 @@ function renderStudentDetail(id){
       + '<div class="thr">حدنصاب: −'+fa(cur.threshold)+' · ورزش/اردو: '+esc(cur.sports)+'</div>'
       + '<ul class="station-actions">'+cur.actions.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')+'</ul></div>';
   } else {
-    html += '<div class="station-card" style="border-color:rgba(0,255,157,.3)"><h3 style="color:var(--green)">وضعیت پاک</h3><div class="thr">هیچ ایستگاه فعالی نیست. تبریک!</div></div>';
+    html += '<div class="station-card" style="border-color:rgba(0,255,157,.3)"><h3 style="color:var(--green)">وضعیت پاک</h3><div class="thr">تبریک!</div></div>';
   }
   html += '</div>';
 
@@ -930,17 +885,14 @@ function renderStudentDetail(id){
         + '<div style="display:flex;justify-content:space-between;gap:12px">'
         + '<div style="min-width:0"><div style="font-size:12.5px;font-weight:600">'+esc(t?t.label:'—')+'</div>'
         + '<div style="font-size:11px;color:var(--text-dim);margin-top:4px">'+fmt(v.occurredAt)+'</div>'
-        + (v.note?'<div style="font-size:11.5px;color:var(--text-mute);margin-top:5px;font-style:italic">«'+esc(v.note)+'»</div>':'')
-        + '</div>'
+        + (v.note?'<div style="font-size:11.5px;color:var(--text-mute);margin-top:5px;font-style:italic">«'+esc(v.note)+'»</div>':'')+'</div>'
         + '<div style="text-align:left"><div style="font-weight:800;font-size:16px;color:'+(v.multiplier>1?'var(--magenta)':'var(--cyan)')+'">−'+fa(v.pointsApplied)+'</div>'
         + (v.multiplier>1?'<div style="font-size:10px;color:var(--text-dim)">'+fa(v.basePoints)+'×'+fa(v.multiplier)+'</div>':'')
-        + '<button class="btn btn-sm btn-danger" style="margin-top:6px" onclick="undoViolation(\''+v.id+'\')">حذف</button>'
-        + '</div></div></div>';
+        + '<button class="btn btn-sm btn-danger" style="margin-top:6px" onclick="undoViolation(\''+v.id+'\')">حذف</button></div></div></div>';
     });
     html += '</div>';
   } else html += '<div style="color:var(--text-mute);font-size:13px">سابقه‌ای نیست</div>';
   html += '</div></div>';
-
   document.getElementById('view').innerHTML = html;
 
   document.getElementById('editStudentBtn').onclick = function(){ openStudentForm(s); };
@@ -965,7 +917,6 @@ function renderQuick(){
   var pre = quickSelection.studentId;
   var selectedStudent = pre ? DB.students.filter(function(s){ return s.id === pre; })[0] : null;
   var selectedType = quickSelection.typeId ? DB.violationTypes.filter(function(t){ return t.id === quickSelection.typeId; })[0] : null;
-
   var previewHTML = '';
   if (selectedStudent && selectedType){
     var prior = countPriorOccurrences(selectedStudent.id, selectedType.id);
@@ -974,28 +925,22 @@ function renderQuick(){
     previewHTML = '<div class="preview">'
       + '<div class="pv-item"><span class="pv-label">این چندمین بار</span><span class="pv-value">'+fa(prior+1)+'</span></div>'
       + '<div class="pv-item"><span class="pv-label">ضریب</span><span class="pv-value '+(mult>1?'mag':'')+'">×'+fa(mult)+'</span></div>'
-      + '<div class="pv-item"><span class="pv-label">امتیاز نهایی</span><span class="pv-value '+(mult>1?'mag':'')+'">−'+fa(applied)+'</span></div>'
-      + '</div>';
+      + '<div class="pv-item"><span class="pv-label">امتیاز نهایی</span><span class="pv-value '+(mult>1?'mag':'')+'">−'+fa(applied)+'</span></div></div>';
   }
-
-  var html = '<div class="grid-2"><div class="stack">'
-    + '<div class="card"><h3 class="card-title">۱. دانش‌آموز</h3>';
+  var html = '<div class="grid-2"><div class="stack"><div class="card"><h3 class="card-title">۱. دانش‌آموز</h3>';
   if (selectedStudent){
     html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:10px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.3);gap:10px">'
       + '<div style="min-width:0"><div style="font-weight:600">'+esc(fullName(selectedStudent))+'</div>'
-      + '<div style="font-size:11.5px;color:var(--text-dim);margin-top:3px">'+esc(selectedStudent.grade||'—')+(selectedStudent.className?' / '+esc(selectedStudent.className):'')+' · امتیاز −'+fa(totalPointsOf(selectedStudent.id))+'</div></div>'
+      + '<div style="font-size:11.5px;color:var(--text-dim);margin-top:3px">'+esc(selectedStudent.className||'—')+' · امتیاز −'+fa(totalPointsOf(selectedStudent.id))+'</div></div>'
       + '<button class="btn btn-sm" id="changeStudent">تغییر</button></div>';
   } else {
     html += '<div class="field"><label>جستجو…</label><input id="qStudent" placeholder="نام یا کد ملی…" autocomplete="off"><div id="qStudentList" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;max-height:260px;overflow:auto"></div></div>';
   }
-  html += '</div>';
-
-  html += '<div class="card"><h3 class="card-title">۲. نوع تخلف</h3><div class="type-grid">';
+  html += '</div><div class="card"><h3 class="card-title">۲. نوع تخلف</h3><div class="type-grid">';
   DB.violationTypes.forEach(function(t){
     html += '<div class="type-tile '+(quickSelection.typeId===t.id?'selected':'')+'" data-type="'+t.id+'"><div class="tt-label">'+esc(t.label)+'</div><div class="tt-pts">−'+fa(t.points)+'</div></div>';
   });
   html += '</div></div></div>';
-
   html += '<div class="stack"><div class="card"><h3 class="card-title">۳. پیش‌نمایش</h3>'+(previewHTML || '<div style="color:var(--text-mute);font-size:13px">انتخاب کن…</div>')+'</div>';
   if (selectedStudent && selectedType){
     html += '<div class="card"><h3 class="card-title">۴. تاریخ و یادداشت</h3>'
@@ -1004,34 +949,24 @@ function renderQuick(){
       + '<button class="btn btn-primary" id="qSubmit" style="margin-top:16px;width:100%;justify-content:center;padding:13px">ثبت تخلف</button></div>';
   }
   html += '</div></div>';
-
   document.getElementById('view').innerHTML = html;
 
   if (!selectedStudent){
-    var q = document.getElementById('qStudent');
-    var list = document.getElementById('qStudentList');
+    var q = document.getElementById('qStudent'), list = document.getElementById('qStudentList');
     var renderList = function(){
       var v = q.value.trim().toLowerCase();
       var items = DB.students.filter(function(s){ return !v || (fullName(s)+' '+s.nationalId).toLowerCase().indexOf(v) >= 0; }).slice(0, 30);
       list.innerHTML = items.map(function(s){ return '<div class="search-item" data-sid="'+s.id+'"><span>'+esc(fullName(s))+'</span><span style="color:var(--text-mute);font-size:11px">−'+fa(totalPointsOf(s.id))+'</span></div>'; }).join('') || '<div style="color:var(--text-mute);font-size:12.5px;padding:8px">موردی یافت نشد</div>';
-      $$('[data-sid]', list).forEach(function(el){
-        el.onclick = function(){ quickSelection.studentId = el.dataset.sid; renderQuick(); };
-      });
+      $$('[data-sid]', list).forEach(function(el){ el.onclick = function(){ quickSelection.studentId = el.dataset.sid; renderQuick(); }; });
     };
-    q.addEventListener('input', renderList);
-    renderList();
-    q.focus();
+    q.addEventListener('input', renderList); renderList(); q.focus();
   } else {
     document.getElementById('changeStudent').onclick = function(){ quickSelection.studentId = null; renderQuick(); };
   }
-  $$('[data-type]').forEach(function(el){
-    el.onclick = function(){ quickSelection.typeId = el.dataset.type; renderQuick(); };
-  });
-
+  $$('[data-type]').forEach(function(el){ el.onclick = function(){ quickSelection.typeId = el.dataset.type; renderQuick(); }; });
   var whenInput = document.getElementById('qWhen');
   if (whenInput && !whenInput.value){
-    var d = new Date();
-    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
     whenInput.value = d.toISOString().slice(0,16);
   }
   var sub = document.getElementById('qSubmit');
@@ -1039,14 +974,7 @@ function renderQuick(){
     var when = whenInput.value ? new Date(whenInput.value).toISOString() : new Date().toISOString();
     var prior = countPriorOccurrences(selectedStudent.id, selectedType.id);
     var mult = multiplierFor(prior);
-    DB.violations.push({
-      id: uid('vio'), studentId: selectedStudent.id, typeId: selectedType.id,
-      occurredAt: when, note: document.getElementById('qNote').value.trim(),
-      priorCount: prior, occurrenceNumber: prior + 1,
-      basePoints: selectedType.points, multiplier: mult,
-      pointsApplied: selectedType.points * mult,
-      archived: false, createdAt: new Date().toISOString()
-    });
+    DB.violations.push({ id: uid('vio'), studentId: selectedStudent.id, typeId: selectedType.id, occurredAt: when, note: document.getElementById('qNote').value.trim(), priorCount: prior, occurrenceNumber: prior + 1, basePoints: selectedType.points, multiplier: mult, pointsApplied: selectedType.points * mult, archived: false, createdAt: new Date().toISOString() });
     saveDB().then(function(){
       toast('ثبت شد — '+fa(selectedType.points*mult)+'− (×'+fa(mult)+')', 'success');
       quickSelection = { studentId:null, typeId:null };
@@ -1069,11 +997,251 @@ function renderStations(){
       + '<div class="thr-big" style="color:'+scoreColor(st.threshold)+'">−'+fa(st.threshold)+'</div>'
       + '<div><h4>'+esc(st.name)+'</h4><p style="color:var(--cyan);margin-bottom:8px">⚑ '+esc(st.sports)+'</p>'
       + '<ul class="station-actions">'+st.actions.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')+'</ul></div>'
-      + '<div style="text-align:center"><div class="pill pill-cyan" style="font-size:14px;padding:8px 16px">'+fa(students.length)+'</div><div style="font-size:10.5px;color:var(--text-mute);margin-top:6px">دانش‌آموز</div></div>'
-      + '</div>';
+      + '<div style="text-align:center"><div class="pill pill-cyan" style="font-size:14px;padding:8px 16px">'+fa(students.length)+'</div><div style="font-size:10.5px;color:var(--text-mute);margin-top:6px">دانش‌آموز</div></div></div>';
   });
   html += '</div>';
   document.getElementById('view').innerHTML = html;
+}
+
+/* ============================================================
+   Import
+   ============================================================ */
+function renderImport(){
+  document.getElementById('view').innerHTML =
+    '<div class="card"><h3 class="card-title">ورود گروهی از اکسل / CSV</h3>'
+    + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 18px">'
+    + 'داده‌ها را از اکسل کپی-پیست کن یا فایل CSV/XLSX آپلود کن. ستون‌ها: '
+    + '<b>شماره دانش‌آموزی، نام، نام خانوادگی، کد ملی، کلاس، نوع ثبت‌نام، همراه پدر، همراه مادر</b>.'
+    + '</p>'
+    + '<button class="btn btn-primary" id="openImportBtn" style="padding:13px 22px;font-size:14px">📥 باز کردن پنجره ورود</button>'
+    + '<button class="btn" id="downloadTemplateBtn" style="margin-right:10px">📄 دانلود قالب نمونه</button></div>';
+  document.getElementById('openImportBtn').onclick = openImportModal;
+  document.getElementById('downloadTemplateBtn').onclick = function(){
+    var csv = '\uFEFFشماره دانش آموزی,نام,نام خانوادگی,کد ملی,کلاس,نوع ثبت نام کلاس,شماره همراه پدر,شماره همراه مادر\n'
+      + '6580385081,محمدطاها,روشن,6580385081,شهید لاریجانی,اصلی,09123983106,09191929420\n'
+      + '4890667180,رضا,امین دهقان,4890667180,شهید کاظمی,اصلی,09123621505,09120054127\n';
+    download('students-template.csv', csv, 'text/csv');
+  };
+}
+
+function sdParseDelimited(text, forced){
+  text = String(text || '').replace(/^\uFEFF/, '');
+  var delim = forced;
+  if (!delim){
+    var fl = (text.split(/\r?\n/)[0] || '');
+    var t = (fl.match(/\t/g)||[]).length, c = (fl.match(/,/g)||[]).length, s = (fl.match(/;/g)||[]).length;
+    delim = (t > c && t > s) ? '\t' : (s > c ? ';' : ',');
+  }
+  var rows = [], row = [], cell = '', inQ = false;
+  for (var i=0;i<text.length;i++){
+    var ch = text[i];
+    if (inQ){ if (ch === '"'){ if (text[i+1] === '"'){ cell += '"'; i++; } else inQ = false; } else cell += ch; }
+    else { if (ch === '"') inQ = true; else if (ch === delim){ row.push(cell); cell=''; } else if (ch === '\r'){} else if (ch === '\n'){ row.push(cell); rows.push(row); row=[]; cell=''; } else cell += ch; }
+  }
+  if (cell.length || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(function(r){ return r.some(function(x){ return String(x).trim() !== ''; }); });
+}
+
+var _sdSheetJSPromise = null;
+function sdLoadSheetJS(){
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  if (_sdSheetJSPromise) return _sdSheetJSPromise;
+  _sdSheetJSPromise = new Promise(function(resolve, reject){
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+    s.onload = function(){ resolve(window.XLSX); };
+    s.onerror = function(){ reject(new Error('بارگذاری کتابخانه اکسل ناموفق')); };
+    document.head.appendChild(s);
+  });
+  return _sdSheetJSPromise;
+}
+
+var SD_ALIASES = {
+  studentNumber:['شماره دانش آموزی','شماره دانش‌آموزی','شماره دانش اموزی','کد دانش آموزی','student number','studentnumber','student_id','studentid'],
+  firstName:['نام','first name','firstname','first_name'],
+  lastName:['نام خانوادگی','نام‌خانوادگی','فامیل','last name','lastname','last_name','family'],
+  nationalId:['کد ملی','کدملی','شماره ملی','national id','nationalid','national_id','melli'],
+  className:['کلاس','کلاس درس','class','classname'],
+  grade:['پایه','پایه تحصیلی','grade','level'],
+  classType:['نوع ثبت نام کلاس','نوع ثبت‌نام کلاس','نوع ثبت نام','نوع ثبت‌نام','class type','type'],
+  parentPhone:['شماره همراه پدر','همراه پدر','تلفن پدر','موبایل پدر','شماره پدر','father phone','fatherphone','father_phone','parent phone'],
+  motherPhone:['شماره همراه مادر','همراه مادر','تلفن مادر','موبایل مادر','شماره مادر','mother phone','motherphone','mother_phone'],
+  studentPhone:['شماره همراه دانش‌آموز','شماره همراه','همراه','تلفن','موبایل','student phone','phone'],
+  notes:['یادداشت','توضیحات','note','notes','description']
+};
+function sdNorm(h){ return String(h==null?'':h).trim().toLowerCase().replace(/\u200c/g,' ').replace(/\s+/g,' '); }
+function sdDetectMapping(hr){
+  if (!hr) return null;
+  var map = {};
+  hr.forEach(function(h, i){
+    var n = sdNorm(h); if (!n) return;
+    for (var key in SD_ALIASES){
+      if (map[key] != null) continue;
+      var al = SD_ALIASES[key];
+      for (var j=0;j<al.length;j++){
+        var na = sdNorm(al[j]);
+        if (na === n){ map[key] = i; break; }
+        if (na.length >= 4 && (n.indexOf(na) >= 0 || na.indexOf(n) >= 0)){ map[key] = i; break; }
+      }
+    }
+  });
+  return map;
+}
+function sdLooksLikeHeader(row){
+  if (!row || !row.length) return false;
+  var j = row.map(sdNorm).join(' | ');
+  return /نام|کد ملی|کلاس|دانش|شماره|phone|name|class|national/i.test(j);
+}
+
+var _sdState = { rows:[], students:[], mapping:null, header:null };
+
+function openImportModal(){
+  var body = '<div class="field"><label>روش ورود</label>'
+    + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
+    + '<button class="btn btn-primary" id="sdTabPaste" type="button">📋 کپی-پیست از اکسل</button>'
+    + '<button class="btn" id="sdTabCsv" type="button">📄 فایل CSV</button>'
+    + '<button class="btn" id="sdTabXlsx" type="button">📊 فایل اکسل</button></div></div>'
+    + '<div id="sdPanePaste" style="margin-top:14px"><div class="field"><label>داده‌ها را کپی کن و اینجا پیست کن</label>'
+    + '<textarea id="sdPasteArea" style="min-height:160px;font-family:Consolas,monospace;direction:ltr;text-align:left" placeholder="ستون‌ها با Tab یا کاما جدا شوند"></textarea></div></div>'
+    + '<div id="sdPaneCsv" style="margin-top:14px;display:none"><div class="field"><label>فایل CSV</label><input type="file" id="sdCsvFile" accept=".csv,.txt"></div></div>'
+    + '<div id="sdPaneXlsx" style="margin-top:14px;display:none"><div class="field"><label>فایل اکسل</label><input type="file" id="sdXlsxFile" accept=".xlsx,.xls">'
+    + '<div style="font-size:11.5px;color:var(--text-mute);margin-top:6px">نیاز به اینترنت برای بارگذاری پارسر</div></div></div>'
+    + '<div class="row" style="margin-top:16px"><button class="btn btn-primary" id="sdParseBtn">پردازش و پیش‌نمایش</button>'
+    + '<span id="sdStatus" style="font-size:12px;color:var(--text-dim);margin-right:auto"></span></div>'
+    + '<div id="sdPreviewArea" style="margin-top:16px;display:none">'
+    + '<div style="font-size:12.5px;color:var(--text-dim);margin-bottom:10px;padding:10px 12px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);border-radius:10px" id="sdMappingInfo"></div>'
+    + '<div class="table-wrap" style="max-height:320px;overflow:auto;border:1px solid var(--border);border-radius:10px">'
+    + '<table style="font-size:12px"><thead><tr><th>#</th><th>نام</th><th>خانوادگی</th><th>کد ملی</th><th>کلاس</th><th>پدر</th><th>مادر</th><th>وضعیت</th></tr></thead><tbody id="sdPreviewBody"></tbody></table></div>'
+    + '<div style="margin-top:14px">'
+    + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="radio" name="sdMode" value="merge" checked> افزودن (تکراری‌ها نادیده)</label>'
+    + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:6px"><input type="radio" name="sdMode" value="update"> افزودن + به‌روزرسانی تکراری‌ها (بر اساس کد ملی)</label>'
+    + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:6px"><input type="radio" name="sdMode" value="replace"> <span style="color:var(--red)">جایگزینی کامل لیست و پاک کردن سوابق</span></label>'
+    + '</div></div>';
+
+  var footer = '<button class="btn" id="sdCancelBtn">انصراف</button><button class="btn btn-primary" id="sdConfirmBtn" disabled>ورود به سامانه</button>';
+  var m = openModal({ title:'📥 ورود گروهی دانش‌آموزان', body: body, footer: footer, wide: true });
+
+  var panes = { paste:'sdPanePaste', csv:'sdPaneCsv', xlsx:'sdPaneXlsx' };
+  var buttons = { paste:'sdTabPaste', csv:'sdTabCsv', xlsx:'sdTabXlsx' };
+  function showPane(tab){
+    Object.keys(panes).forEach(function(k){
+      m.root.querySelector('#'+panes[k]).style.display = (k === tab ? 'block' : 'none');
+      var b = m.root.querySelector('#'+buttons[k]); b.className = 'btn' + (k === tab ? ' btn-primary' : '');
+    });
+  }
+  m.root.querySelector('#sdTabPaste').onclick = function(){ showPane('paste'); };
+  m.root.querySelector('#sdTabCsv').onclick = function(){ showPane('csv'); };
+  m.root.querySelector('#sdTabXlsx').onclick = function(){ showPane('xlsx'); };
+
+  m.root.querySelector('#sdParseBtn').onclick = function(){
+    var status = m.root.querySelector('#sdStatus');
+    status.style.color = 'var(--text-dim)'; status.textContent = 'در حال پردازش…';
+    var whichTab = 'paste';
+    if (m.root.querySelector('#sdPaneCsv').style.display !== 'none') whichTab = 'csv';
+    if (m.root.querySelector('#sdPaneXlsx').style.display !== 'none') whichTab = 'xlsx';
+
+    if (whichTab === 'xlsx'){
+      var xf = m.root.querySelector('#sdXlsxFile').files[0];
+      if (!xf){ status.textContent = 'فایلی انتخاب نشده'; return; }
+      status.textContent = 'بارگذاری کتابخانه…';
+      sdLoadSheetJS().then(function(XLSX){
+        status.textContent = 'خواندن فایل…';
+        return xf.arrayBuffer().then(function(buf){
+          var wb = XLSX.read(buf, { type:'array' });
+          var ws = wb.Sheets[wb.SheetNames[0]];
+          var arr = XLSX.utils.sheet_to_json(ws, { header:1, raw:false, defval:'' });
+          _sdState.rows = arr.filter(function(r){ return r.some(function(c){ return String(c).trim(); }); });
+          _sdProcess(m);
+        });
+      }).catch(function(e){ status.textContent = '✕ ' + e.message; status.style.color = 'var(--red)'; });
+      return;
+    }
+    if (whichTab === 'csv'){
+      var cf = m.root.querySelector('#sdCsvFile').files[0];
+      if (!cf){ status.textContent = 'فایلی انتخاب نشده'; return; }
+      cf.text().then(function(t){ _sdState.rows = sdParseDelimited(t); _sdProcess(m); });
+      return;
+    }
+    var txt = m.root.querySelector('#sdPasteArea').value || '';
+    if (!txt.trim()){ status.textContent = 'داده‌ای وارد نشده'; return; }
+    _sdState.rows = sdParseDelimited(txt);
+    _sdProcess(m);
+  };
+
+  m.root.querySelector('#sdCancelBtn').onclick = m.close;
+  m.root.querySelector('#sdConfirmBtn').onclick = function(){
+    var mode = m.root.querySelector('input[name="sdMode"]:checked').value;
+    var students = _sdState.students || [];
+    if (!students.length) return;
+    var added = 0, updated = 0, skipped = 0;
+    if (mode === 'replace'){ DB.students = []; DB.violations = []; }
+    var existing = {};
+    DB.students.forEach(function(s){ if (s.nationalId) existing[String(s.nationalId).trim()] = s; });
+    students.forEach(function(stu){
+      var nid = String(stu.nationalId || '').trim();
+      if (mode === 'replace'){ DB.students.push(Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, stu)); added++; }
+      else if (nid && existing[nid]){
+        if (mode === 'update'){ Object.assign(existing[nid], stu); updated++; }
+        else skipped++;
+      } else {
+        var ns = Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, stu);
+        DB.students.push(ns); if (nid) existing[nid] = ns; added++;
+      }
+    });
+    saveDB().then(function(){
+      m.close();
+      toast('ورود انجام شد — ' + fa(added) + ' افزوده، ' + fa(updated) + ' به‌روز، ' + fa(skipped) + ' رد شد', 'success');
+      render();
+    });
+  };
+}
+
+function _sdProcess(m){
+  var rows = _sdState.rows;
+  if (!rows.length){ m.root.querySelector('#sdStatus').textContent = 'داده‌ای یافت نشد'; return; }
+  var headerRow = null, dataStart = 0;
+  if (sdLooksLikeHeader(rows[0])){ headerRow = rows[0]; dataStart = 1; }
+  var mapping = headerRow ? sdDetectMapping(headerRow) : null;
+  if (!mapping || Object.keys(mapping).length < 2){
+    mapping = { studentNumber:0, firstName:1, lastName:2, nationalId:3, className:4, classType:5, parentPhone:6, motherPhone:7 };
+  }
+  var students = [];
+  for (var i = dataStart; i < rows.length; i++){
+    var r = rows[i];
+    var g = function(k){ var idx = mapping[k]; if (idx == null) return ''; return String(r[idx] == null ? '' : r[idx]).trim(); };
+    var stu = {
+      studentNumber: g('studentNumber'), firstName: g('firstName'), lastName: g('lastName'),
+      nationalId: g('nationalId') || g('studentNumber'), className: g('className'),
+      grade: g('grade'), classType: g('classType'), parentPhone: g('parentPhone'), motherPhone: g('motherPhone')
+    };
+    if (!stu.firstName && !stu.lastName) continue;
+    students.push(stu);
+  }
+  _sdState.students = students; _sdState.header = headerRow; _sdState.mapping = mapping;
+
+  var area = m.root.querySelector('#sdPreviewArea');
+  var body = m.root.querySelector('#sdPreviewBody');
+  var info = m.root.querySelector('#sdMappingInfo');
+  var present = Object.keys(mapping).filter(function(k){ return mapping[k] != null; });
+  var hd = headerRow ? present.map(function(k){ return '<b>'+esc(headerRow[mapping[k]] || k)+'</b> ← '+k; }).join(' · ') : present.map(function(k){ return k+'=ستون '+fa(mapping[k]+1); }).join(' · ');
+  info.innerHTML = '📌 ردیف هدر: ' + (headerRow ? 'شناسایی شد' : 'شناسایی نشد (ترتیب پیش‌فرض)') + '<br>نگاشت: ' + hd + '<br>تعداد ردیف: <b>' + fa(students.length) + '</b>';
+
+  body.innerHTML = students.slice(0, 100).map(function(s, i){
+    var ok = (s.firstName || s.lastName);
+    return '<tr><td>' + fa(i+1) + '</td>'
+      + '<td>' + (esc(s.firstName) || '—') + '</td>'
+      + '<td>' + (esc(s.lastName) || '—') + '</td>'
+      + '<td class="mono">' + (esc(s.nationalId) || '—') + '</td>'
+      + '<td>' + (esc(s.className) || '—') + '</td>'
+      + '<td class="mono">' + (esc(s.parentPhone) || '—') + '</td>'
+      + '<td class="mono">' + (esc(s.motherPhone) || '—') + '</td>'
+      + '<td>' + (ok ? '<span class="pill pill-green">آماده</span>' : '<span class="pill pill-red">رد</span>') + '</td></tr>';
+  }).join('') + (students.length > 100 ? '<tr><td colspan="8" style="text-align:center;color:var(--text-mute)">… و ' + fa(students.length - 100) + ' ردیف دیگر</td></tr>' : '');
+
+  area.style.display = 'block';
+  m.root.querySelector('#sdConfirmBtn').disabled = students.length === 0;
+  var st = m.root.querySelector('#sdStatus');
+  st.textContent = fa(students.length) + ' دانش‌آموز آماده ورود'; st.style.color = 'var(--green)';
 }
 
 /* ============================================================
@@ -1084,11 +1252,12 @@ function renderSettings(){
   var showCloudForm = (m === 'cloud') || (setupMode === 'cloud');
 
   var html = '<div class="card" style="margin-bottom:20px"><h3 class="card-title">حالت ذخیره‌سازی</h3>'
-    + '<div style="font-size:12px;color:var(--text-mute);margin-bottom:14px;line-height:1.7">در هر سه حالت، داده‌ها <b style="color:var(--green)">همیشه در مرورگر شما هم ذخیره می‌شوند</b> (۵ نسخه پشتیبان).</div>'
+    + '<div style="font-size:12px;color:var(--text-mute);margin-bottom:14px;line-height:1.7">'
+    + '<b style="color:var(--green)">پیشنهاد:</b> حالت ابری رو انتخاب کن. کافیه فقط کلید <code>X-Master-Key</code> رو بدی — Bin خودکار پیدا یا ساخته می‌شه. همه دستگاه‌ها و مرورگرها همون داده رو می‌بینن.</div>'
     + '<div class="grid-3" style="margin-bottom:16px">'
-    + '<div class="mode-card '+(m==='local'?'selected':'')+'" data-mode="local"><div class="m-ico">🖥️</div><div class="m-body"><h4>لوکال</h4><p>فقط روی همین مرورگر.</p></div></div>'
-    + '<div class="mode-card '+(m==='file'?'selected':'')+'" data-mode="file"><div class="m-ico">📁</div><div class="m-body"><h4>فایل روی دیسک</h4><p>ذخیره در فایل JSON. مناسب پشتیبان.</p></div></div>'
-    + '<div class="mode-card '+(m==='cloud'?'selected':'')+'" data-mode="cloud"><div class="m-ico">☁️</div><div class="m-body"><h4>ابری (چند کاربره)</h4><p>ذخیره در JSONBin. چند نفر هم‌زمان.</p></div></div>'
+    + '<div class="mode-card '+(m==='cloud'?'selected':'')+'" data-mode="cloud"><div class="m-ico">☁️</div><div class="m-body"><h4>ابری (پیشنهاد)</h4><p>همه دستگاه‌ها یک داده مشترک. فقط کلید API لازمه.</p></div></div>'
+    + '<div class="mode-card '+(m==='local'?'selected':'')+'" data-mode="local"><div class="m-ico">🖥️</div><div class="m-body"><h4>لوکال</h4><p>فقط همین مرورگر.</p></div></div>'
+    + '<div class="mode-card '+(m==='file'?'selected':'')+'" data-mode="file"><div class="m-ico">📁</div><div class="m-body"><h4>فایل روی دیسک</h4><p>ذخیره در فایل JSON.</p></div></div>'
     + '</div>';
 
   if (m === 'file' && fileHandle){
@@ -1096,14 +1265,13 @@ function renderSettings(){
   }
   if (m === 'cloud'){
     html += '<div class="cloud-status '+(cloudOnline?'ok':'err')+'"><span>'+(cloudOnline?'✓':'✕')+'</span>'
-      + '<span style="flex:1">'+(cloudOnline ? 'متصل' : 'قطع — داده محلی ذخیره می‌شود')+' · Bin: <code dir="ltr">'+esc(CFG.cloud.binId)+'</code>'
-      + (DB && DB.meta && DB.meta.pendingSync ? ' · <b style="color:var(--yellow)">در صف</b>' : '')+'</span>'
+      + '<span style="flex:1">'+(cloudOnline ? 'به سرور ابری متصل' : 'اتصال قطع — داده محلی ذخیره می‌شود')+' · Bin: <code dir="ltr">'+esc(CFG.cloud.binId)+'</code> · نام: <code dir="ltr">'+esc(CFG.cloud.binName||BIN_NAME)+'</code>'
+      + (DB && DB.meta && DB.meta.pendingSync ? ' · <b style="color:var(--yellow)">در صف</b>' : '') + '</span>'
       + '<button class="btn btn-sm" id="disconnectCloudBtn">قطع</button></div>';
   }
   html += '</div>';
 
   if (showCloudForm) html += renderCloudConfig();
-  if (m !== 'file' && setupMode !== 'cloud' && !CFG.cloud) html += renderFileConnectBtn();
 
   html += '<div class="grid-2" style="margin-top:20px">'
     + '<div class="card"><h3 class="card-title">اطلاعات مدرسه</h3>'
@@ -1111,33 +1279,24 @@ function renderSettings(){
     + '<div class="field" style="margin-top:12px"><label>نام شما</label><input id="setUserName" placeholder="مثلاً: مدیر"></div>'
     + '<div class="field-row" style="margin-top:12px">'
     + '<div class="field"><label>سال تحصیلی</label><input id="setYear"></div>'
-    + '<div class="field"><label>دوره ریست (ماه)</label><input id="setReset" type="number" min="1" max="12"></div>'
-    + '</div>'
+    + '<div class="field"><label>دوره ریست (ماه)</label><input id="setReset" type="number" min="1" max="12"></div></div>'
     + '<div class="field" style="margin-top:12px"><label>تاریخ شروع سال</label><input id="setYearStart" type="date"></div>'
     + '<button class="btn btn-primary" id="saveSettings" style="margin-top:16px">ذخیره</button></div>'
-
     + '<div class="card"><h3 class="card-title">ضرایب تصاعدی</h3>'
     + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;padding:14px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--border)">'
-    + '<div>• دفعه ۱ و ۲: × <b style="color:var(--cyan)">۱</b></div>'
-    + '<div>• دفعه ۳ و ۴: × <b style="color:var(--cyan)">۲</b></div>'
-    + '<div>• دفعه ۵ و ۶: × <b style="color:var(--cyan)">۳</b></div>'
-    + '<div>• دفعه ۷+: × <b style="color:var(--cyan)">۴</b></div>'
-    + '</div></div></div>';
+    + '<div>• دفعه ۱ و ۲: × <b style="color:var(--cyan)">۱</b></div><div>• دفعه ۳ و ۴: × <b style="color:var(--cyan)">۲</b></div>'
+    + '<div>• دفعه ۵ و ۶: × <b style="color:var(--cyan)">۳</b></div><div>• دفعه ۷+: × <b style="color:var(--cyan)">۴</b></div></div></div></div>';
 
-  // جدول انواع
   html += '<div class="card" style="margin-top:20px"><h3 class="card-title">جدول تخلفات</h3><div class="table-wrap" style="border:none;background:transparent"><table><thead><tr><th style="width:60px">#</th><th>عنوان</th><th style="width:160px">امتیاز</th></tr></thead><tbody>';
   DB.violationTypes.forEach(function(t,i){
-    html += '<tr><td>'+fa(i+1)+'</td>'
-      + '<td><input data-tid="'+t.id+'" data-field="label" value="'+esc(t.label)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
+    html += '<tr><td>'+fa(i+1)+'</td><td><input data-tid="'+t.id+'" data-field="label" value="'+esc(t.label)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
       + '<td><input data-tid="'+t.id+'" data-field="points" type="number" min="1" value="'+t.points+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;text-align:center"></td></tr>';
   });
   html += '</tbody></table></div><button class="btn btn-primary" id="saveTypes" style="margin-top:14px">ذخیره</button></div>';
 
-  // ایستگاه‌ها
   html += '<div class="card" style="margin-top:20px"><h3 class="card-title">ایستگاه‌ها</h3><div class="table-wrap" style="border:none;background:transparent"><table><thead><tr><th style="width:60px">#</th><th>عنوان</th><th style="width:120px">حدنصاب</th><th>ورزش/اردو</th></tr></thead><tbody>';
   DB.stations.forEach(function(st,i){
-    html += '<tr><td>'+fa(i+1)+'</td>'
-      + '<td><input data-sid="'+st.id+'" data-field="name" value="'+esc(st.name)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
+    html += '<tr><td>'+fa(i+1)+'</td><td><input data-sid="'+st.id+'" data-field="name" value="'+esc(st.name)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
       + '<td><input data-sid="'+st.id+'" data-field="threshold" type="number" value="'+st.threshold+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;text-align:center"></td>'
       + '<td><input data-sid="'+st.id+'" data-field="sports" value="'+esc(st.sports)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td></tr>';
   });
@@ -1145,29 +1304,23 @@ function renderSettings(){
 
   document.getElementById('view').innerHTML = html;
 
-  // mode cards
   $$('[data-mode]').forEach(function(el){
     el.onclick = function(){
       var target = el.dataset.mode;
       if (target === 'local'){
-        var p = Promise.resolve();
-        if (fileHandle) p = p.then(disconnectFile);
+        var p = Promise.resolve(); if (fileHandle) p = p.then(disconnectFile);
         p.then(function(){
           if (CFG.cloud) delete CFG.cloud;
           CFG.mode = 'local'; saveCFG();
           if (pollTimer) clearInterval(pollTimer);
-          cloudOnline = false;
-          setupMode = null;
-          toast('حالت لوکال','success');
-          render();
+          cloudOnline = false; setupMode = null;
+          toast('حالت لوکال','success'); render();
         });
       } else if (target === 'file'){
         if (CFG.cloud){ delete CFG.cloud; if (pollTimer) clearInterval(pollTimer); }
-        setupMode = 'file';
-        connectFile();
-      } else if (target === 'cloud'){
-        setupMode = 'cloud';
-        render();
+        setupMode = 'file'; connectFile();
+      } else {
+        setupMode = 'cloud'; render();
         setTimeout(function(){ var f = document.getElementById('cloudForm'); if (f) f.scrollIntoView({behavior:'smooth', block:'start'}); }, 150);
       }
     };
@@ -1175,36 +1328,19 @@ function renderSettings(){
 
   if (document.getElementById('disconnectFileBtn')) document.getElementById('disconnectFileBtn').onclick = disconnectFile;
   if (document.getElementById('disconnectCloudBtn')) document.getElementById('disconnectCloudBtn').onclick = disconnectCloud;
-  if (document.getElementById('connectFileBtn')) document.getElementById('connectFileBtn').onclick = connectFile;
   if (document.getElementById('cancelCloudBtn')) document.getElementById('cancelCloudBtn').onclick = function(){ setupMode = null; render(); };
-  if (document.getElementById('testCloudBtn')){
-    document.getElementById('testCloudBtn').onclick = function(){
+
+  // ★ فقط دکمه اتصال — بدون Bin ID
+  if (document.getElementById('connectCloudAutoBtn')){
+    document.getElementById('connectCloudAutoBtn').onclick = function(){
       var k = document.getElementById('cloudKey').value.trim();
-      var b = document.getElementById('cloudBin').value.trim();
-      var s = document.getElementById('cloudTestStatus');
-      s.textContent = 'در حال تست…'; s.style.color = 'var(--text-dim)';
-      testCloud(k, b).then(function(){ s.textContent = '✓ اتصال موفق'; s.style.color = 'var(--green)'; })
-        .catch(function(e){ s.textContent = '✕ '+e.message; s.style.color = 'var(--red)'; });
-    };
-  }
-  if (document.getElementById('createBinBtn')){
-    document.getElementById('createBinBtn').onclick = function(){
-      var k = document.getElementById('cloudKey').value.trim();
-      if (!k){ toast('اول کلید API را وارد کن','error'); return; }
-      var s = document.getElementById('cloudTestStatus');
-      s.textContent = 'در حال ساخت…'; s.style.color = 'var(--yellow)';
-      createBin(k).then(function(id){
-        document.getElementById('cloudBin').value = id;
-        s.textContent = '✓ Bin ساخته شد — حالا «اتصال» را بزن'; s.style.color = 'var(--green)';
-      }).catch(function(e){ s.textContent = '✕ '+e.message; s.style.color = 'var(--red)'; });
-    };
-  }
-  if (document.getElementById('saveCloudBtn')){
-    document.getElementById('saveCloudBtn').onclick = function(){
-      var k = document.getElementById('cloudKey').value.trim();
-      var b = document.getElementById('cloudBin').value.trim();
-      if (!k || !b){ toast('کلید و Bin ID الزامی است','error'); return; }
-      connectCloud(k, b).catch(function(e){ toast(e.message,'error'); });
+      if (!k){ toast('کلید API را وارد کن','error'); return; }
+      var s = document.getElementById('cloudStatusText');
+      s.textContent = '⏳ در حال جستجوی Bin…'; s.style.color = 'var(--yellow)';
+      connectCloudAuto(k).catch(function(e){
+        s.textContent = '✕ ' + e.message; s.style.color = 'var(--red)';
+        toast(e.message,'error');
+      });
     };
   }
 
@@ -1220,9 +1356,10 @@ function renderSettings(){
   };
   document.getElementById('saveTypes').onclick = function(){
     DB.violationTypes = DB.violationTypes.map(function(t){
-      var lbl = document.querySelector('[data-tid="'+t.id+'"][data-field="label"]').value;
-      var pts = Number(document.querySelector('[data-tid="'+t.id+'"][data-field="points"]').value) || 1;
-      return Object.assign({}, t, { label:lbl, points:pts });
+      return Object.assign({}, t, {
+        label: document.querySelector('[data-tid="'+t.id+'"][data-field="label"]').value,
+        points: Number(document.querySelector('[data-tid="'+t.id+'"][data-field="points"]').value) || 1
+      });
     });
     saveDB().then(function(){ toast('ذخیره شد','success'); });
   };
@@ -1242,66 +1379,51 @@ function renderSettings(){
   document.getElementById('setReset').value = DB.settings.resetMonths || 2;
   document.getElementById('setYearStart').value = DB.settings.yearStartISO ? DB.settings.yearStartISO.slice(0,10) : '';
   document.getElementById('setUserName').value = CFG.userName || '';
-  if (showCloudForm){
-    document.getElementById('cloudKey').value = (CFG.cloud && CFG.cloud.apiKey) || '';
-    document.getElementById('cloudBin').value = (CFG.cloud && CFG.cloud.binId) || '';
-  }
+  if (showCloudForm) document.getElementById('cloudKey').value = (CFG.cloud && CFG.cloud.apiKey) || '';
 }
 
 function renderCloudConfig(){
   return '<div class="card" id="cloudForm" style="margin-bottom:20px;border-color:rgba(0,229,255,.4)">'
-    + '<h3 class="card-title">☁️ اتصال ابری (JSONBin)</h3>'
+    + '<h3 class="card-title">☁️ اتصال ابری سراسری</h3>'
     + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;margin-bottom:16px;padding:14px;background:rgba(0,229,255,.04);border-radius:10px;border:1px solid rgba(0,229,255,.2)">'
-    + '<b style="color:var(--cyan)">راهنما:</b><br>'
+    + '<b style="color:var(--cyan)">فقط کلید API رو وارد کن — بقیه خودکاره:</b><br>'
     + '۱. برو به <a href="https://jsonbin.io" target="_blank" style="color:var(--cyan)">jsonbin.io</a> و ثبت‌نام کن (رایگان).<br>'
-    + '۲. از منو <b>API Keys</b> → کلید <b>X-Master-Key</b> را کپی کن.<br>'
-    + '۳. کلید را در فیلد زیر پیست کن و روی «ساخت Bin جدید» بزن.<br>'
-    + '۴. بعد «اتصال و ذخیره» را بزن. تمام!'
+    + '۲. از منو <b>API Keys</b> → کلید <b>X-Master-Key</b> رو کپی کن.<br>'
+    + '۳. کلید رو اینجا پیست کن و روی <b>«اتصال»</b> بزن.<br>'
+    + '۴. سامانه خودکار دنبال یه Bin با نام <code>'+BIN_NAME+'</code> می‌گرده؛ اگه پیدا کرد وصل می‌شه، اگه نه می‌سازه.<br>'
+    + '۵. همین کلید رو توی هر دستگاه دیگه‌ای بزنی → همه‌چیز یکسان.'
     + '</div>'
     + '<div class="field"><label>کلید API (X-Master-Key)</label><input id="cloudKey" placeholder="$2a$10$…" dir="ltr" autocomplete="off"></div>'
-    + '<div class="field" style="margin-top:12px"><label>Bin ID</label><input id="cloudBin" placeholder="بعد از ساخت Bin خودکار پر می‌شود" dir="ltr" autocomplete="off"></div>'
-    + '<div id="cloudTestStatus" style="margin-top:12px;font-size:12px;color:var(--text-dim)">وضعیت: —</div>'
+    + '<div id="cloudStatusText" style="margin-top:12px;font-size:12px;color:var(--text-dim)">وضعیت: —</div>'
     + '<div class="row" style="margin-top:16px">'
-    + '<button class="btn" id="createBinBtn">🔨 ساخت Bin جدید</button>'
-    + '<button class="btn" id="testCloudBtn">🔌 تست اتصال</button>'
-    + '<button class="btn btn-primary" id="saveCloudBtn">✓ اتصال و ذخیره</button>'
+    + '<button class="btn btn-primary" id="connectCloudAutoBtn" style="padding:12px 22px;font-size:14px">🔌 اتصال</button>'
     + '<button class="btn btn-ghost" id="cancelCloudBtn" style="margin-right:auto">انصراف</button>'
     + '</div></div>';
-}
-
-function renderFileConnectBtn(){
-  return '<div class="card" style="margin-bottom:20px"><h3 class="card-title">📁 اتصال به فایل داده</h3>'
-    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">یه فایل <code>discipline-data.json</code> روی دیسک انتخاب کن. هر تغییر خودکار در فایل ذخیره می‌شود.</p>'
-    + '<button class="btn btn-primary" id="connectFileBtn">انتخاب / ساخت فایل</button>'
-    + '<div style="margin-top:12px;font-size:11.5px;color:var(--text-mute)">⚠️ فقط Chrome و Edge</div></div>';
 }
 
 /* ============================================================
    Backup
    ============================================================ */
 function renderBackup(){
-  var backups = [];
-  try { backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]'); } catch(e){}
-
+  var backups = []; try { backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]'); } catch(e){}
   var html = '<div class="grid-2">'
     + '<div class="card"><h3 class="card-title">پشتیبان‌گیری</h3>'
     + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">فایل پشتیبان شامل تمام داده‌ها است.</p>'
     + '<div class="row"><button class="btn btn-primary" id="expJson">⤓ JSON</button>'
     + '<button class="btn" id="expCsvS">⤓ CSV دانش‌آموزان</button>'
     + '<button class="btn" id="expCsvV">⤓ CSV تخلفات</button></div></div>'
-
     + '<div class="card"><h3 class="card-title">بازیابی از فایل</h3>'
     + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">با بارگذاری فایل، کل دیتابیس جایگزین می‌شود.</p>'
     + '<input type="file" id="importFile" accept=".json" style="display:none">'
     + '<button class="btn" id="impBtn">⤒ بارگذاری فایل</button></div></div>';
 
   html += '<div class="card" style="margin-top:20px"><h3 class="card-title">🗄️ نسخه‌های پشتیبان محلی ('+fa(backups.length)+')</h3>'
-    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">در هر تغییر یک نسخه در مرورگر ذخیره می‌شود (حداکثر '+fa(MAX_BACKUPS)+').</p>';
+    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">در هر تغییر یه نسخه در مرورگر ذخیره می‌شود (حداکثر '+fa(MAX_BACKUPS)+').</p>';
   if (backups.length){
     html += '<div style="display:flex;flex-direction:column;gap:8px">';
     backups.forEach(function(b, i){
       html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;gap:10px">'
-        + '<div style="min-width:0"><div style="font-size:12.5px;font-weight:600">'+(b._backedUpAt ? fmt(b._backedUpAt) : '—')+'</div>'
+        + '<div style="min-width:0"><div style="font-size:12.5px;font-weight:600">'+(b._backedUpAt ? fmt(b._backedUpAt) : '—')+(b._tag ? ' · <span style="color:var(--yellow)">'+esc(b._tag)+'</span>' : '')+'</div>'
         + '<div style="font-size:11px;color:var(--text-dim);margin-top:3px">'+fa((b.students||[]).length)+' دانش‌آموز · '+fa((b.violations||[]).length)+' تخلف</div></div>'
         + '<button class="btn btn-sm" data-restore="'+i+'">بازیابی</button></div>';
     });
@@ -1313,29 +1435,25 @@ function renderBackup(){
     + '<h3 class="card-title" style="color:var(--red)">منطقه خطر</h3>'
     + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">کل سوابق آرشیو می‌شود (حذف نمی‌شود).</p>'
     + '<button class="btn btn-danger" id="resetAll">↺ آرشیو کل سوابق</button></div>';
-
   document.getElementById('view').innerHTML = html;
 
   $$('[data-restore]').forEach(function(btn){
     btn.onclick = function(){
-      var i = Number(btn.dataset.restore);
-      var b = backups[i];
-      if (!b) return;
+      var i = Number(btn.dataset.restore); var b = backups[i]; if (!b) return;
       if (!confirm('دیتابیس فعلی با این نسخه جایگزین شود؟')) return;
       DB = normalizeDB(JSON.parse(JSON.stringify(b)));
-      delete DB._backedUpAt;
+      delete DB._backedUpAt; delete DB._tag;
       DB.meta.lastModified = new Date().toISOString();
-      saveDB().then(function(){ toast('بازیابی انجام شد','success'); render(); });
+      saveDB().then(function(){ toast('بازیابی شد','success'); render(); });
     };
   });
 
   document.getElementById('expJson').onclick = function(){ download('discipline-backup-'+Date.now()+'.json', JSON.stringify(DB, null, 2), 'application/json'); };
   document.getElementById('expCsvS').onclick = function(){
-    var rows = [['نام','کد ملی','پایه','کلاس','تلفن ولی','امتیاز','ایستگاه']];
+    var rows = [['شماره دانش‌آموزی','نام','نام خانوادگی','کد ملی','کلاس','نوع ثبت‌نام','تلفن پدر','تلفن مادر','امتیاز','ایستگاه']];
     DB.students.forEach(function(s){
-      var pts = totalPointsOf(s.id);
-      var st = currentStation(pts);
-      rows.push([fullName(s), s.nationalId, s.grade, s.className, s.parentPhone, pts, st?st.name:'—']);
+      var pts = totalPointsOf(s.id); var st = currentStation(pts);
+      rows.push([s.studentNumber||'', s.firstName||'', s.lastName||'', s.nationalId||'', s.className||'', s.classType||'', s.parentPhone||'', s.motherPhone||'', pts, st?st.name:'—']);
     });
     download('students.csv', '\uFEFF'+rows.map(function(r){ return r.map(csvCell).join(','); }).join('\n'), 'text/csv');
   };
@@ -1352,16 +1470,16 @@ function renderBackup(){
   document.getElementById('importFile').onchange = function(e){
     var f = e.target.files[0]; if (!f) return;
     if (!confirm('کل دیتابیس جایگزین شود؟')) return;
-    var reader = new FileReader();
-    reader.onload = function(){
+    var r = new FileReader();
+    r.onload = function(){
       try {
-        var data = JSON.parse(reader.result);
+        var data = JSON.parse(r.result);
         if (!Array.isArray(data.students)) throw new Error('فایل نامعتبر');
         DB = normalizeDB(data);
-        saveDB().then(function(){ toast('بازیابی انجام شد','success'); render(); });
+        saveDB().then(function(){ toast('بازیابی شد','success'); render(); });
       } catch(err){ toast('خطا: '+err.message, 'error'); }
     };
-    reader.readAsText(f);
+    r.readAsText(f);
   };
   document.getElementById('resetAll').onclick = function(){
     if (!confirm('مطمئنی؟')) return;
@@ -1385,32 +1503,34 @@ function openStudentForm(student){
   var isEdit = !!student;
   var body = '<div class="field-row">'
     + '<div class="field"><label>نام *</label><input id="fFirstName" value="'+esc(student?student.firstName:'')+'"></div>'
-    + '<div class="field"><label>نام خانوادگی *</label><input id="fLastName" value="'+esc(student?student.lastName:'')+'"></div>'
-    + '</div>'
+    + '<div class="field"><label>نام خانوادگی *</label><input id="fLastName" value="'+esc(student?student.lastName:'')+'"></div></div>'
     + '<div class="field-row">'
-    + '<div class="field"><label>کد ملی</label><input id="fNationalId" value="'+esc(student?student.nationalId:'')+'"></div>'
-    + '<div class="field"><label>تلفن دانش‌آموز</label><input id="fStudentPhone" value="'+esc(student?student.studentPhone:'')+'"></div>'
-    + '</div>'
+    + '<div class="field"><label>شماره دانش‌آموزی</label><input id="fStudentNumber" value="'+esc(student?student.studentNumber:'')+'"></div>'
+    + '<div class="field"><label>کد ملی</label><input id="fNationalId" value="'+esc(student?student.nationalId:'')+'"></div></div>'
     + '<div class="field-row">'
     + '<div class="field"><label>پایه</label><input id="fGrade" value="'+esc(student?student.grade:'')+'"></div>'
-    + '<div class="field"><label>کلاس</label><input id="fClassName" value="'+esc(student?student.className:'')+'"></div>'
-    + '</div>'
-    + '<div class="field"><label>تلفن ولی</label><input id="fParentPhone" value="'+esc(student?student.parentPhone:'')+'"></div>'
+    + '<div class="field"><label>کلاس</label><input id="fClassName" value="'+esc(student?student.className:'')+'"></div></div>'
+    + '<div class="field"><label>نوع ثبت‌نام کلاس</label><input id="fClassType" value="'+esc(student?student.classType:'')+'"></div>'
+    + '<div class="field-row" style="margin-top:12px">'
+    + '<div class="field"><label>تلفن پدر</label><input id="fParentPhone" value="'+esc(student?student.parentPhone:'')+'"></div>'
+    + '<div class="field"><label>تلفن مادر</label><input id="fMotherPhone" value="'+esc(student?student.motherPhone:'')+'"></div></div>'
+    + '<div class="field"><label>تلفن دانش‌آموز</label><input id="fStudentPhone" value="'+esc(student?student.studentPhone:'')+'"></div>'
     + '<div class="field"><label>آدرس</label><input id="fAddress" value="'+esc(student?student.address:'')+'"></div>'
     + '<div class="field"><label>یادداشت</label><textarea id="fNotes">'+esc(student?student.notes:'')+'</textarea></div>';
-
   var footer = '<button class="btn" data-cancel>انصراف</button><button class="btn btn-primary" data-save>'+(isEdit?'ذخیره':'ثبت')+'</button>';
   var m = openModal({ title: isEdit?'ویرایش':'دانش‌آموز جدید', body: body, footer: footer });
-
   m.root.querySelector('[data-cancel]').onclick = m.close;
   m.root.querySelector('[data-save]').onclick = function(){
     var p = {
       firstName: document.getElementById('fFirstName').value.trim(),
       lastName: document.getElementById('fLastName').value.trim(),
+      studentNumber: document.getElementById('fStudentNumber').value.trim(),
       nationalId: document.getElementById('fNationalId').value.trim(),
       grade: document.getElementById('fGrade').value.trim(),
       className: document.getElementById('fClassName').value.trim(),
+      classType: document.getElementById('fClassType').value.trim(),
       parentPhone: document.getElementById('fParentPhone').value.trim(),
+      motherPhone: document.getElementById('fMotherPhone').value.trim(),
       studentPhone: document.getElementById('fStudentPhone').value.trim(),
       address: document.getElementById('fAddress').value.trim(),
       notes: document.getElementById('fNotes').value.trim()
@@ -1419,21 +1539,52 @@ function openStudentForm(student){
     if (isEdit) Object.assign(student, p);
     else DB.students.push(Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, p));
     saveDB().then(function(){
-      m.close();
-      toast(isEdit?'ویرایش شد':'ثبت شد','success');
+      m.close(); toast(isEdit?'ویرایش شد':'ثبت شد','success');
       if (!isEdit && getRoute().route !== 'students') navigate('students'); else render();
     });
   };
 }
 
 /* ============================================================
-   Wiring + Init
+   بررسی نسخه‌ی جدید (آپدیت خودکار کد)
+   ============================================================ */
+function compareVersions(a, b){
+  function p(v){ return String(v||'0').split('.').map(function(x){ return parseInt(x,10)||0; }); }
+  var A = p(a), B = p(b), len = Math.max(A.length, B.length);
+  for (var i=0; i<len; i++){
+    var x = A[i]||0, y = B[i]||0;
+    if (x > y) return 1;
+    if (x < y) return -1;
+  }
+  return 0;
+}
+function checkForNewCode(){
+  var base = location.href.split('#')[0].split('?')[0];
+  var url = base + '?_=' + Date.now();
+  fetch(url, { cache:'no-store' })
+    .then(function(r){ return r.text(); })
+    .then(function(html){
+      var m = html.match(/<meta\s+name=["']app-version["']\s+content=["']([^"']+)["']/i);
+      if (!m) return;
+      var remote = m[1];
+      if (compareVersions(remote, APP_VERSION) > 0){
+        var b = document.getElementById('updateBanner');
+        if (b){
+          b.querySelector('span').textContent = '🚀 نسخه جدید (' + remote + ') آماده است — الان به‌روزرسانی کن';
+          b.classList.add('show');
+        }
+      }
+    })
+    .catch(function(){ /* ignore */ });
+}
+
+/* ============================================================
+   Wiring
    ============================================================ */
 document.addEventListener('click', function(e){
   var nav = e.target.closest ? e.target.closest('.nav a') : null;
-  if (nav) navigate(nav.dataset.route);
+  if (nav){ e.preventDefault(); navigate(nav.dataset.route); }
 });
-
 document.getElementById('addStudentBtn').onclick = function(){ openStudentForm(null); };
 document.getElementById('menuBtn').onclick = function(){ document.getElementById('sidebar').classList.toggle('open'); };
 window.addEventListener('hashchange', render);
@@ -1443,10 +1594,10 @@ var gsResults = document.getElementById('searchResults');
 gs.addEventListener('input', function(){
   var q = gs.value.trim().toLowerCase();
   if (!q){ gsResults.classList.add('hidden'); return; }
-  var items = DB.students.filter(function(s){ return (fullName(s)+' '+s.nationalId).toLowerCase().indexOf(q) >= 0; }).slice(0, 8);
+  var items = DB.students.filter(function(s){ return (fullName(s)+' '+s.nationalId+' '+(s.className||'')).toLowerCase().indexOf(q) >= 0; }).slice(0, 8);
   gsResults.innerHTML = items.length ? items.map(function(s){
     return '<div class="search-item" data-sid="'+s.id+'"><div><div style="font-weight:600">'+esc(fullName(s))+'</div>'
-      + '<div style="font-size:11px;color:var(--text-mute);margin-top:2px">'+esc(s.grade||'')+(s.nationalId?' · '+esc(s.nationalId):'')+'</div></div>'
+      + '<div style="font-size:11px;color:var(--text-mute);margin-top:2px">'+esc(s.className||'')+(s.nationalId?' · '+esc(s.nationalId):'')+'</div></div>'
       + '<div class="pill '+scorePillClass(totalPointsOf(s.id))+'">−'+fa(totalPointsOf(s.id))+'</div></div>';
   }).join('') : '<div class="search-item" style="cursor:default;color:var(--text-mute)">نتیجه‌ای یافت نشد</div>';
   $$('[data-sid]', gsResults).forEach(function(el){
@@ -1461,35 +1612,41 @@ document.addEventListener('click', function(e){
 window.navigate = navigate;
 window.undoViolation = undoViolation;
 
-/* init */
+/* ============================================================
+   Init
+   ============================================================ */
 (function(){
+  try { document.getElementById('verHint').textContent = 'نسخه ' + APP_VERSION; } catch(e){}
+
   tryRestoreFileHandle()
     .then(loadDB)
     .then(function(){
       if (!DB) DB = defaultDB();
       if (!location.hash) location.hash = '#/dashboard';
-      document.getElementById('boot').style.display = 'none';
+      var boot = document.getElementById('boot'); if (boot) boot.style.display = 'none';
       render();
       startPolling();
+      // چک نسخه جدید
+      setTimeout(checkForNewCode, 1500);
+      setInterval(checkForNewCode, 5 * 60 * 1000);
       window.addEventListener('online', function(){
         if (activeMode() === 'cloud' && DB.meta.pendingSync){
           pushToCloud().then(function(ok){
             if (ok){
               DB.meta.pendingSync = false;
               try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
-              toast('اینترنت برگشت — همگام شد','success');
-              updateStorageBadge();
+              toast('اینترنت برگشت — همگام شد','success'); updateStorageBadge();
             }
           });
         }
       });
     })
     .catch(function(e){
-      document.getElementById('boot').innerHTML = '<div style="text-align:center;padding:30px">'
+      var boot = document.getElementById('boot');
+      if (boot) boot.innerHTML = '<div style="text-align:center;padding:30px">'
         + '<h2 style="color:#ff3a5e">خطا در راه‌اندازی</h2>'
-        + '<p style="color:#8d97b0;margin:20px 0">'+esc(e.message||e)+'</p>'
-        + '<button onclick="localStorage.clear();location.reload()" style="padding:12px 24px;background:#00e5ff;color:#000;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:700">پاک کردن و شروع مجدد</button>'
-        + '</div>';
+        + '<p style="color:#8d97b0;margin:20px 0">'+esc(e.message||String(e))+'</p>'
+        + '<button onclick="localStorage.clear();location.reload()" style="padding:12px 24px;background:#00e5ff;color:#000;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:700">پاک کردن و شروع مجدد</button></div>';
     });
 })();
 </script>
