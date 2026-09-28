@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="app-version" content="4.1.0">
+<meta name="app-version" content="4.2.0">
 <title>سامانه مدیریت انضباطی مدرسه</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -30,7 +30,7 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 .brand-text{display:flex;flex-direction:column;line-height:1.25}
 .brand-text strong{font-size:15px}
 .brand-text span{font-size:11px;color:var(--text-dim)}
-.nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.nav{display:flex;flex-direction:column;gap:4px;flex:1;overflow-y:auto}
 .nav a{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;border:1px solid transparent;transition:all .18s;position:relative;cursor:pointer}
 .nav a:hover{color:var(--text);background:rgba(255,255,255,.03);box-shadow:inset 0 0 16px rgba(0,229,255,.08)}
 .nav a.active{color:var(--cyan);background:linear-gradient(90deg,rgba(0,229,255,.10),rgba(0,229,255,.01));border-color:rgba(0,229,255,.30);animation:borderGlow 3s ease-in-out infinite}
@@ -212,6 +212,7 @@ tbody tr:last-child td{border-bottom:none}
       <a data-route="dashboard"><span class="nav-ico">◈</span><span>داشبورد</span></a>
       <a data-route="students"><span class="nav-ico">◉</span><span>دانش‌آموزان</span></a>
       <a data-route="quick"><span class="nav-ico">✦</span><span>ثبت تخلف</span></a>
+      <a data-route="batch"><span class="nav-ico">👥</span><span>ثبت گروهی</span></a>
       <a data-route="stations"><span class="nav-ico">⚑</span><span>ایستگاه‌ها</span></a>
       <a data-route="import"><span class="nav-ico">📥</span><span>ورود از اکسل</span></a>
       <a data-route="settings"><span class="nav-ico">⚙</span><span>تنظیمات</span></a>
@@ -222,7 +223,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="storage-badge local" id="storageBadge" onclick="location.hash='#/settings'">
         <span class="dot"></span><span id="storageText">لوکال</span>
       </div>
-      <div class="hint" id="verHint">نسخه ۴.۱.۰</div>
+      <div class="hint" id="verHint">نسخه ۴.۲.۰</div>
     </div>
   </aside>
 
@@ -250,7 +251,7 @@ tbody tr:last-child td{border-bottom:none}
 /* ============================================================
    ثابت‌ها
    ============================================================ */
-var APP_VERSION = '4.1.0';
+var APP_VERSION = '4.2.0';
 var STORAGE_KEY = 'sd-v3';
 var BACKUP_KEY  = 'sd-backups-v3';
 var CFG_KEY     = 'sd-cfg-v3';
@@ -382,6 +383,10 @@ var cloudOnline = false;
 var pollTimer = null;
 var setupMode = null;
 var quickSelection = { studentId:null, typeId:null };
+var batchState = {
+  selectedIds: [], typeId: null, dateTime: '', note: '',
+  filterClass: '', filterGrade: '', search: ''
+};
 
 var IDB = {
   _db: null,
@@ -415,7 +420,6 @@ function normalizeDB(db){
   db.students = Array.isArray(db.students) ? db.students : [];
   db.violations = Array.isArray(db.violations) ? db.violations : [];
   db.violationTypes = Array.isArray(db.violationTypes) && db.violationTypes.length ? db.violationTypes : JSON.parse(JSON.stringify(DEFAULT_TYPES));
-  // اطمینان از وجود t11 و t12
   var ids = db.violationTypes.map(function(t){ return t.id; });
   if (ids.indexOf('t11') < 0) db.violationTypes.push({ id:'t11', label:'تخلف اردو مطالعاتی', points:2 });
   if (ids.indexOf('t12') < 0) db.violationTypes.push({ id:'t12', label:'سایر موارد', points:1 });
@@ -577,7 +581,7 @@ document.addEventListener('visibilitychange', function(){ if (!document.hidden) 
 window.addEventListener('focus', function(){ pullFromCloud(true); });
 
 /* ============================================================
-   ساخت Bin و اتصال
+   Bin و اتصال
    ============================================================ */
 function createSharedBin(apiKey){
   return fetch('https://api.jsonbin.io/v3/b', {
@@ -738,7 +742,7 @@ function render(){
   if (applyAutoReset()) saveDB();
   var r = getRoute();
   $$('.nav a').forEach(function(a){ a.classList.toggle('active', a.dataset.route === r.route); });
-  var titles = { dashboard:'داشبورد', students:'دانش‌آموزان', student:'پرونده دانش‌آموز', quick:'ثبت تخلف', stations:'ایستگاه‌های تنبیهی', import:'ورود گروهی از اکسل', settings:'تنظیمات', backup:'پشتیبان‌گیری' };
+  var titles = { dashboard:'داشبورد', students:'دانش‌آموزان', student:'پرونده دانش‌آموز', quick:'ثبت تخلف', batch:'ثبت گروهی تخلف', stations:'ایستگاه‌های تنبیهی', import:'ورود گروهی از اکسل', settings:'تنظیمات', backup:'پشتیبان‌گیری' };
   document.getElementById('pageTitle').textContent = titles[r.route] || 'داشبورد';
   document.getElementById('brandSchool').textContent = DB.settings.schoolName || 'دبیرستان';
   document.getElementById('yearBadge').textContent = 'سال تحصیلی ' + (DB.settings.academicYear || '—');
@@ -746,7 +750,7 @@ function render(){
   updateStorageBadge();
   if (r.route === 'student' && r.param) return renderStudentDetail(r.param);
   if (r.route === 'quick' && r.param){ quickSelection.studentId = r.param; return renderQuick(); }
-  var views = { dashboard:renderDashboard, students:renderStudents, quick:renderQuick, stations:renderStations, import:renderImport, settings:renderSettings, backup:renderBackup };
+  var views = { dashboard:renderDashboard, students:renderStudents, quick:renderQuick, batch:renderBatch, stations:renderStations, import:renderImport, settings:renderSettings, backup:renderBackup };
   (views[r.route] || renderDashboard)();
 }
 
@@ -959,7 +963,7 @@ function undoViolation(id){
 }
 
 /* ============================================================
-   Quick
+   Quick log (تک‌نفره)
    ============================================================ */
 function renderQuick(){
   var pre = quickSelection.studentId;
@@ -1021,6 +1025,260 @@ function renderQuick(){
     DB.violations.push({ id: uid('vio'), studentId: selectedStudent.id, typeId: selectedType.id, occurredAt: when, note: document.getElementById('qNote').value.trim(), priorCount: prior, occurrenceNumber: prior + 1, basePoints: selectedType.points, multiplier: mult, pointsApplied: selectedType.points * mult, archived: false, createdAt: new Date().toISOString() });
     saveDB().then(function(){ toast('ثبت شد — '+fa(selectedType.points*mult)+'− (×'+fa(mult)+')', 'success'); quickSelection = { studentId:null, typeId:null }; navigate('student', selectedStudent.id); });
   };
+}
+
+/* ============================================================
+   Batch (ثبت گروهی)
+   ============================================================ */
+function renderBatch(){
+  var view = document.getElementById('view');
+  if (!view) return;
+
+  var grades = [];
+  DB.students.forEach(function(s){ if (s.grade && grades.indexOf(s.grade) < 0) grades.push(s.grade); });
+  grades.sort();
+  var classMap = {};
+  DB.students.forEach(function(s){ if (s.className) classMap[s.className] = (classMap[s.className]||0)+1; });
+  var classList = Object.keys(classMap).sort();
+
+  var html = '<div class="card" style="margin-bottom:20px">'
+    + '<h3 class="card-title">فیلتر و انتخاب سریع</h3>'
+    + '<div class="row">'
+    + '<input id="batchSearch" placeholder="جستجو (نام یا کد ملی)…" value="'+esc(batchState.search)+'" style="flex:1;min-width:200px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">'
+    + '<select id="batchGrade" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none"><option value="">همه پایه‌ها</option>'
+    + grades.map(function(g){ return '<option'+(batchState.filterGrade===g?' selected':'')+'>'+esc(g)+'</option>'; }).join('')
+    + '</select>'
+    + '<select id="batchClass" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none;max-width:220px"><option value="">همه کلاس‌ها</option>'
+    + classList.map(function(c){ return '<option value="'+esc(c)+'"'+(batchState.filterClass===c?' selected':'')+'>'+esc(c)+' ('+fa(classMap[c])+')</option>'; }).join('')
+    + '</select>'
+    + '<button class="btn" id="batchSelectAll">✓ انتخاب همه</button>'
+    + '<button class="btn" id="batchClear">✕ پاک کردن</button>'
+    + '<span class="pill pill-cyan" id="batchCount" style="font-size:12px;padding:6px 14px;margin-right:auto">'+fa(batchState.selectedIds.length)+' انتخاب‌شده</span>'
+    + '</div></div>';
+
+  html += '<div class="grid-2">';
+
+  html += '<div class="card" style="max-height:640px;overflow:hidden;display:flex;flex-direction:column">'
+    + '<h3 class="card-title">دانش‌آموزان</h3>'
+    + '<div id="batchStudentList" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:4px;padding:4px"></div>'
+    + '</div>';
+
+  html += '<div class="stack">'
+    + '<div class="card"><h3 class="card-title">نوع تخلف</h3><div class="type-grid" id="batchTypeGrid">';
+  DB.violationTypes.forEach(function(t){
+    html += '<div class="type-tile '+(batchState.typeId===t.id?'selected':'')+'" data-type="'+t.id+'"><div class="tt-label">'+esc(t.label)+'</div><div class="tt-pts">−'+fa(t.points)+'</div></div>';
+  });
+  html += '</div></div>';
+
+  html += '<div class="card"><h3 class="card-title">تاریخ و یادداشت</h3>'
+    + '<div class="field"><label>تاریخ و ساعت</label><input type="datetime-local" id="batchWhen"></div>'
+    + '<div class="field" style="margin-top:12px"><label>یادداشت مشترک (اختیاری)</label><textarea id="batchNote" style="min-height:70px">'+esc(batchState.note)+'</textarea></div>'
+    + '</div>';
+
+  html += '<div class="card"><h3 class="card-title">خلاصه</h3>'
+    + '<div id="batchSummary"></div>'
+    + '<button class="btn btn-primary" id="batchSubmit" style="margin-top:14px;width:100%;justify-content:center;padding:14px;font-size:14px">📌 ثبت برای همه</button>'
+    + '</div>';
+
+  html += '</div></div>';
+  view.innerHTML = html;
+
+  var whenInput = document.getElementById('batchWhen');
+  if (whenInput){
+    if (batchState.dateTime){
+      whenInput.value = batchState.dateTime;
+    } else {
+      var d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      whenInput.value = d.toISOString().slice(0,16);
+      batchState.dateTime = whenInput.value;
+    }
+    whenInput.addEventListener('change', function(){ batchState.dateTime = whenInput.value; });
+  }
+  var noteInput = document.getElementById('batchNote');
+  if (noteInput) noteInput.addEventListener('input', function(){ batchState.note = noteInput.value; });
+
+  var searchInput = document.getElementById('batchSearch');
+  var gradeSelect = document.getElementById('batchGrade');
+  var classSelect = document.getElementById('batchClass');
+  function applyFilters(){
+    batchState.search = searchInput.value;
+    batchState.filterGrade = gradeSelect.value;
+    batchState.filterClass = classSelect.value;
+    renderBatchStudentList();
+  }
+  searchInput.addEventListener('input', applyFilters);
+  gradeSelect.addEventListener('change', applyFilters);
+  classSelect.addEventListener('change', applyFilters);
+
+  document.getElementById('batchSelectAll').onclick = function(){
+    getFilteredStudents().forEach(function(s){
+      if (batchState.selectedIds.indexOf(s.id) < 0) batchState.selectedIds.push(s.id);
+    });
+    renderBatchStudentList();
+    updateBatchCount();
+    updateBatchSummary();
+  };
+  document.getElementById('batchClear').onclick = function(){
+    batchState.selectedIds = [];
+    renderBatchStudentList();
+    updateBatchCount();
+    updateBatchSummary();
+  };
+
+  document.querySelectorAll('#batchTypeGrid [data-type]').forEach(function(el){
+    el.onclick = function(){
+      batchState.typeId = el.dataset.type;
+      document.querySelectorAll('#batchTypeGrid [data-type]').forEach(function(e){
+        e.classList.toggle('selected', e.dataset.type === batchState.typeId);
+      });
+      updateBatchSummary();
+    };
+  });
+
+  document.getElementById('batchSubmit').onclick = submitBatch;
+  renderBatchStudentList();
+  updateBatchSummary();
+}
+
+function getFilteredStudents(){
+  return DB.students.filter(function(s){
+    if (batchState.filterClass && s.className !== batchState.filterClass) return false;
+    if (batchState.filterGrade && s.grade !== batchState.filterGrade) return false;
+    if (batchState.search){
+      var q = batchState.search.trim().toLowerCase();
+      if ((fullName(s) + ' ' + s.nationalId).toLowerCase().indexOf(q) < 0) return false;
+    }
+    return true;
+  }).sort(function(a,b){
+    var an = (a.lastName || '') + ' ' + (a.firstName || '');
+    var bn = (b.lastName || '') + ' ' + (b.firstName || '');
+    return an.localeCompare(bn, 'fa');
+  });
+}
+
+function renderBatchStudentList(){
+  var list = document.getElementById('batchStudentList');
+  if (!list) return;
+  var filtered = getFilteredStudents();
+  if (!filtered.length){
+    list.innerHTML = '<div style="text-align:center;color:var(--text-mute);padding:40px 20px">دانش‌آموزی یافت نشد</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(function(s){
+    var checked = batchState.selectedIds.indexOf(s.id) >= 0;
+    var pts = totalPointsOf(s.id);
+    return '<label data-sid="'+s.id+'" style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:'+(checked?'rgba(0,229,255,.08)':'rgba(255,255,255,.02)')+';border:1px solid '+(checked?'rgba(0,229,255,.4)':'var(--border)')+';cursor:pointer;transition:all .15s">'
+      + '<input type="checkbox" '+(checked?'checked':'')+' style="width:16px;height:16px;accent-color:var(--cyan);cursor:pointer">'
+      + '<div style="flex:1;min-width:0">'
+      +   '<div style="font-weight:600;font-size:13px">'+esc(fullName(s))+'</div>'
+      +   '<div style="font-size:10.5px;color:var(--text-mute);margin-top:2px">'+esc(s.className||'—')+(s.nationalId?' · '+esc(s.nationalId):'')+'</div>'
+      + '</div>'
+      + '<span class="pill '+(pts===0?'pill-green':scorePillClass(pts))+'" style="font-size:11px">−'+fa(pts)+'</span>'
+      + '</label>';
+  }).join('');
+
+  list.querySelectorAll('[data-sid]').forEach(function(el){
+    var cb = el.querySelector('input[type=checkbox]');
+    var sid = el.dataset.sid;
+    cb.addEventListener('change', function(){
+      var idx = batchState.selectedIds.indexOf(sid);
+      if (cb.checked && idx < 0) batchState.selectedIds.push(sid);
+      else if (!cb.checked && idx >= 0) batchState.selectedIds.splice(idx, 1);
+      el.style.background = cb.checked ? 'rgba(0,229,255,.08)' : 'rgba(255,255,255,.02)';
+      el.style.borderColor = cb.checked ? 'rgba(0,229,255,.4)' : 'var(--border)';
+      updateBatchCount();
+      updateBatchSummary();
+    });
+  });
+}
+
+function updateBatchCount(){
+  var el = document.getElementById('batchCount');
+  if (el) el.textContent = fa(batchState.selectedIds.length) + ' انتخاب‌شده';
+}
+
+function updateBatchSummary(){
+  var box = document.getElementById('batchSummary');
+  if (!box) return;
+  var type = batchState.typeId ? DB.violationTypes.find(function(t){ return t.id === batchState.typeId; }) : null;
+  if (!batchState.selectedIds.length || !type){
+    box.innerHTML = '<div style="color:var(--text-mute);font-size:12.5px;line-height:2">'
+      + (!batchState.selectedIds.length ? '👈 از ستون کنار دانش‌آموزان را انتخاب کن<br>' : '')
+      + (!type ? '👈 نوع تخلف را انتخاب کن' : '')
+      + '</div>';
+    return;
+  }
+  var totalPoints = 0;
+  var details = [];
+  batchState.selectedIds.forEach(function(sid){
+    var stu = DB.students.find(function(x){ return x.id === sid; });
+    if (!stu) return;
+    var prior = countPriorOccurrences(stu.id, type.id);
+    var mult = multiplierFor(prior);
+    var applied = type.points * mult;
+    totalPoints += applied;
+    details.push({ prior: prior, mult: mult, applied: applied });
+  });
+  var html = '<div style="font-size:12.5px;line-height:2">'
+    + '<div style="padding:12px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.3);border-radius:10px">'
+    + '<b>👥 تعداد:</b> ' + fa(batchState.selectedIds.length) + ' دانش‌آموز<br>'
+    + '<b>⚠ نوع:</b> ' + esc(type.label) + ' (پایه −' + fa(type.points) + ')<br>'
+    + '<b>📊 مجموع:</b> −' + fa(totalPoints) + ' امتیاز'
+    + '</div>';
+  var uniqMult = [];
+  details.forEach(function(d){ if (uniqMult.indexOf(d.mult) < 0) uniqMult.push(d.mult); });
+  if (uniqMult.length > 1){
+    html += '<div style="margin-top:10px;font-size:11.5px;color:var(--text-mute);line-height:1.9">'
+      + '<b>توزیع ضرایب (بسته به سابقه‌ی هر نفر):</b><br>'
+      + uniqMult.sort(function(a,b){ return a-b; }).map(function(m){
+        var n = details.filter(function(x){ return x.mult === m; }).length;
+        return '• ' + fa(n) + ' نفر با ×' + fa(m) + ' → هر نفر −' + fa(type.points * m);
+      }).join('<br>')
+      + '</div>';
+  }
+  html += '</div>';
+  box.innerHTML = html;
+}
+
+function submitBatch(){
+  if (!batchState.selectedIds.length){ toast('دانش‌آموزی انتخاب نشده','error'); return; }
+  var type = DB.violationTypes.find(function(t){ return t.id === batchState.typeId; });
+  if (!type){ toast('نوع تخلف انتخاب نشده','error'); return; }
+  var when = batchState.dateTime ? new Date(batchState.dateTime).toISOString() : new Date().toISOString();
+  var note = batchState.note || '';
+  if (!confirm('تخلف «' + type.label + '» برای ' + batchState.selectedIds.length + ' دانش‌آموز ثبت شود؟')) return;
+  var count = 0, total = 0;
+  batchState.selectedIds.forEach(function(sid){
+    var stu = DB.students.find(function(s){ return s.id === sid; });
+    if (!stu) return;
+    var prior = countPriorOccurrences(stu.id, type.id);
+    var mult = multiplierFor(prior);
+    var applied = type.points * mult;
+    DB.violations.push({
+      id: uid('vio'),
+      studentId: stu.id,
+      typeId: type.id,
+      occurredAt: when,
+      note: note,
+      priorCount: prior,
+      occurrenceNumber: prior + 1,
+      basePoints: type.points,
+      multiplier: mult,
+      pointsApplied: applied,
+      archived: false,
+      createdAt: new Date().toISOString(),
+      _batch: true
+    });
+    count++;
+    total += applied;
+  });
+  saveDB().then(function(){
+    toast('✓ ' + fa(count) + ' تخلف ثبت شد (مجموع ' + fa(total) + '− امتیاز)', 'success');
+    batchState.selectedIds = [];
+    batchState.note = '';
+    render();
+  });
 }
 
 /* ============================================================
@@ -1100,7 +1358,7 @@ function sdLoadSheetJS(){
 }
 
 /* ============================================================
-   نگاشت ستون‌ها — الگوریتم دقیق دو مرحله‌ای
+   نگاشت ستون‌ها — دقیق دو مرحله‌ای
    ============================================================ */
 var SD_ALIASES = {
   studentNumber:['شماره دانش آموزی','شماره دانش‌آموزی','شماره دانش اموزی','کد دانش آموزی','شماره دانش‌آموز','student number','studentnumber'],
@@ -1129,11 +1387,7 @@ function sdDetectMapping(hr){
       if (map[key] != null) continue;
       var al = SD_ALIASES[key];
       for (var j=0;j<al.length;j++){
-        if (sdNorm(al[j]) === n){
-          map[key] = i;
-          used[i] = true;
-          break;
-        }
+        if (sdNorm(al[j]) === n){ map[key] = i; used[i] = true; break; }
       }
     }
   });
@@ -1149,17 +1403,11 @@ function sdDetectMapping(hr){
       for (var j=0;j<al.length;j++){
         var na = sdNorm(al[j]);
         if (na.length < 4) continue;
-        if (n.indexOf(na) >= 0 || na.indexOf(n) >= 0){
-          cands.push({ key:key, len:na.length });
-          break;
-        }
+        if (n.indexOf(na) >= 0 || na.indexOf(n) >= 0){ cands.push({ key:key, len:na.length }); break; }
       }
     }
     cands.sort(function(a,b){ return b.len - a.len; });
-    if (cands.length){
-      map[cands[0].key] = i;
-      used[i] = true;
-    }
+    if (cands.length){ map[cands[0].key] = i; used[i] = true; }
   });
   return map;
 }
@@ -1170,7 +1418,7 @@ function sdLooksLikeHeader(row){
 }
 
 /* ============================================================
-   تشخیص فرمت حضور و غیاب و پارس آن
+   تشخیص فرمت حضور و غیاب
    ============================================================ */
 function isAttendanceFormat(headerRow){
   if (!headerRow) return false;
@@ -1187,11 +1435,7 @@ function parseStudentCell(cell){
   if (parts.length === 0) return { firstName:'', lastName:'', nationalId:nationalId };
   if (parts.length === 1) return { firstName:parts[0], lastName:'', nationalId:nationalId };
   if (parts.length === 2) return { firstName:parts[0], lastName:parts[1], nationalId:nationalId };
-  // نام‌های چندبخشی
-  var splitAt = 2;
-  if (parts.length === 3) splitAt = 2;
-  else if (parts.length === 4) splitAt = 2;
-  else splitAt = Math.ceil(parts.length / 2);
+  var splitAt = parts.length <= 4 ? 2 : Math.ceil(parts.length / 2);
   return { firstName: parts.slice(0, splitAt).join(' '), lastName: parts.slice(splitAt).join(' '), nationalId: nationalId };
 }
 
@@ -1270,30 +1514,20 @@ function processAttendanceRows(rows){
 
     if (!studentsMap[key]){
       studentsMap[key] = {
-        firstName: parsed.firstName,
-        lastName: parsed.lastName,
-        nationalId: parsed.nationalId,
-        studentNumber: parsed.nationalId,
-        className: className,
-        _fromAttendance: true
+        firstName: parsed.firstName, lastName: parsed.lastName,
+        nationalId: parsed.nationalId, studentNumber: parsed.nationalId,
+        className: className, _fromAttendance: true
       };
     } else if (className && !studentsMap[key].className){
       studentsMap[key].className = className;
     }
-
     violations.push({
-      _key: key,
-      typeId: typeId,
-      occurredAt: isoDate,
+      _key: key, typeId: typeId, occurredAt: isoDate,
       note: notes ? (notes + (registrar ? ' — ' + registrar : '')) : (registrar || ''),
       _origType: typeRaw
     });
   }
-  return {
-    students: Object.keys(studentsMap).map(function(k){ return studentsMap[k]; }),
-    violations: violations,
-    stats: skipped
-  };
+  return { students: Object.keys(studentsMap).map(function(k){ return studentsMap[k]; }), violations: violations, stats: skipped };
 }
 
 /* ============================================================
@@ -1307,11 +1541,7 @@ var _sdState = { rows:[], students:[], mapping:null, header:null, attendanceMode
 function openImportModal(){
   var body = '<div style="padding:13px 15px;background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(255,43,214,.05));border:1px solid rgba(0,229,255,.35);border-radius:10px;font-size:12.5px;line-height:1.9;margin-bottom:14px">'
     + '<b style="color:var(--cyan)">📋 تشخیص خودکار:</b><br>'
-    + 'اگه فایل فرمت <b>«حضور و غیاب»</b> داشته باشد (ستون‌های شماره، دانش‌آموز، عنوان مورد)، سامانه خودکار:<br>'
-    + '✅ اسم و فامیل را از «نام خانوادگی (کد ملی)» جدا می‌کند<br>'
-    + '✅ فقط تخلفات واقعی را ثبت می‌کند<br>'
-    + '✅ موارد <b>موجه</b> و <b>مثبت</b> (جوجه طلایی، کمک، مسابقه) را نادیده می‌گیرد<br>'
-    + '✅ دانش‌آموز جدید را خودکار می‌سازد'
+    + 'اگه فایل فرمت <b>«حضور و غیاب»</b> داشته باشد، سامانه خودکار اسم و فامیل را جدا می‌کند، فقط تخلفات واقعی را ثبت می‌کند، موارد <b>موجه</b> و <b>مثبت</b> (جوجه طلایی، کمک، مسابقه) را نادیده می‌گیرد و دانش‌آموز جدید را می‌سازد.'
     + '</div>'
     + '<div class="field"><label>روش ورود</label>'
     + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
@@ -1327,11 +1557,8 @@ function openImportModal(){
     + '<div id="sdPreviewArea" style="margin-top:16px;display:none">'
     + '<div style="font-size:12.5px;color:var(--text-dim);margin-bottom:10px;padding:10px 12px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);border-radius:10px" id="sdMappingInfo"></div>'
     + '<div class="table-wrap" style="max-height:320px;overflow:auto"><table style="font-size:12px"><thead><tr><th>#</th><th>نام</th><th>خانوادگی</th><th>کد ملی</th><th>کلاس</th><th>پدر</th><th>مادر</th><th>وضعیت</th></tr></thead><tbody id="sdPreviewBody"></tbody></table></div>'
-    + '<div id="sdModeBox" style="margin-top:14px">'
-    + '<label style="display:flex;gap:8px;font-size:13px"><input type="radio" name="sdMode" value="merge" checked> افزودن</label>'
-    + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="update"> افزودن + به‌روزرسانی</label>'
-    + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="replace"> <span style="color:var(--red)">جایگزینی کامل</span></label>'
-    + '</div></div>';
+    + '<div id="sdModeBox" style="margin-top:14px"></div>'
+    + '</div>';
   var footer = '<button class="btn" id="sdCancelBtn">انصراف</button><button class="btn btn-primary" id="sdConfirmBtn" disabled>ورود</button>';
   var m = openModal({ title:'📥 ورود گروهی', body: body, footer: footer, wide: true });
 
@@ -1385,13 +1612,12 @@ function openImportModal(){
 }
 
 /* ============================================================
-   _sdProcess — مسیریابی بین دو فرمت
+   _sdProcess — مسیریابی
    ============================================================ */
 function _sdProcess(m){
   var rows = _sdState.rows;
   if (!rows.length){ m.root.querySelector('#sdStatus').textContent = 'داده‌ای یافت نشد'; return; }
   if (isAttendanceFormat(rows[0])){ _sdProcessAttendance(m, rows); return; }
-  // حالت عادی (لیست دانش‌آموزان)
   _sdState.attendanceMode = false;
   var headerRow = null, dataStart = 0;
   if (sdLooksLikeHeader(rows[0])){ headerRow = rows[0]; dataStart = 1; }
@@ -1439,7 +1665,6 @@ function _sdProcess(m){
       + '<td>'+(ok?'<span class="pill pill-green">آماده</span>':'<span class="pill pill-red">رد</span>')+'</td></tr>';
   }).join('') + (students.length > 100 ? '<tr><td colspan="8" style="text-align:center;color:var(--text-mute)">… و ' + fa(students.length - 100) + ' ردیف دیگر</td></tr>' : '');
 
-  // نمایش باکس mode اصلی
   var modeBox = m.root.querySelector('#sdModeBox');
   if (modeBox){
     modeBox.innerHTML =
@@ -1480,8 +1705,7 @@ function _sdProcessAttendance(m, rows){
     + fa(result.stats.positive || 0) + ' مثبت · '
     + fa(result.stats.justified || 0) + ' موجه · '
     + fa(result.stats.invalid || 0) + ' نامعتبر · '
-    + fa(result.stats.badStudent || 0) + ' بدون نام'
-    + '</span>';
+    + fa(result.stats.badStudent || 0) + ' بدون نام</span>';
 
   var table = m.root.querySelector('#sdPreviewArea table');
   if (table){
@@ -1494,9 +1718,7 @@ function _sdProcessAttendance(m, rows){
   var shown = Math.min(result.violations.length, 100);
   for (var i = 0; i < shown; i++){
     var v = result.violations[i];
-    var stu = result.students.find(function(s){
-      return s.nationalId === v._key || (s.firstName + ' ' + s.lastName) === v._key;
-    });
+    var stu = result.students.find(function(s){ return s.nationalId === v._key || (s.firstName + ' ' + s.lastName) === v._key; });
     var vt = DB.violationTypes.find(function(t){ return t.id === v.typeId; });
     var exists = DB.students.some(function(s){ return s.nationalId && stu && s.nationalId === stu.nationalId; });
     if (!exists) newCount++;
@@ -1531,15 +1753,11 @@ function _sdProcessAttendance(m, rows){
   var confirmBtn = m.root.querySelector('#sdConfirmBtn');
   confirmBtn.disabled = result.violations.length === 0;
   confirmBtn.textContent = '✓ ثبت ' + fa(result.violations.length) + ' تخلف';
-
   var st2 = m.root.querySelector('#sdStatus');
   st2.textContent = 'آماده — ' + fa(result.violations.length) + ' تخلف';
   st2.style.color = 'var(--green)';
 }
 
-/* ============================================================
-   تأیید ورود
-   ============================================================ */
 function handleConfirm(m){
   if (_sdState.attendanceMode){
     var result = _sdState.attendanceData;
@@ -1595,7 +1813,6 @@ function handleConfirm(m){
     return;
   }
 
-  // حالت عادی
   var modeEl = m.root.querySelector('input[name="sdMode"]:checked');
   var mode = modeEl ? modeEl.value : 'merge';
   var students = _sdState.students || [];
@@ -1678,13 +1895,33 @@ function renderSettings(){
   });
   html += '</tbody></table></div><button class="btn btn-primary" id="saveTypes" style="margin-top:14px">ذخیره</button></div>';
 
-  html += '<div class="card" style="margin-top:20px"><h3 class="card-title">ایستگاه‌ها</h3><div class="table-wrap" style="border:none;background:transparent"><table><thead><tr><th style="width:60px">#</th><th>عنوان</th><th style="width:120px">حدنصاب</th><th>ورزش/اردو</th></tr></thead><tbody>';
-  DB.stations.forEach(function(st,i){
-    html += '<tr><td>'+fa(i+1)+'</td><td><input data-sid="'+st.id+'" data-field="name" value="'+esc(st.name)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
+  // ★ ایستگاه‌ها با ویرایش کامل
+  html += '<div class="card" style="margin-top:20px" id="stationsEditorCard">'
+    + '<h3 class="card-title">ایستگاه‌های تنبیهی</h3>'
+    + '<div style="font-size:11.5px;color:var(--text-mute);margin-bottom:12px;line-height:1.7">'
+    + 'نام، حدنصاب، وضعیت ورزش/اردو و <b style="color:var(--cyan)">اعمال اجرایی هر ایستگاه</b> رو می‌تونی ویرایش کنی. روی دکمه «✎ ویرایش» بزن.'
+    + '</div>'
+    + '<div class="table-wrap" style="border:none;background:transparent"><table><thead><tr>'
+    + '<th style="width:50px">#</th><th>عنوان</th>'
+    + '<th style="width:110px">حدنصاب</th><th>ورزش/اردو</th>'
+    + '<th style="width:100px">اعمال</th><th style="width:110px"></th>'
+    + '</tr></thead><tbody>';
+  DB.stations.forEach(function(st, i){
+    html += '<tr>'
+      + '<td>' + fa(i+1) + '</td>'
+      + '<td><input data-sid="'+st.id+'" data-field="name" value="'+esc(st.name)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
       + '<td><input data-sid="'+st.id+'" data-field="threshold" type="number" value="'+st.threshold+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;text-align:center"></td>'
-      + '<td><input data-sid="'+st.id+'" data-field="sports" value="'+esc(st.sports)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td></tr>';
+      + '<td><input data-sid="'+st.id+'" data-field="sports" value="'+esc(st.sports)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
+      + '<td><span class="pill pill-cyan" style="font-size:10.5px">' + fa((st.actions||[]).length) + ' مورد</span></td>'
+      + '<td><button class="btn btn-sm btn-primary" data-edit-actions="' + i + '">✎ ویرایش</button></td>'
+      + '</tr>';
   });
-  html += '</tbody></table></div><button class="btn btn-primary" id="saveStations" style="margin-top:14px">ذخیره</button></div>';
+  html += '</tbody></table></div>'
+    + '<div class="row" style="margin-top:14px">'
+    + '<button class="btn btn-primary" id="saveStationsNames">ذخیره نام/حدنصاب/ورزش</button>'
+    + '<button class="btn" id="addStationBtn">+ افزودن ایستگاه جدید</button>'
+    + '</div>'
+    + '</div>';
 
   document.getElementById('view').innerHTML = html;
 
@@ -1752,6 +1989,44 @@ function renderSettings(){
     };
   }
 
+  // ★ wire ایستگاه‌ها
+  var sc = document.getElementById('stationsEditorCard');
+  if (sc){
+    sc.querySelectorAll('[data-edit-actions]').forEach(function(btn){
+      btn.onclick = function(){
+        var i = Number(btn.dataset.editActions);
+        var st = DB.stations[i];
+        if (st) openStationActionsEditor(st);
+      };
+    });
+    var saveBtn = sc.querySelector('#saveStationsNames');
+    if (saveBtn){
+      saveBtn.onclick = function(){
+        DB.stations = DB.stations.map(function(st){
+          var nameEl = sc.querySelector('[data-sid="'+st.id+'"][data-field="name"]');
+          var thrEl = sc.querySelector('[data-sid="'+st.id+'"][data-field="threshold"]');
+          var sportsEl = sc.querySelector('[data-sid="'+st.id+'"][data-field="sports"]');
+          if (!nameEl || !thrEl || !sportsEl) return st;
+          return Object.assign({}, st, {
+            name: nameEl.value,
+            threshold: Number(thrEl.value) || st.threshold,
+            sports: sportsEl.value
+          });
+        }).sort(function(a,b){ return a.threshold - b.threshold; });
+        saveDB().then(function(){ toast('ذخیره شد','success'); render(); });
+      };
+    }
+    var addBtn = sc.querySelector('#addStationBtn');
+    if (addBtn){
+      addBtn.onclick = function(){
+        var maxThr = DB.stations.reduce(function(m,s){ return Math.max(m, s.threshold); }, 0);
+        DB.stations.push({ id: 's' + Date.now(), threshold: maxThr + 20, name: 'ایستگاه جدید', sports: '', actions: [] });
+        DB.stations.sort(function(a,b){ return a.threshold - b.threshold; });
+        saveDB().then(function(){ toast('ایستگاه اضافه شد','success'); render(); });
+      };
+    }
+  }
+
   document.getElementById('saveSettings').onclick = function(){
     DB.settings.schoolName = document.getElementById('setSchool').value;
     DB.settings.academicYear = document.getElementById('setYear').value;
@@ -1771,16 +2046,6 @@ function renderSettings(){
     });
     saveDB().then(function(){ toast('ذخیره شد','success'); });
   };
-  document.getElementById('saveStations').onclick = function(){
-    DB.stations = DB.stations.map(function(st){
-      return Object.assign({}, st, {
-        name: document.querySelector('[data-sid="'+st.id+'"][data-field="name"]').value,
-        threshold: Number(document.querySelector('[data-sid="'+st.id+'"][data-field="threshold"]').value) || st.threshold,
-        sports: document.querySelector('[data-sid="'+st.id+'"][data-field="sports"]').value
-      });
-    }).sort(function(a,b){ return a.threshold - b.threshold; });
-    saveDB().then(function(){ toast('ذخیره شد','success'); render(); });
-  };
 
   document.getElementById('setSchool').value = DB.settings.schoolName || '';
   document.getElementById('setYear').value = DB.settings.academicYear || '';
@@ -1791,6 +2056,45 @@ function renderSettings(){
     document.getElementById('cloudKey').value = (CFG.cloud && CFG.cloud.apiKey) || '';
     document.getElementById('cloudBin').value = savedBin || '';
   }
+}
+
+function openStationActionsEditor(station){
+  var actionsText = (station.actions || []).join('\n');
+  var body = '<div class="field"><label>نام ایستگاه</label><input id="stEditName" value="'+esc(station.name)+'"></div>'
+    + '<div class="field-row" style="margin-top:12px">'
+    + '<div class="field"><label>حدنصاب (امتیاز منفی)</label><input id="stEditThreshold" type="number" min="1" value="'+station.threshold+'"></div>'
+    + '<div class="field"><label>وضعیت ورزش/اردو</label><input id="stEditSports" value="'+esc(station.sports)+'"></div>'
+    + '</div>'
+    + '<div class="field" style="margin-top:12px">'
+    + '<label>اعمال اجرایی و تنبیهی</label>'
+    + '<div style="font-size:11.5px;color:var(--text-mute);margin-bottom:6px">هر مورد در یک خط. این‌ها در پرونده دانش‌آموز و صفحه ایستگاه‌ها نمایش داده می‌شوند.</div>'
+    + '<textarea id="stEditActions" style="min-height:200px;font-family:inherit;direction:rtl;line-height:2" placeholder="کسر ۰.۵ نمره انضباط&#10;ایستادن رو به دیوار&#10;رونویسی از آیین‌نامه">'+esc(actionsText)+'</textarea>'
+    + '</div>'
+    + '<div class="field" style="margin-top:12px;padding:12px 14px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.25);border-radius:10px">'
+    + '<div style="font-size:11.5px;color:var(--text-dim);margin-bottom:8px">پیش‌نمایش اعمال:</div>'
+    + '<ul class="station-actions" id="stActionsPreview"></ul>'
+    + '</div>';
+  var footer = '<button class="btn" data-cancel>انصراف</button><button class="btn btn-primary" data-save>ذخیره تغییرات</button>';
+  var m = openModal({ title: 'ویرایش ایستگاه — ' + station.name, body: body, footer: footer });
+  var ta = m.root.querySelector('#stEditActions');
+  var preview = m.root.querySelector('#stActionsPreview');
+  function updatePreview(){
+    var acts = ta.value.split('\n').map(function(x){ return x.trim(); }).filter(Boolean);
+    preview.innerHTML = acts.length
+      ? acts.map(function(a){ return '<li>' + esc(a) + '</li>'; }).join('')
+      : '<li style="opacity:.5">هیچ عملی تعریف نشده</li>';
+  }
+  ta.addEventListener('input', updatePreview);
+  updatePreview();
+  m.root.querySelector('[data-cancel]').onclick = m.close;
+  m.root.querySelector('[data-save]').onclick = function(){
+    station.name = m.root.querySelector('#stEditName').value.trim() || station.name;
+    station.threshold = Number(m.root.querySelector('#stEditThreshold').value) || station.threshold;
+    station.sports = m.root.querySelector('#stEditSports').value.trim();
+    station.actions = ta.value.split('\n').map(function(x){ return x.trim(); }).filter(Boolean);
+    DB.stations.sort(function(a,b){ return a.threshold - b.threshold; });
+    saveDB().then(function(){ m.close(); toast('ایستگاه ذخیره شد','success'); render(); });
+  };
 }
 
 function renderCloudConfig(savedBin){
@@ -1954,30 +2258,6 @@ function openStudentForm(student){
       if (!isEdit && getRoute().route !== 'students') navigate('students'); else render();
     });
   };
-}
-
-/* ============================================================
-   چک نسخه
-   ============================================================ */
-function compareVersions(a, b){
-  function p(v){ return String(v||'0').split('.').map(function(x){ return parseInt(x,10)||0; }); }
-  var A = p(a), B = p(b), len = Math.max(A.length, B.length);
-  for (var i=0; i<len; i++){ var x = A[i]||0, y = B[i]||0; if (x > y) return 1; if (x < y) return -1; }
-  return 0;
-}
-function checkForNewCode(){
-  var base = location.href.split('#')[0].split('?')[0];
-  fetch(base + '?_=' + Date.now(), { cache:'no-store' })
-    .then(function(r){ return r.text(); })
-    .then(function(html){
-      var m = html.match(/<meta\s+name=["']app-version["']\s+content=["']([^"']+)["']/i);
-      if (!m) return;
-      if (compareVersions(m[1], APP_VERSION) > 0){
-        // می‌تونیم بنر نشون بدیم، ولی برای سادگی فقط کنسول
-        console.log('[Update] نسخه جدید موجود:', m[1]);
-      }
-    })
-    .catch(function(){});
 }
 
 /* ============================================================
