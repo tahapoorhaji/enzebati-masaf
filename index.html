@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="app-version" content="4.0.1">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="app-version" content="4.0.2">
 <title>سامانه مدیریت انضباطی مدرسه</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -185,8 +184,8 @@ tbody tr:last-child td{border-bottom:none}
 
 <div id="errBox"></div>
 <div id="updateBanner">
-  <span>🚀 نسخه جدید سامانه آماده است</span>
-  <button onclick="location.reload(true)">به‌روزرسانی کن</button>
+  <span>🚀 نسخه جدید آماده است</span>
+  <button onclick="location.reload(true)">به‌روزرسانی</button>
 </div>
 <div id="boot"><div><div class="spin"></div><div>در حال بارگذاری…</div></div></div>
 <div class="bg-grid"></div>
@@ -215,7 +214,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="storage-badge local" id="storageBadge" onclick="location.hash='#/settings'">
         <span class="dot"></span><span id="storageText">لوکال</span>
       </div>
-      <div class="hint" id="verHint">نسخه ۴.۰.۱</div>
+      <div class="hint" id="verHint">نسخه ۴.۰.۲</div>
     </div>
   </aside>
 
@@ -241,18 +240,15 @@ tbody tr:last-child td{border-bottom:none}
 
 <script>
 /* ============================================================
-   ثابت‌ها — این خط را هرگز عوض نکن
+   ثابت‌ها
    ============================================================ */
-var APP_VERSION = '4.0.1';
-var BIN_NAME = 'school-discipline-main';
+var APP_VERSION = '4.0.2';
 var STORAGE_KEY = 'sd-v3';
 var BACKUP_KEY  = 'sd-backups-v3';
 var CFG_KEY     = 'sd-cfg-v3';
+var BIN_ID_KEY  = 'sd-binid';
 var MAX_BACKUPS = 5;
 
-/* ============================================================
-   ابزار خطا
-   ============================================================ */
 function showError(msg){
   var el = document.getElementById('errBox');
   if (!el) return;
@@ -357,9 +353,6 @@ var pollTimer = null;
 var setupMode = null;
 var quickSelection = { studentId:null, typeId:null };
 
-/* ============================================================
-   IndexedDB برای نگه‌داشتن file handle
-   ============================================================ */
 var IDB = {
   _db: null,
   open: function(){
@@ -379,7 +372,7 @@ var IDB = {
 };
 
 /* ============================================================
-   تشخیص حالت + توابع پایه
+   ابزار پایه
    ============================================================ */
 function activeMode(){
   if (CFG.cloud && CFG.cloud.apiKey && CFG.cloud.binId) return 'cloud';
@@ -413,19 +406,13 @@ function saveLocalBackup(db, tag){
   } catch(e){}
 }
 
-/* ============================================================
-   به‌روزرسانی نشانگر حالت ذخیره‌سازی (این تابع قبلاً جا افتاده بود)
-   ============================================================ */
 function updateStorageBadge(){
   var badge = document.getElementById('storageBadge');
   var text  = document.getElementById('storageText');
   if (!badge || !text) return;
-
   var m = activeMode();
   var pending = DB && DB.meta && DB.meta.pendingSync;
-
   badge.className = 'storage-badge ' + m;
-
   var label;
   if (m === 'cloud'){
     if (pending) label = 'ابری — در صف';
@@ -440,14 +427,19 @@ function updateStorageBadge(){
 }
 
 /* ============================================================
-   بارگذاری / ذخیره‌سازی
+   بارگذاری و ذخیره‌سازی
    ============================================================ */
 function loadDB(){
   var mode = activeMode();
   var promise;
   if (mode === 'cloud'){
     promise = fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId+'/latest', { headers:{ 'X-Master-Key': CFG.cloud.apiKey } })
-      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(r){
+        if (r.status === 401 || r.status === 403) throw new Error('کلید X-Master-Key نامعتبر (HTTP '+r.status+')');
+        if (r.status === 404) throw new Error('Bin ID پیدا نشد (HTTP 404)');
+        if (!r.ok) throw new Error('HTTP '+r.status);
+        return r.json();
+      })
       .then(function(j){
         cloudOnline = true;
         var remote = normalizeDB(j.record || j);
@@ -456,8 +448,9 @@ function loadDB(){
         if (local && local.meta && local.meta.pendingSync){ DB = normalizeDB(local); }
         else { DB = remote; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){} }
       })
-      .catch(function(){
+      .catch(function(e){
         cloudOnline = false;
+        console.error('[loadDB cloud]', e.message);
         try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
         catch(x){ DB = defaultDB(); }
       });
@@ -478,6 +471,7 @@ function loadDB(){
 }
 
 function pushToCloud(){
+  if (!CFG.cloud || !CFG.cloud.binId || !CFG.cloud.apiKey) return Promise.resolve(false);
   return fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId, {
     method:'PUT',
     headers:{ 'Content-Type':'application/json', 'X-Master-Key': CFG.cloud.apiKey },
@@ -499,7 +493,7 @@ function saveDB(){
   if (mode === 'cloud'){
     return pushToCloud().then(function(ok){
       DB.meta.pendingSync = !ok;
-      if (!ok) toast('اینترنت قطع — داده محلی ذخیره شد، بعداً همگام می‌شود', 'info');
+      if (!ok) toast('اینترنت قطع — داده محلی ذخیره شد', 'info');
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
       updateStorageBadge();
     });
@@ -526,7 +520,6 @@ function startPolling(){
 
 function pullFromCloud(silent){
   if (activeMode() !== 'cloud') return Promise.resolve();
-  // اگه تغییرات معلق داریم، اول آپلود کن
   if (DB && DB.meta && DB.meta.pendingSync){
     return pushToCloud().then(function(ok){
       if (ok){
@@ -545,10 +538,7 @@ function pullFromCloud(silent){
       if (remote.meta && DB.meta && remote.meta.lastModified !== DB.meta.lastModified){
         DB = remote;
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
-        if (!silent){
-          render();
-          toast('داده‌ها از دستگاه دیگری به‌روز شد', 'info');
-        }
+        if (!silent){ render(); toast('داده‌ها از دستگاه دیگری به‌روز شد', 'info'); }
       }
       updateStorageBadge();
     })
@@ -559,63 +549,49 @@ document.addEventListener('visibilitychange', function(){ if (!document.hidden) 
 window.addEventListener('focus', function(){ pullFromCloud(true); });
 
 /* ============================================================
-   پیدا کردن Bin خودکار
+   ساخت Bin جدید و اتصال
    ============================================================ */
-function listBins(apiKey){
-  return fetch('https://api.jsonbin.io/v3/b', { headers:{ 'X-Master-Key': apiKey } })
-    .then(function(r){ if (!r.ok) throw new Error('کلید نامعتبر (HTTP '+r.status+')'); return r.json(); })
-    .then(function(data){
-      var arr = Array.isArray(data) ? data : (data.bins || data.records || data.data || []);
-      return arr.map(function(b){
-        var m = b.metadata || b;
-        return { id: m.id || b.id, name: m.name || b.name || '', createdAt: m.createdAt || b.createdAt || '' };
-      }).filter(function(x){ return x.id; });
-    });
-}
-
 function createSharedBin(apiKey){
   return fetch('https://api.jsonbin.io/v3/b', {
-    method:'POST',
-    headers:{ 'Content-Type':'application/json', 'X-Master-Key':apiKey, 'X-Bin-Name':BIN_NAME, 'X-Bin-Private':'true' },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': apiKey,
+      'X-Bin-Name': 'school-discipline',
+      'X-Bin-Private': 'true'
+    },
     body: JSON.stringify(DB || defaultDB())
-  }).then(function(r){ if (!r.ok) throw new Error('خطا در ساخت (HTTP '+r.status+')'); return r.json(); })
-    .then(function(j){ return j.metadata.id; });
+  }).then(function(r){
+    if (r.status === 401 || r.status === 403) throw new Error('کلید X-Master-Key نامعتبر (HTTP '+r.status+')');
+    if (!r.ok) throw new Error('ساخت Bin ناموفق (HTTP '+r.status+')');
+    return r.json();
+  }).then(function(j){
+    if (!j || !j.metadata || !j.metadata.id) throw new Error('پاسخ سرور نامعتبر');
+    return j.metadata.id;
+  });
 }
 
-function connectCloudAuto(apiKey){
-  return listBins(apiKey).then(function(bins){
-    // دنبال Bin با اسم ثابت
-    var matches = bins.filter(function(b){ return b.name === BIN_NAME; });
-    if (matches.length > 0){
-      matches.sort(function(a,b){ return new Date(b.createdAt||0) - new Date(a.createdAt||0); });
-      return { id: matches[0].id, created: false, name: matches[0].name };
-    }
-    // اگه Bin با اسم مشابه هست، هشدار بده
-    var similar = bins.filter(function(b){ return /school|discipline|انضباط/i.test(b.name || ''); });
-    if (similar.length > 0){
-      var msg = '⚠ یه Bin مرتبط با این سامانه پیدا شد:\n\n'
-        + similar.slice(0,3).map(function(b){ return '• ' + (b.name||'بدون نام') + ' (' + b.id + ')'; }).join('\n')
-        + '\n\nولی نام دقیق «' + BIN_NAME + '» نیست.\n\n'
-        + 'از همین Bin استفاده شود؟ (اگه «خیر» بزنی، Bin جدید ساخته می‌شه)';
-      if (confirm(msg)){
-        return { id: similar[0].id, created: false, name: similar[0].name };
-      }
-    }
-    // ساخت Bin جدید
-    return createSharedBin(apiKey).then(function(id){ return { id: id, created: true, name: BIN_NAME }; });
-  }).then(function(res){
-    CFG.cloud = { apiKey:apiKey, binId:res.id, binName:res.name };
+function connectCloud(apiKey, binId){
+  return fetch('https://api.jsonbin.io/v3/b/'+binId+'/latest', {
+    headers: { 'X-Master-Key': apiKey }
+  }).then(function(r){
+    if (r.status === 401 || r.status === 403) throw new Error('کلید X-Master-Key نامعتبر (HTTP '+r.status+')');
+    if (r.status === 404) throw new Error('Bin ID پیدا نشد (HTTP 404)');
+    if (!r.ok) throw new Error('خطا در اتصال (HTTP '+r.status+')');
+    return r.json();
+  }).then(function(){
+    CFG.cloud = { apiKey: apiKey, binId: binId };
     CFG.mode = 'cloud';
     saveCFG();
+    try { localStorage.setItem(BIN_ID_KEY, binId); } catch(e){}
     return loadDB();
-  }).then(function(){
-    return saveDB();
-  }).then(function(){
-    setupMode = null;
-    startPolling();
-    toast('☁️ اتصال ابری برقرار شد — داده‌ها روی همه دستگاه‌ها همگام می‌شوند', 'success');
-    render();
-  });
+  }).then(function(){ return saveDB(); })
+    .then(function(){
+      setupMode = null;
+      startPolling();
+      toast('☁️ اتصال ابری برقرار شد', 'success');
+      render();
+    });
 }
 
 function disconnectCloud(){
@@ -691,23 +667,18 @@ function applyAutoReset(){
 }
 
 function yearStartMs(){ return DB.settings.yearStartISO ? new Date(DB.settings.yearStartISO).getTime() : 0; }
-
 function activeViolationsOf(sid){
   var ys = yearStartMs();
   return DB.violations.filter(function(v){ return v.studentId === sid && !v.archived && new Date(v.occurredAt).getTime() >= ys; })
     .sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); });
 }
-
 function totalPointsOf(sid){ return activeViolationsOf(sid).reduce(function(s,v){ return s + v.pointsApplied; }, 0); }
-
 function typeCountsOf(sid){
   var m = {};
   activeViolationsOf(sid).forEach(function(v){ m[v.typeId] = (m[v.typeId]||0)+1; });
   return m;
 }
-
 function countPriorOccurrences(sid, tid){ return typeCountsOf(sid)[tid] || 0; }
-
 function multiplierFor(prior){
   var k = prior + 1;
   if (k <= 2) return 1;
@@ -715,16 +686,13 @@ function multiplierFor(prior){
   if (k <= 6) return 3;
   return 4;
 }
-
 function currentStation(points){
   var cur = null; DB.stations.forEach(function(s){ if (points >= s.threshold) cur = s; }); return cur;
 }
-
 function nextStation(points){
   for (var i=0;i<DB.stations.length;i++) if (points < DB.stations[i].threshold) return DB.stations[i];
   return null;
 }
-
 function scoreColor(p){
   if (p===0) return 'var(--green)';
   if (p<15) return 'var(--cyan)';
@@ -735,7 +703,6 @@ function scoreColor(p){
   if (p<100) return 'var(--magenta)';
   return 'var(--purple)';
 }
-
 function scorePillClass(p){
   if (p===0) return 'pill-green';
   if (p<15) return 'pill-cyan';
@@ -748,7 +715,7 @@ function scorePillClass(p){
 }
 
 /* ============================================================
-   ابزار عمومی
+   ابزار
    ============================================================ */
 function $(s, r){ return (r||document).querySelector(s); }
 function $$(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
@@ -863,7 +830,7 @@ function renderStudents(){
 
   if (list.length){
     html += '<div class="table-wrap"><table><thead><tr><th>نام</th><th>کد ملی</th><th>کلاس</th><th>امتیاز</th><th>ایستگاه</th><th>آخرین تخلف</th><th></th></tr></thead><tbody id="studentsTbody"></tbody></table></div>';
-  } else html += '<div class="empty"><div class="e-ico">◉</div><div class="e-txt">هنوز دانش‌آموزی ثبت نشده — از «ورود از اکسل» استفاده کن</div></div>';
+  } else html += '<div class="empty"><div class="e-ico">◉</div><div class="e-txt">هنوز دانش‌آموزی ثبت نشده</div></div>';
   document.getElementById('view').innerHTML = html;
 
   var tbody = document.getElementById('studentsTbody');
@@ -1103,16 +1070,14 @@ function renderImport(){
   document.getElementById('view').innerHTML =
     '<div class="card"><h3 class="card-title">ورود گروهی از اکسل / CSV</h3>'
     + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 18px">'
-    + 'داده‌ها را از اکسل کپی-پیست کن یا فایل CSV/XLSX آپلود کن. ستون‌ها: '
-    + '<b>شماره دانش‌آموزی، نام، نام خانوادگی، کد ملی، کلاس، نوع ثبت‌نام، همراه پدر، همراه مادر</b>.'
+    + 'داده‌ها را از اکسل کپی-پیست کن یا فایل CSV/XLSX آپلود کن.'
     + '</p>'
     + '<button class="btn btn-primary" id="openImportBtn" style="padding:13px 22px;font-size:14px">📥 باز کردن پنجره ورود</button>'
     + '<button class="btn" id="downloadTemplateBtn" style="margin-right:10px">📄 دانلود قالب نمونه</button></div>';
   document.getElementById('openImportBtn').onclick = openImportModal;
   document.getElementById('downloadTemplateBtn').onclick = function(){
     var csv = '\uFEFFشماره دانش آموزی,نام,نام خانوادگی,کد ملی,کلاس,نوع ثبت نام کلاس,شماره همراه پدر,شماره همراه مادر\n'
-      + '6580385081,محمدطاها,روشن,6580385081,شهید لاریجانی,اصلی,09123983106,09191929420\n'
-      + '4890667180,رضا,امین دهقان,4890667180,شهید کاظمی,اصلی,09123621505,09120054127\n';
+      + '6580385081,محمدطاها,روشن,6580385081,شهید لاریجانی,اصلی,09123983106,09191929420\n';
     download('students-template.csv', csv, 'text/csv');
   };
 }
@@ -1150,17 +1115,17 @@ function sdLoadSheetJS(){
 }
 
 var SD_ALIASES = {
-  studentNumber:['شماره دانش آموزی','شماره دانش‌آموزی','شماره دانش اموزی','کد دانش آموزی','student number','studentnumber','student_id','studentid'],
-  firstName:['نام','first name','firstname','first_name'],
-  lastName:['نام خانوادگی','نام‌خانوادگی','فامیل','last name','lastname','last_name','family'],
-  nationalId:['کد ملی','کدملی','شماره ملی','national id','nationalid','national_id','melli'],
+  studentNumber:['شماره دانش آموزی','شماره دانش‌آموزی','شماره دانش اموزی','کد دانش آموزی','student number','studentnumber'],
+  firstName:['نام','first name','firstname'],
+  lastName:['نام خانوادگی','نام‌خانوادگی','فامیل','last name','lastname','family'],
+  nationalId:['کد ملی','کدملی','شماره ملی','national id','nationalid'],
   className:['کلاس','کلاس درس','class','classname'],
   grade:['پایه','پایه تحصیلی','grade','level'],
-  classType:['نوع ثبت نام کلاس','نوع ثبت‌نام کلاس','نوع ثبت نام','نوع ثبت‌نام','class type','type'],
-  parentPhone:['شماره همراه پدر','همراه پدر','تلفن پدر','موبایل پدر','شماره پدر','father phone','fatherphone','father_phone','parent phone'],
-  motherPhone:['شماره همراه مادر','همراه مادر','تلفن مادر','موبایل مادر','شماره مادر','mother phone','motherphone','mother_phone'],
-  studentPhone:['شماره همراه دانش‌آموز','شماره همراه','همراه','تلفن','موبایل','student phone','phone'],
-  notes:['یادداشت','توضیحات','note','notes','description']
+  classType:['نوع ثبت نام کلاس','نوع ثبت‌نام کلاس','نوع ثبت نام','class type'],
+  parentPhone:['شماره همراه پدر','همراه پدر','تلفن پدر','father phone','parent phone'],
+  motherPhone:['شماره همراه مادر','همراه مادر','تلفن مادر','mother phone'],
+  studentPhone:['شماره همراه دانش‌آموز','شماره همراه','phone'],
+  notes:['یادداشت','توضیحات','note','notes']
 };
 function sdNorm(h){ return String(h==null?'':h).trim().toLowerCase().replace(/\u200c/g,' ').replace(/\s+/g,' '); }
 function sdDetectMapping(hr){
@@ -1191,27 +1156,25 @@ var _sdState = { rows:[], students:[], mapping:null, header:null };
 function openImportModal(){
   var body = '<div class="field"><label>روش ورود</label>'
     + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
-    + '<button class="btn btn-primary" id="sdTabPaste" type="button">📋 کپی-پیست از اکسل</button>'
-    + '<button class="btn" id="sdTabCsv" type="button">📄 فایل CSV</button>'
-    + '<button class="btn" id="sdTabXlsx" type="button">📊 فایل اکسل</button></div></div>'
-    + '<div id="sdPanePaste" style="margin-top:14px"><div class="field"><label>داده‌ها را کپی کن و اینجا پیست کن</label>'
-    + '<textarea id="sdPasteArea" style="min-height:160px;font-family:Consolas,monospace;direction:ltr;text-align:left" placeholder="ستون‌ها با Tab یا کاما جدا شوند"></textarea></div></div>'
+    + '<button class="btn btn-primary" id="sdTabPaste" type="button">📋 کپی-پیست</button>'
+    + '<button class="btn" id="sdTabCsv" type="button">📄 CSV</button>'
+    + '<button class="btn" id="sdTabXlsx" type="button">📊 اکسل</button></div></div>'
+    + '<div id="sdPanePaste" style="margin-top:14px"><div class="field"><label>داده‌ها را پیست کن</label>'
+    + '<textarea id="sdPasteArea" style="min-height:160px;font-family:Consolas,monospace;direction:ltr;text-align:left"></textarea></div></div>'
     + '<div id="sdPaneCsv" style="margin-top:14px;display:none"><div class="field"><label>فایل CSV</label><input type="file" id="sdCsvFile" accept=".csv,.txt"></div></div>'
-    + '<div id="sdPaneXlsx" style="margin-top:14px;display:none"><div class="field"><label>فایل اکسل</label><input type="file" id="sdXlsxFile" accept=".xlsx,.xls">'
-    + '<div style="font-size:11.5px;color:var(--text-mute);margin-top:6px">نیاز به اینترنت برای بارگذاری پارسر</div></div></div>'
-    + '<div class="row" style="margin-top:16px"><button class="btn btn-primary" id="sdParseBtn">پردازش و پیش‌نمایش</button>'
+    + '<div id="sdPaneXlsx" style="margin-top:14px;display:none"><div class="field"><label>فایل اکسل</label><input type="file" id="sdXlsxFile" accept=".xlsx,.xls"></div></div>'
+    + '<div class="row" style="margin-top:16px"><button class="btn btn-primary" id="sdParseBtn">پردازش</button>'
     + '<span id="sdStatus" style="font-size:12px;color:var(--text-dim);margin-right:auto"></span></div>'
     + '<div id="sdPreviewArea" style="margin-top:16px;display:none">'
     + '<div style="font-size:12.5px;color:var(--text-dim);margin-bottom:10px;padding:10px 12px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);border-radius:10px" id="sdMappingInfo"></div>'
-    + '<div class="table-wrap" style="max-height:320px;overflow:auto;border:1px solid var(--border);border-radius:10px">'
-    + '<table style="font-size:12px"><thead><tr><th>#</th><th>نام</th><th>خانوادگی</th><th>کد ملی</th><th>کلاس</th><th>پدر</th><th>مادر</th><th>وضعیت</th></tr></thead><tbody id="sdPreviewBody"></tbody></table></div>'
+    + '<div class="table-wrap" style="max-height:320px;overflow:auto"><table style="font-size:12px"><thead><tr><th>#</th><th>نام</th><th>خانوادگی</th><th>کد ملی</th><th>کلاس</th><th>پدر</th><th>مادر</th><th>وضعیت</th></tr></thead><tbody id="sdPreviewBody"></tbody></table></div>'
     + '<div style="margin-top:14px">'
-    + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="radio" name="sdMode" value="merge" checked> افزودن (تکراری‌ها نادیده)</label>'
-    + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:6px"><input type="radio" name="sdMode" value="update"> افزودن + به‌روزرسانی تکراری‌ها (بر اساس کد ملی)</label>'
-    + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:6px"><input type="radio" name="sdMode" value="replace"> <span style="color:var(--red)">جایگزینی کامل لیست و پاک کردن سوابق</span></label>'
+    + '<label style="display:flex;gap:8px;font-size:13px"><input type="radio" name="sdMode" value="merge" checked> افزودن</label>'
+    + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="update"> افزودن + به‌روزرسانی</label>'
+    + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="replace"> <span style="color:var(--red)">جایگزینی کامل</span></label>'
     + '</div></div>';
-  var footer = '<button class="btn" id="sdCancelBtn">انصراف</button><button class="btn btn-primary" id="sdConfirmBtn" disabled>ورود به سامانه</button>';
-  var m = openModal({ title:'📥 ورود گروهی دانش‌آموزان', body: body, footer: footer, wide: true });
+  var footer = '<button class="btn" id="sdCancelBtn">انصراف</button><button class="btn btn-primary" id="sdConfirmBtn" disabled>ورود</button>';
+  var m = openModal({ title:'📥 ورود گروهی', body: body, footer: footer, wide: true });
 
   var panes = { paste:'sdPanePaste', csv:'sdPaneCsv', xlsx:'sdPaneXlsx' };
   var buttons = { paste:'sdTabPaste', csv:'sdTabCsv', xlsx:'sdTabXlsx' };
@@ -1235,9 +1198,8 @@ function openImportModal(){
     if (whichTab === 'xlsx'){
       var xf = m.root.querySelector('#sdXlsxFile').files[0];
       if (!xf){ status.textContent = 'فایلی انتخاب نشده'; return; }
-      status.textContent = 'بارگذاری کتابخانه…';
+      status.textContent = 'بارگذاری…';
       sdLoadSheetJS().then(function(XLSX){
-        status.textContent = 'خواندن فایل…';
         return xf.arrayBuffer().then(function(buf){
           var wb = XLSX.read(buf, { type:'array' });
           var ws = wb.Sheets[wb.SheetNames[0]];
@@ -1282,7 +1244,7 @@ function openImportModal(){
     });
     saveDB().then(function(){
       m.close();
-      toast('ورود انجام شد — ' + fa(added) + ' افزوده، ' + fa(updated) + ' به‌روز، ' + fa(skipped) + ' رد شد', 'success');
+      toast('ورود انجام شد — '+fa(added)+' افزوده، '+fa(updated)+' به‌روز، '+fa(skipped)+' رد', 'success');
       render();
     });
   };
@@ -1309,31 +1271,24 @@ function _sdProcess(m){
     if (!stu.firstName && !stu.lastName) continue;
     students.push(stu);
   }
-  _sdState.students = students; _sdState.header = headerRow; _sdState.mapping = mapping;
-
+  _sdState.students = students;
   var area = m.root.querySelector('#sdPreviewArea');
   var body = m.root.querySelector('#sdPreviewBody');
   var info = m.root.querySelector('#sdMappingInfo');
   var present = Object.keys(mapping).filter(function(k){ return mapping[k] != null; });
   var hd = headerRow ? present.map(function(k){ return '<b>'+esc(headerRow[mapping[k]] || k)+'</b> ← '+k; }).join(' · ') : present.map(function(k){ return k+'=ستون '+fa(mapping[k]+1); }).join(' · ');
-  info.innerHTML = '📌 ردیف هدر: ' + (headerRow ? 'شناسایی شد' : 'شناسایی نشد (ترتیب پیش‌فرض)') + '<br>نگاشت: ' + hd + '<br>تعداد ردیف: <b>' + fa(students.length) + '</b>';
-
+  info.innerHTML = '📌 هدر: '+(headerRow?'شناسایی شد':'پیش‌فرض')+'<br>نگاشت: '+hd+'<br>تعداد: <b>'+fa(students.length)+'</b>';
   body.innerHTML = students.slice(0, 100).map(function(s, i){
     var ok = (s.firstName || s.lastName);
-    return '<tr><td>' + fa(i+1) + '</td>'
-      + '<td>' + (esc(s.firstName) || '—') + '</td>'
-      + '<td>' + (esc(s.lastName) || '—') + '</td>'
-      + '<td class="mono">' + (esc(s.nationalId) || '—') + '</td>'
-      + '<td>' + (esc(s.className) || '—') + '</td>'
-      + '<td class="mono">' + (esc(s.parentPhone) || '—') + '</td>'
-      + '<td class="mono">' + (esc(s.motherPhone) || '—') + '</td>'
-      + '<td>' + (ok ? '<span class="pill pill-green">آماده</span>' : '<span class="pill pill-red">رد</span>') + '</td></tr>';
-  }).join('') + (students.length > 100 ? '<tr><td colspan="8" style="text-align:center;color:var(--text-mute)">… و ' + fa(students.length - 100) + ' ردیف دیگر</td></tr>' : '');
-
+    return '<tr><td>'+fa(i+1)+'</td><td>'+(esc(s.firstName)||'—')+'</td><td>'+(esc(s.lastName)||'—')+'</td>'
+      + '<td class="mono">'+(esc(s.nationalId)||'—')+'</td><td>'+(esc(s.className)||'—')+'</td>'
+      + '<td class="mono">'+(esc(s.parentPhone)||'—')+'</td><td class="mono">'+(esc(s.motherPhone)||'—')+'</td>'
+      + '<td>'+(ok?'<span class="pill pill-green">آماده</span>':'<span class="pill pill-red">رد</span>')+'</td></tr>';
+  }).join('');
   area.style.display = 'block';
   m.root.querySelector('#sdConfirmBtn').disabled = students.length === 0;
   var st = m.root.querySelector('#sdStatus');
-  st.textContent = fa(students.length) + ' دانش‌آموز آماده ورود'; st.style.color = 'var(--green)';
+  st.textContent = fa(students.length) + ' آماده ورود'; st.style.color = 'var(--green)';
 }
 
 /* ============================================================
@@ -1342,12 +1297,15 @@ function _sdProcess(m){
 function renderSettings(){
   var m = activeMode();
   var showCloudForm = (m === 'cloud') || (setupMode === 'cloud');
+  var savedBin = '';
+  try { savedBin = localStorage.getItem(BIN_ID_KEY) || ''; } catch(e){}
+  if (!savedBin && CFG.cloud && CFG.cloud.binId) savedBin = CFG.cloud.binId;
 
   var html = '<div class="card" style="margin-bottom:20px"><h3 class="card-title">حالت ذخیره‌سازی</h3>'
     + '<div style="font-size:12px;color:var(--text-mute);margin-bottom:14px;line-height:1.7">'
-    + '<b style="color:var(--green)">پیشنهاد:</b> حالت ابری را انتخاب کن. کافیه فقط کلید <code>X-Master-Key</code> را بدی — Bin خودکار پیدا یا ساخته می‌شود. همه دستگاه‌ها و مرورگرها همان داده را می‌بینند.</div>'
+    + '<b style="color:var(--green)">پیشنهاد:</b> حالت ابری. کافیه فقط <code>X-Master-Key</code> رو بدی — Bin خودکار ساخته می‌شه.</div>'
     + '<div class="grid-3" style="margin-bottom:16px">'
-    + '<div class="mode-card '+(m==='cloud'?'selected':'')+'" data-mode="cloud"><div class="m-ico">☁️</div><div class="m-body"><h4>ابری (پیشنهاد)</h4><p>همه دستگاه‌ها یک داده مشترک. فقط کلید API لازم است.</p></div></div>'
+    + '<div class="mode-card '+(m==='cloud'?'selected':'')+'" data-mode="cloud"><div class="m-ico">☁️</div><div class="m-body"><h4>ابری (پیشنهاد)</h4><p>همه دستگاه‌ها یک داده مشترک.</p></div></div>'
     + '<div class="mode-card '+(m==='local'?'selected':'')+'" data-mode="local"><div class="m-ico">🖥️</div><div class="m-body"><h4>لوکال</h4><p>فقط همین مرورگر.</p></div></div>'
     + '<div class="mode-card '+(m==='file'?'selected':'')+'" data-mode="file"><div class="m-ico">📁</div><div class="m-body"><h4>فایل روی دیسک</h4><p>ذخیره در فایل JSON.</p></div></div>'
     + '</div>';
@@ -1357,16 +1315,14 @@ function renderSettings(){
   }
   if (m === 'cloud'){
     html += '<div class="cloud-status '+(cloudOnline?'ok':'err')+'"><span>'+(cloudOnline?'✓':'✕')+'</span>'
-      + '<span style="flex:1">'+(cloudOnline ? 'به سرور ابری متصل' : 'اتصال قطع — داده محلی ذخیره می‌شود')
-      + ' · Bin Name: <code dir="ltr">'+esc(CFG.cloud.binName||BIN_NAME)+'</code>'
-      + ' · Bin ID: <code dir="ltr" id="binIdDisplay" style="cursor:pointer;text-decoration:underline dotted" title="برای کپی کلیک کن">'+esc(CFG.cloud.binId)+'</code>'
+      + '<span style="flex:1">'+(cloudOnline ? 'متصل به JSONBin' : 'اتصال قطع — داده محلی')+' · Bin ID: <code dir="ltr">'+esc(CFG.cloud.binId)+'</code>'
       + (DB && DB.meta && DB.meta.pendingSync ? ' · <b style="color:var(--yellow)">در صف</b>' : '') + '</span>'
       + '<button class="btn btn-sm" id="copyBinIdBtn">کپی ID</button>'
       + '<button class="btn btn-sm" id="disconnectCloudBtn">قطع</button></div>';
   }
   html += '</div>';
 
-  if (showCloudForm) html += renderCloudConfig();
+  if (showCloudForm) html += renderCloudConfig(savedBin);
 
   html += '<div class="grid-2" style="margin-top:20px">'
     + '<div class="card"><h3 class="card-title">اطلاعات مدرسه</h3>'
@@ -1379,8 +1335,10 @@ function renderSettings(){
     + '<button class="btn btn-primary" id="saveSettings" style="margin-top:16px">ذخیره</button></div>'
     + '<div class="card"><h3 class="card-title">ضرایب تصاعدی</h3>'
     + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;padding:14px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--border)">'
-    + '<div>• دفعه ۱ و ۲: × <b style="color:var(--cyan)">۱</b></div><div>• دفعه ۳ و ۴: × <b style="color:var(--cyan)">۲</b></div>'
-    + '<div>• دفعه ۵ و ۶: × <b style="color:var(--cyan)">۳</b></div><div>• دفعه ۷+: × <b style="color:var(--cyan)">۴</b></div></div></div></div>';
+    + '<div>• دفعه ۱ و ۲: × <b style="color:var(--cyan)">۱</b></div>'
+    + '<div>• دفعه ۳ و ۴: × <b style="color:var(--cyan)">۲</b></div>'
+    + '<div>• دفعه ۵ و ۶: × <b style="color:var(--cyan)">۳</b></div>'
+    + '<div>• دفعه ۷+: × <b style="color:var(--cyan)">۴</b></div></div></div></div>';
 
   html += '<div class="card" style="margin-top:20px"><h3 class="card-title">جدول تخلفات</h3><div class="table-wrap" style="border:none;background:transparent"><table><thead><tr><th style="width:60px">#</th><th>عنوان</th><th style="width:160px">امتیاز</th></tr></thead><tbody>';
   DB.violationTypes.forEach(function(t,i){
@@ -1425,31 +1383,58 @@ function renderSettings(){
   if (document.getElementById('disconnectCloudBtn')) document.getElementById('disconnectCloudBtn').onclick = disconnectCloud;
   if (document.getElementById('cancelCloudBtn')) document.getElementById('cancelCloudBtn').onclick = function(){ setupMode = null; render(); };
 
-  // کپی Bin ID
   if (document.getElementById('copyBinIdBtn')){
     document.getElementById('copyBinIdBtn').onclick = function(){
       var id = CFG.cloud && CFG.cloud.binId;
       if (!id){ toast('Bin ID یافت نشد','error'); return; }
-      navigator.clipboard.writeText(id).then(function(){ toast('Bin ID کپی شد','success'); })
-        .catch(function(){ toast('کپی نشد','error'); });
-    };
-  }
-  if (document.getElementById('binIdDisplay')){
-    document.getElementById('binIdDisplay').onclick = function(){
-      navigator.clipboard.writeText(CFG.cloud.binId).then(function(){ toast('Bin ID کپی شد','success'); });
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(id).then(function(){ toast('Bin ID کپی شد: '+id,'success'); })
+          .catch(function(){ prompt('کپی کن:', id); });
+      } else {
+        prompt('کپی کن:', id);
+      }
     };
   }
 
-  // ★ دکمه اتصال ابری
-  if (document.getElementById('connectCloudAutoBtn')){
-    document.getElementById('connectCloudAutoBtn').onclick = function(){
+  // Create Bin
+  if (document.getElementById('createBinBtn')){
+    document.getElementById('createBinBtn').onclick = function(){
       var k = document.getElementById('cloudKey').value.trim();
-      if (!k){ toast('کلید API را وارد کن','error'); return; }
+      if (!k){ toast('اول کلید X-Master-Key را وارد کن','error'); return; }
+      if (!confirm('یک Bin جدید ساخته می‌شود و داده‌های فعلی در آن ذخیره می‌شود.\n\nBin ID را جای امنی ذخیره کن.\n\nادامه؟')) return;
       var s = document.getElementById('cloudStatusText');
-      s.textContent = '⏳ در حال جستجوی Bin…'; s.style.color = 'var(--yellow)';
-      connectCloudAuto(k).catch(function(e){
+      s.textContent = '⏳ در حال ساخت Bin…'; s.style.color = 'var(--yellow)';
+      createSharedBin(k).then(function(id){
+        document.getElementById('cloudBin').value = id;
+        try { localStorage.setItem(BIN_ID_KEY, id); } catch(e){}
+        s.innerHTML = '✓ Bin ساخته شد — حالا «اتصال» را بزن<br><code dir="ltr">'+esc(id)+'</code>';
+        s.style.color = 'var(--green)';
+        if (navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(id).then(function(){
+            toast('Bin ID کپی شد','success');
+          });
+        } else {
+          alert('Bin ID:\n\n' + id + '\n\nکپی کن و جای امنی ذخیره کن.');
+        }
+      }).catch(function(e){
         s.textContent = '✕ ' + e.message; s.style.color = 'var(--red)';
-        toast(e.message,'error');
+        toast(e.message, 'error');
+      });
+    };
+  }
+
+  // Connect
+  if (document.getElementById('connectCloudBtn')){
+    document.getElementById('connectCloudBtn').onclick = function(){
+      var k = document.getElementById('cloudKey').value.trim();
+      var b = document.getElementById('cloudBin').value.trim();
+      if (!k){ toast('کلید X-Master-Key را وارد کن','error'); return; }
+      if (!b){ toast('Bin ID را وارد کن یا «ساخت Bin جدید» را بزن','error'); return; }
+      var s = document.getElementById('cloudStatusText');
+      s.textContent = '⏳ در حال اتصال…'; s.style.color = 'var(--yellow)';
+      connectCloud(k, b).catch(function(e){
+        s.textContent = '✕ ' + e.message; s.style.color = 'var(--red)';
+        toast(e.message, 'error');
       });
     };
   }
@@ -1489,24 +1474,31 @@ function renderSettings(){
   document.getElementById('setReset').value = DB.settings.resetMonths || 2;
   document.getElementById('setYearStart').value = DB.settings.yearStartISO ? DB.settings.yearStartISO.slice(0,10) : '';
   document.getElementById('setUserName').value = CFG.userName || '';
-  if (showCloudForm) document.getElementById('cloudKey').value = (CFG.cloud && CFG.cloud.apiKey) || '';
+  if (showCloudForm){
+    document.getElementById('cloudKey').value = (CFG.cloud && CFG.cloud.apiKey) || '';
+    document.getElementById('cloudBin').value = savedBin || '';
+  }
 }
 
-function renderCloudConfig(){
+function renderCloudConfig(savedBin){
+  var savedKey = (CFG.cloud && CFG.cloud.apiKey) || '';
   return '<div class="card" id="cloudForm" style="margin-bottom:20px;border-color:rgba(0,229,255,.4)">'
-    + '<h3 class="card-title">☁️ اتصال ابری سراسری</h3>'
+    + '<h3 class="card-title">☁️ اتصال ابری (JSONBin)</h3>'
     + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;margin-bottom:16px;padding:14px;background:rgba(0,229,255,.04);border-radius:10px;border:1px solid rgba(0,229,255,.2)">'
-    + '<b style="color:var(--cyan)">فقط کلید API را وارد کن — بقیه خودکار است:</b><br>'
+    + '<b style="color:var(--cyan)">راهنما:</b><br>'
     + '۱. برو به <a href="https://jsonbin.io" target="_blank" style="color:var(--cyan)">jsonbin.io</a> و ثبت‌نام کن (رایگان).<br>'
     + '۲. از منو <b>API Keys</b> → کلید <b>X-Master-Key</b> را کپی کن.<br>'
-    + '۳. کلید را اینجا پیست کن و روی <b>«اتصال»</b> بزن.<br>'
-    + '۴. سامانه خودکار دنبال یک Bin با نام <code>'+BIN_NAME+'</code> می‌گردد؛ اگر پیدا کرد وصل می‌شود، اگر نه می‌سازد.<br>'
-    + '۵. همین کلید را توی هر دستگاه دیگری بزنی → همه‌چیز یکسان.'
+    + '۳. کلید را در فیلد زیر پیست کن.<br>'
+    + '۴. <b>اولین بار:</b> روی «🔨 ساخت Bin جدید» بزن → Bin ID خودکار پر و کپی می‌شود.<br>'
+    + '۵. <b>بارهای بعدی روی دستگاه دیگر:</b> Bin ID ذخیره‌شده را وارد کن.<br>'
+    + '۶. روی «🔌 اتصال» بزن.'
     + '</div>'
-    + '<div class="field"><label>کلید API (X-Master-Key)</label><input id="cloudKey" placeholder="$2a$10$…" dir="ltr" autocomplete="off"></div>'
+    + '<div class="field"><label>X-Master-Key *</label><input id="cloudKey" placeholder="$2a$10$…" dir="ltr" autocomplete="off" value="'+esc(savedKey)+'"></div>'
+    + '<div class="field" style="margin-top:12px"><label>Bin ID</label><input id="cloudBin" placeholder="اگه اولین باره، خالی بذار و «ساخت Bin جدید» را بزن" dir="ltr" autocomplete="off" value="'+esc(savedBin||'')+'"></div>'
     + '<div id="cloudStatusText" style="margin-top:12px;font-size:12px;color:var(--text-dim)">وضعیت: —</div>'
     + '<div class="row" style="margin-top:16px">'
-    + '<button class="btn btn-primary" id="connectCloudAutoBtn" style="padding:12px 22px;font-size:14px">🔌 اتصال</button>'
+    + '<button class="btn" id="createBinBtn">🔨 ساخت Bin جدید</button>'
+    + '<button class="btn btn-primary" id="connectCloudBtn" style="padding:12px 22px;font-size:14px">🔌 اتصال</button>'
     + '<button class="btn btn-ghost" id="cancelCloudBtn" style="margin-right:auto">انصراف</button>'
     + '</div></div>';
 }
@@ -1527,8 +1519,7 @@ function renderBackup(){
     + '<input type="file" id="importFile" accept=".json" style="display:none">'
     + '<button class="btn" id="impBtn">⤒ بارگذاری فایل</button></div></div>';
 
-  html += '<div class="card" style="margin-top:20px"><h3 class="card-title">🗄️ نسخه‌های پشتیبان محلی ('+fa(backups.length)+')</h3>'
-    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">در هر تغییر یک نسخه در مرورگر ذخیره می‌شود (حداکثر '+fa(MAX_BACKUPS)+').</p>';
+  html += '<div class="card" style="margin-top:20px"><h3 class="card-title">🗄️ پشتیبان محلی ('+fa(backups.length)+')</h3>';
   if (backups.length){
     html += '<div style="display:flex;flex-direction:column;gap:8px">';
     backups.forEach(function(b, i){
@@ -1543,7 +1534,7 @@ function renderBackup(){
 
   html += '<div class="card" style="margin-top:20px;border-color:rgba(255,58,94,.35)">'
     + '<h3 class="card-title" style="color:var(--red)">منطقه خطر</h3>'
-    + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">کل سوابق آرشیو می‌شود (حذف نمی‌شود).</p>'
+    + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">کل سوابق آرشیو می‌شود.</p>'
     + '<button class="btn btn-danger" id="resetAll">↺ آرشیو کل سوابق</button></div>';
   document.getElementById('view').innerHTML = html;
 
@@ -1657,7 +1648,7 @@ function openStudentForm(student){
 }
 
 /* ============================================================
-   چک نسخه جدید
+   چک نسخه
    ============================================================ */
 function compareVersions(a, b){
   function p(v){ return String(v||'0').split('.').map(function(x){ return parseInt(x,10)||0; }); }
@@ -1669,22 +1660,16 @@ function compareVersions(a, b){
   }
   return 0;
 }
-
 function checkForNewCode(){
   var base = location.href.split('#')[0].split('?')[0];
-  var url = base + '?_=' + Date.now();
-  fetch(url, { cache:'no-store' })
+  fetch(base + '?_=' + Date.now(), { cache:'no-store' })
     .then(function(r){ return r.text(); })
     .then(function(html){
       var m = html.match(/<meta\s+name=["']app-version["']\s+content=["']([^"']+)["']/i);
       if (!m) return;
-      var remote = m[1];
-      if (compareVersions(remote, APP_VERSION) > 0){
+      if (compareVersions(m[1], APP_VERSION) > 0){
         var b = document.getElementById('updateBanner');
-        if (b){
-          b.querySelector('span').textContent = '🚀 نسخه جدید (' + remote + ') آماده است — الان به‌روزرسانی کن';
-          b.classList.add('show');
-        }
+        if (b){ b.querySelector('span').textContent = '🚀 نسخه جدید (' + m[1] + ') آماده است'; b.classList.add('show'); }
       }
     })
     .catch(function(){});
