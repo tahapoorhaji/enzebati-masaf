@@ -3,10 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="app-version" content="4.0.0">
+<meta name="app-version" content="4.0.1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>سامانه مدیریت انضباطی مدرسه</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -16,7 +14,7 @@ html,body{height:100%;margin:0}
 body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .bg-grid,.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0}
 .bg-grid{background-image:linear-gradient(rgba(0,229,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse at 50% 30%,#000 40%,transparent 90%)}
-.bg-glow{background:radial-gradient(ellipse 60% 40% at 15% 0%,rgba(0,229,255,.10),transparent 60%),radial-gradient(ellipse 50% 40% at 90% 100%,rgba(255,43,214,.08),transparent 60%),radial-gradient(ellipse 70% 50% at 50% 50%,rgba(168,85,247,.05),transparent 70%)}
+.bg-glow{background:radial-gradient(ellipse 60% 40% at 15% 0%,rgba(0,229,255,.10),transparent 60%),radial-gradient(ellipse 50% 40% at 90% 100%,rgba(255,43,214,.08),transparent 60%)}
 .app{display:grid;grid-template-columns:262px 1fr;min-height:100vh;position:relative;z-index:1}
 .sidebar{background:linear-gradient(180deg,rgba(10,13,22,.92),rgba(8,10,18,.86));border-left:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;backdrop-filter:blur(20px)}
 .brand{display:flex;align-items:center;gap:12px;padding:4px 6px 18px;border-bottom:1px solid var(--border)}
@@ -155,7 +153,7 @@ tbody tr:last-child td{border-bottom:none}
 .mode-card .m-body{flex:1;min-width:0}
 .mode-card h4{margin:0 0 4px;font-size:14px}
 .mode-card p{margin:0;font-size:12px;color:var(--text-dim);line-height:1.6}
-.cloud-status{padding:12px 14px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:10px;border:1px solid}
+.cloud-status{padding:12px 14px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:10px;border:1px solid;flex-wrap:wrap}
 .cloud-status.ok{color:var(--green);background:rgba(0,255,157,.06);border-color:rgba(0,255,157,.3)}
 .cloud-status.warn{color:var(--yellow);background:rgba(255,214,10,.06);border-color:rgba(255,214,10,.3)}
 .cloud-status.err{color:var(--red);background:rgba(255,58,94,.06);border-color:rgba(255,58,94,.3)}
@@ -163,7 +161,7 @@ tbody tr:last-child td{border-bottom:none}
 #boot .spin{width:44px;height:44px;border:3px solid rgba(0,229,255,.15);border-top-color:var(--cyan);border-radius:50%;animation:sp 1s linear infinite;margin:0 auto 14px}
 @keyframes sp{to{transform:rotate(360deg)}}
 #errBox{display:none;position:fixed;top:0;right:0;left:0;background:#ff3a5e;color:#fff;padding:14px 20px;font-family:'Vazirmatn',sans-serif;z-index:9999;font-size:13px;direction:rtl}
-#updateBanner{display:none;position:fixed;top:0;right:0;left:0;background:linear-gradient(90deg,#00e5ff,#00ff9d);color:#04060c;padding:12px 20px;font-family:'Vazirmatn',sans-serif;z-index:9998;direction:rtl;font-weight:700;font-size:13px;display:none;align-items:center;gap:14px;justify-content:center;box-shadow:0 4px 20px rgba(0,229,255,.4)}
+#updateBanner{display:none;position:fixed;top:0;right:0;left:0;background:linear-gradient(90deg,#00e5ff,#00ff9d);color:#04060c;padding:12px 20px;font-family:'Vazirmatn',sans-serif;z-index:9998;direction:rtl;font-weight:700;font-size:13px;align-items:center;gap:14px;justify-content:center;box-shadow:0 4px 20px rgba(0,229,255,.4)}
 #updateBanner.show{display:flex}
 #updateBanner button{background:#04060c;color:#00e5ff;border:none;padding:8px 16px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:12px}
 @media (max-width:900px){
@@ -217,7 +215,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="storage-badge local" id="storageBadge" onclick="location.hash='#/settings'">
         <span class="dot"></span><span id="storageText">لوکال</span>
       </div>
-      <div class="hint" id="verHint">نسخه ۴.۰.۰</div>
+      <div class="hint" id="verHint">نسخه ۴.۰.۱</div>
     </div>
   </aside>
 
@@ -242,10 +240,19 @@ tbody tr:last-child td{border-bottom:none}
 <div id="modalRoot"></div>
 
 <script>
-var APP_VERSION = '4.0.0';
+/* ============================================================
+   ثابت‌ها — این خط را هرگز عوض نکن
+   ============================================================ */
+var APP_VERSION = '4.0.1';
 var BIN_NAME = 'school-discipline-main';
-var PENDING_UPDATE_KEY = 'sd-pending-update';
+var STORAGE_KEY = 'sd-v3';
+var BACKUP_KEY  = 'sd-backups-v3';
+var CFG_KEY     = 'sd-cfg-v3';
+var MAX_BACKUPS = 5;
 
+/* ============================================================
+   ابزار خطا
+   ============================================================ */
 function showError(msg){
   var el = document.getElementById('errBox');
   if (!el) return;
@@ -337,16 +344,22 @@ function defaultDB(){
 }
 
 /* ============================================================
-   ذخیره‌سازی
+   متغیرهای سراسری
    ============================================================ */
-var STORAGE_KEY = 'sd-v3', BACKUP_KEY = 'sd-backups-v3', CFG_KEY = 'sd-cfg-v3', MAX_BACKUPS = 5;
 var CFG = {};
 try { CFG = JSON.parse(localStorage.getItem(CFG_KEY) || '{}') || {}; } catch(e){ CFG = {}; }
 function saveCFG(){ try { localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); } catch(e){} }
 
-var DB = null, fileHandle = null, cloudOnline = false, pollTimer = null, setupMode = null;
+var DB = null;
+var fileHandle = null;
+var cloudOnline = false;
+var pollTimer = null;
+var setupMode = null;
 var quickSelection = { studentId:null, typeId:null };
 
+/* ============================================================
+   IndexedDB برای نگه‌داشتن file handle
+   ============================================================ */
 var IDB = {
   _db: null,
   open: function(){
@@ -365,6 +378,9 @@ var IDB = {
   del: function(k){ return this.open().then(function(db){ return new Promise(function(res,rej){ var tx=db.transaction('h','readwrite'); tx.objectStore('h').delete(k); tx.oncomplete=function(){res()}; tx.onerror=function(){rej(tx.error)}; }); }); }
 };
 
+/* ============================================================
+   تشخیص حالت + توابع پایه
+   ============================================================ */
 function activeMode(){
   if (CFG.cloud && CFG.cloud.apiKey && CFG.cloud.binId) return 'cloud';
   if (fileHandle) return 'file';
@@ -397,6 +413,35 @@ function saveLocalBackup(db, tag){
   } catch(e){}
 }
 
+/* ============================================================
+   به‌روزرسانی نشانگر حالت ذخیره‌سازی (این تابع قبلاً جا افتاده بود)
+   ============================================================ */
+function updateStorageBadge(){
+  var badge = document.getElementById('storageBadge');
+  var text  = document.getElementById('storageText');
+  if (!badge || !text) return;
+
+  var m = activeMode();
+  var pending = DB && DB.meta && DB.meta.pendingSync;
+
+  badge.className = 'storage-badge ' + m;
+
+  var label;
+  if (m === 'cloud'){
+    if (pending) label = 'ابری — در صف';
+    else if (cloudOnline) label = 'ابری — متصل';
+    else label = 'ابری — قطع (محلی)';
+  } else if (m === 'file'){
+    label = pending ? 'فایل — خطا' : 'فایل روی دیسک';
+  } else {
+    label = 'لوکال (مرورگر)';
+  }
+  text.textContent = label;
+}
+
+/* ============================================================
+   بارگذاری / ذخیره‌سازی
+   ============================================================ */
 function loadDB(){
   var mode = activeMode();
   var promise;
@@ -471,16 +516,27 @@ function saveDB(){
 }
 
 /* ============================================================
-   همگام‌سازی ابری سراسری
+   همگام‌سازی ابری
    ============================================================ */
 function startPolling(){
   if (pollTimer) clearInterval(pollTimer);
   if (activeMode() !== 'cloud') return;
-  pollTimer = setInterval(pullFromCloud, 10000);
+  pollTimer = setInterval(function(){ pullFromCloud(false); }, 10000);
 }
 
 function pullFromCloud(silent){
   if (activeMode() !== 'cloud') return Promise.resolve();
+  // اگه تغییرات معلق داریم، اول آپلود کن
+  if (DB && DB.meta && DB.meta.pendingSync){
+    return pushToCloud().then(function(ok){
+      if (ok){
+        DB.meta.pendingSync = false;
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
+        if (!silent) toast('همگام شد','success');
+      }
+      updateStorageBadge();
+    });
+  }
   return fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId+'/latest', { headers:{ 'X-Master-Key': CFG.cloud.apiKey } })
     .then(function(r){ if(!r.ok) throw 0; return r.json(); })
     .then(function(j){
@@ -499,14 +555,11 @@ function pullFromCloud(silent){
     .catch(function(){ cloudOnline = false; updateStorageBadge(); });
 }
 
-// همگام‌سازی وقتی کاربر به تب برمی‌گردد
-document.addEventListener('visibilitychange', function(){
-  if (!document.hidden) pullFromCloud(true);
-});
+document.addEventListener('visibilitychange', function(){ if (!document.hidden) pullFromCloud(true); });
 window.addEventListener('focus', function(){ pullFromCloud(true); });
 
 /* ============================================================
-   پیدا کردن خودکار Bin
+   پیدا کردن Bin خودکار
    ============================================================ */
 function listBins(apiKey){
   return fetch('https://api.jsonbin.io/v3/b', { headers:{ 'X-Master-Key': apiKey } })
@@ -520,15 +573,6 @@ function listBins(apiKey){
     });
 }
 
-function findSharedBin(apiKey){
-  return listBins(apiKey).then(function(bins){
-    var matches = bins.filter(function(b){ return b.name === BIN_NAME; });
-    if (!matches.length) return null;
-    matches.sort(function(a,b){ return new Date(b.createdAt||0) - new Date(a.createdAt||0); });
-    return matches[0];
-  });
-}
-
 function createSharedBin(apiKey){
   return fetch('https://api.jsonbin.io/v3/b', {
     method:'POST',
@@ -538,17 +582,29 @@ function createSharedBin(apiKey){
     .then(function(j){ return j.metadata.id; });
 }
 
-// اتصال خودکار: فقط با کلید
 function connectCloudAuto(apiKey){
   return listBins(apiKey).then(function(bins){
+    // دنبال Bin با اسم ثابت
     var matches = bins.filter(function(b){ return b.name === BIN_NAME; });
     if (matches.length > 0){
       matches.sort(function(a,b){ return new Date(b.createdAt||0) - new Date(a.createdAt||0); });
-      return { id: matches[0].id, created: false };
+      return { id: matches[0].id, created: false, name: matches[0].name };
     }
-    return createSharedBin(apiKey).then(function(id){ return { id: id, created: true }; });
+    // اگه Bin با اسم مشابه هست، هشدار بده
+    var similar = bins.filter(function(b){ return /school|discipline|انضباط/i.test(b.name || ''); });
+    if (similar.length > 0){
+      var msg = '⚠ یه Bin مرتبط با این سامانه پیدا شد:\n\n'
+        + similar.slice(0,3).map(function(b){ return '• ' + (b.name||'بدون نام') + ' (' + b.id + ')'; }).join('\n')
+        + '\n\nولی نام دقیق «' + BIN_NAME + '» نیست.\n\n'
+        + 'از همین Bin استفاده شود؟ (اگه «خیر» بزنی، Bin جدید ساخته می‌شه)';
+      if (confirm(msg)){
+        return { id: similar[0].id, created: false, name: similar[0].name };
+      }
+    }
+    // ساخت Bin جدید
+    return createSharedBin(apiKey).then(function(id){ return { id: id, created: true, name: BIN_NAME }; });
   }).then(function(res){
-    CFG.cloud = { apiKey:apiKey, binId:res.id, binName:BIN_NAME };
+    CFG.cloud = { apiKey:apiKey, binId:res.id, binName:res.name };
     CFG.mode = 'cloud';
     saveCFG();
     return loadDB();
@@ -594,6 +650,7 @@ function connectFile(){
     .then(function(){ setupMode = null; toast('فایل متصل شد','success'); render(); })
     .catch(function(e){ if (e.name !== 'AbortError') toast('خطا: '+e.message,'error'); });
 }
+
 function disconnectFile(){
   fileHandle = null;
   return IDB.del('fileHandle').then(function(){
@@ -601,6 +658,7 @@ function disconnectFile(){
     toast('اتصال فایل قطع شد','success'); render();
   });
 }
+
 function tryRestoreFileHandle(){
   return IDB.get('fileHandle').then(function(h){ if (h) fileHandle = h; }).catch(function(){});
 }
@@ -631,17 +689,25 @@ function applyAutoReset(){
   }
   return changed;
 }
+
 function yearStartMs(){ return DB.settings.yearStartISO ? new Date(DB.settings.yearStartISO).getTime() : 0; }
+
 function activeViolationsOf(sid){
   var ys = yearStartMs();
   return DB.violations.filter(function(v){ return v.studentId === sid && !v.archived && new Date(v.occurredAt).getTime() >= ys; })
     .sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); });
 }
+
 function totalPointsOf(sid){ return activeViolationsOf(sid).reduce(function(s,v){ return s + v.pointsApplied; }, 0); }
+
 function typeCountsOf(sid){
-  var m = {}; activeViolationsOf(sid).forEach(function(v){ m[v.typeId] = (m[v.typeId]||0)+1; }); return m;
+  var m = {};
+  activeViolationsOf(sid).forEach(function(v){ m[v.typeId] = (m[v.typeId]||0)+1; });
+  return m;
 }
+
 function countPriorOccurrences(sid, tid){ return typeCountsOf(sid)[tid] || 0; }
+
 function multiplierFor(prior){
   var k = prior + 1;
   if (k <= 2) return 1;
@@ -649,24 +715,47 @@ function multiplierFor(prior){
   if (k <= 6) return 3;
   return 4;
 }
+
 function currentStation(points){
   var cur = null; DB.stations.forEach(function(s){ if (points >= s.threshold) cur = s; }); return cur;
 }
+
 function nextStation(points){
   for (var i=0;i<DB.stations.length;i++) if (points < DB.stations[i].threshold) return DB.stations[i];
   return null;
 }
-function scoreColor(p){ if (p===0) return 'var(--green)'; if (p<15) return 'var(--cyan)'; if (p<30) return 'var(--yellow)'; if (p<45) return 'var(--orange)'; if (p<65) return 'var(--red)'; if (p<80) return '#ff1f4d'; if (p<100) return 'var(--magenta)'; return 'var(--purple)'; }
-function scorePillClass(p){ if (p===0) return 'pill-green'; if (p<15) return 'pill-cyan'; if (p<30) return 'pill-yellow'; if (p<45) return 'pill-orange'; if (p<65) return 'pill-red'; if (p<80) return 'pill-red'; if (p<100) return 'pill-mag'; return 'pill-purple'; }
+
+function scoreColor(p){
+  if (p===0) return 'var(--green)';
+  if (p<15) return 'var(--cyan)';
+  if (p<30) return 'var(--yellow)';
+  if (p<45) return 'var(--orange)';
+  if (p<65) return 'var(--red)';
+  if (p<80) return '#ff1f4d';
+  if (p<100) return 'var(--magenta)';
+  return 'var(--purple)';
+}
+
+function scorePillClass(p){
+  if (p===0) return 'pill-green';
+  if (p<15) return 'pill-cyan';
+  if (p<30) return 'pill-yellow';
+  if (p<45) return 'pill-orange';
+  if (p<65) return 'pill-red';
+  if (p<80) return 'pill-red';
+  if (p<100) return 'pill-mag';
+  return 'pill-purple';
+}
 
 /* ============================================================
-   ابزار
+   ابزار عمومی
    ============================================================ */
 function $(s, r){ return (r||document).querySelector(s); }
 function $$(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function fullName(s){ return [s.firstName, s.lastName].filter(Boolean).join(' ') || 'بی‌نام'; }
 function uid(p){ return p + '_' + Math.random().toString(36).slice(2,10); }
+
 function toast(msg, kind){
   var el = document.getElementById('toast');
   if (!el) return;
@@ -675,6 +764,7 @@ function toast(msg, kind){
   clearTimeout(toast._t);
   toast._t = setTimeout(function(){ el.classList.remove('show'); }, 3800);
 }
+
 function openModal(opts){
   var root = document.getElementById('modalRoot');
   root.innerHTML = '<div class="modal-mask" id="modalMask"><div class="modal '+(opts.wide?'wide':'')+'"><div class="modal-head"><h3>'+esc(opts.title)+'</h3><button class="modal-close" id="modalClose">✕</button></div><div class="modal-body">'+opts.body+'</div>'+(opts.footer?'<div class="modal-foot">'+opts.footer+'</div>':'')+'</div></div>';
@@ -692,6 +782,7 @@ function getRoute(){
   return { route: p[0] || 'dashboard', param: p[1] };
 }
 function navigate(r, p){ location.hash = p ? '#/'+r+'/'+p : '#/'+r; }
+
 function render(){
   if (!DB){ var v = document.getElementById('view'); if (v) v.innerHTML = '<div class="empty">در حال بارگذاری…</div>'; return; }
   if (applyAutoReset()) saveDB();
@@ -758,7 +849,7 @@ function renderDashboard(){
 }
 
 /* ============================================================
-   Students
+   Students list
    ============================================================ */
 function renderStudents(){
   var list = DB.students.slice().sort(function(a,b){ return totalPointsOf(b.id) - totalPointsOf(a.id); });
@@ -793,6 +884,7 @@ function renderStudents(){
   }
   if (document.getElementById('goImportBtn')) document.getElementById('goImportBtn').onclick = function(){ navigate('import'); };
 }
+
 function studentRow(s){
   var pts = totalPointsOf(s.id);
   var cur = currentStation(pts);
@@ -904,6 +996,7 @@ function renderStudentDetail(id){
     saveDB().then(function(){ toast('حذف شد','success'); navigate('students'); });
   };
 }
+
 function undoViolation(id){
   if (!confirm('این تخلف حذف شود؟')) return;
   DB.violations = DB.violations.filter(function(v){ return v.id !== id; });
@@ -911,7 +1004,7 @@ function undoViolation(id){
 }
 
 /* ============================================================
-   Quick
+   Quick log
    ============================================================ */
 function renderQuick(){
   var pre = quickSelection.studentId;
@@ -1117,7 +1210,6 @@ function openImportModal(){
     + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:6px"><input type="radio" name="sdMode" value="update"> افزودن + به‌روزرسانی تکراری‌ها (بر اساس کد ملی)</label>'
     + '<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:6px"><input type="radio" name="sdMode" value="replace"> <span style="color:var(--red)">جایگزینی کامل لیست و پاک کردن سوابق</span></label>'
     + '</div></div>';
-
   var footer = '<button class="btn" id="sdCancelBtn">انصراف</button><button class="btn btn-primary" id="sdConfirmBtn" disabled>ورود به سامانه</button>';
   var m = openModal({ title:'📥 ورود گروهی دانش‌آموزان', body: body, footer: footer, wide: true });
 
@@ -1253,9 +1345,9 @@ function renderSettings(){
 
   var html = '<div class="card" style="margin-bottom:20px"><h3 class="card-title">حالت ذخیره‌سازی</h3>'
     + '<div style="font-size:12px;color:var(--text-mute);margin-bottom:14px;line-height:1.7">'
-    + '<b style="color:var(--green)">پیشنهاد:</b> حالت ابری رو انتخاب کن. کافیه فقط کلید <code>X-Master-Key</code> رو بدی — Bin خودکار پیدا یا ساخته می‌شه. همه دستگاه‌ها و مرورگرها همون داده رو می‌بینن.</div>'
+    + '<b style="color:var(--green)">پیشنهاد:</b> حالت ابری را انتخاب کن. کافیه فقط کلید <code>X-Master-Key</code> را بدی — Bin خودکار پیدا یا ساخته می‌شود. همه دستگاه‌ها و مرورگرها همان داده را می‌بینند.</div>'
     + '<div class="grid-3" style="margin-bottom:16px">'
-    + '<div class="mode-card '+(m==='cloud'?'selected':'')+'" data-mode="cloud"><div class="m-ico">☁️</div><div class="m-body"><h4>ابری (پیشنهاد)</h4><p>همه دستگاه‌ها یک داده مشترک. فقط کلید API لازمه.</p></div></div>'
+    + '<div class="mode-card '+(m==='cloud'?'selected':'')+'" data-mode="cloud"><div class="m-ico">☁️</div><div class="m-body"><h4>ابری (پیشنهاد)</h4><p>همه دستگاه‌ها یک داده مشترک. فقط کلید API لازم است.</p></div></div>'
     + '<div class="mode-card '+(m==='local'?'selected':'')+'" data-mode="local"><div class="m-ico">🖥️</div><div class="m-body"><h4>لوکال</h4><p>فقط همین مرورگر.</p></div></div>'
     + '<div class="mode-card '+(m==='file'?'selected':'')+'" data-mode="file"><div class="m-ico">📁</div><div class="m-body"><h4>فایل روی دیسک</h4><p>ذخیره در فایل JSON.</p></div></div>'
     + '</div>';
@@ -1265,8 +1357,11 @@ function renderSettings(){
   }
   if (m === 'cloud'){
     html += '<div class="cloud-status '+(cloudOnline?'ok':'err')+'"><span>'+(cloudOnline?'✓':'✕')+'</span>'
-      + '<span style="flex:1">'+(cloudOnline ? 'به سرور ابری متصل' : 'اتصال قطع — داده محلی ذخیره می‌شود')+' · Bin: <code dir="ltr">'+esc(CFG.cloud.binId)+'</code> · نام: <code dir="ltr">'+esc(CFG.cloud.binName||BIN_NAME)+'</code>'
+      + '<span style="flex:1">'+(cloudOnline ? 'به سرور ابری متصل' : 'اتصال قطع — داده محلی ذخیره می‌شود')
+      + ' · Bin Name: <code dir="ltr">'+esc(CFG.cloud.binName||BIN_NAME)+'</code>'
+      + ' · Bin ID: <code dir="ltr" id="binIdDisplay" style="cursor:pointer;text-decoration:underline dotted" title="برای کپی کلیک کن">'+esc(CFG.cloud.binId)+'</code>'
       + (DB && DB.meta && DB.meta.pendingSync ? ' · <b style="color:var(--yellow)">در صف</b>' : '') + '</span>'
+      + '<button class="btn btn-sm" id="copyBinIdBtn">کپی ID</button>'
       + '<button class="btn btn-sm" id="disconnectCloudBtn">قطع</button></div>';
   }
   html += '</div>';
@@ -1330,7 +1425,22 @@ function renderSettings(){
   if (document.getElementById('disconnectCloudBtn')) document.getElementById('disconnectCloudBtn').onclick = disconnectCloud;
   if (document.getElementById('cancelCloudBtn')) document.getElementById('cancelCloudBtn').onclick = function(){ setupMode = null; render(); };
 
-  // ★ فقط دکمه اتصال — بدون Bin ID
+  // کپی Bin ID
+  if (document.getElementById('copyBinIdBtn')){
+    document.getElementById('copyBinIdBtn').onclick = function(){
+      var id = CFG.cloud && CFG.cloud.binId;
+      if (!id){ toast('Bin ID یافت نشد','error'); return; }
+      navigator.clipboard.writeText(id).then(function(){ toast('Bin ID کپی شد','success'); })
+        .catch(function(){ toast('کپی نشد','error'); });
+    };
+  }
+  if (document.getElementById('binIdDisplay')){
+    document.getElementById('binIdDisplay').onclick = function(){
+      navigator.clipboard.writeText(CFG.cloud.binId).then(function(){ toast('Bin ID کپی شد','success'); });
+    };
+  }
+
+  // ★ دکمه اتصال ابری
   if (document.getElementById('connectCloudAutoBtn')){
     document.getElementById('connectCloudAutoBtn').onclick = function(){
       var k = document.getElementById('cloudKey').value.trim();
@@ -1386,12 +1496,12 @@ function renderCloudConfig(){
   return '<div class="card" id="cloudForm" style="margin-bottom:20px;border-color:rgba(0,229,255,.4)">'
     + '<h3 class="card-title">☁️ اتصال ابری سراسری</h3>'
     + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;margin-bottom:16px;padding:14px;background:rgba(0,229,255,.04);border-radius:10px;border:1px solid rgba(0,229,255,.2)">'
-    + '<b style="color:var(--cyan)">فقط کلید API رو وارد کن — بقیه خودکاره:</b><br>'
+    + '<b style="color:var(--cyan)">فقط کلید API را وارد کن — بقیه خودکار است:</b><br>'
     + '۱. برو به <a href="https://jsonbin.io" target="_blank" style="color:var(--cyan)">jsonbin.io</a> و ثبت‌نام کن (رایگان).<br>'
-    + '۲. از منو <b>API Keys</b> → کلید <b>X-Master-Key</b> رو کپی کن.<br>'
-    + '۳. کلید رو اینجا پیست کن و روی <b>«اتصال»</b> بزن.<br>'
-    + '۴. سامانه خودکار دنبال یه Bin با نام <code>'+BIN_NAME+'</code> می‌گرده؛ اگه پیدا کرد وصل می‌شه، اگه نه می‌سازه.<br>'
-    + '۵. همین کلید رو توی هر دستگاه دیگه‌ای بزنی → همه‌چیز یکسان.'
+    + '۲. از منو <b>API Keys</b> → کلید <b>X-Master-Key</b> را کپی کن.<br>'
+    + '۳. کلید را اینجا پیست کن و روی <b>«اتصال»</b> بزن.<br>'
+    + '۴. سامانه خودکار دنبال یک Bin با نام <code>'+BIN_NAME+'</code> می‌گردد؛ اگر پیدا کرد وصل می‌شود، اگر نه می‌سازد.<br>'
+    + '۵. همین کلید را توی هر دستگاه دیگری بزنی → همه‌چیز یکسان.'
     + '</div>'
     + '<div class="field"><label>کلید API (X-Master-Key)</label><input id="cloudKey" placeholder="$2a$10$…" dir="ltr" autocomplete="off"></div>'
     + '<div id="cloudStatusText" style="margin-top:12px;font-size:12px;color:var(--text-dim)">وضعیت: —</div>'
@@ -1418,7 +1528,7 @@ function renderBackup(){
     + '<button class="btn" id="impBtn">⤒ بارگذاری فایل</button></div></div>';
 
   html += '<div class="card" style="margin-top:20px"><h3 class="card-title">🗄️ نسخه‌های پشتیبان محلی ('+fa(backups.length)+')</h3>'
-    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">در هر تغییر یه نسخه در مرورگر ذخیره می‌شود (حداکثر '+fa(MAX_BACKUPS)+').</p>';
+    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">در هر تغییر یک نسخه در مرورگر ذخیره می‌شود (حداکثر '+fa(MAX_BACKUPS)+').</p>';
   if (backups.length){
     html += '<div style="display:flex;flex-direction:column;gap:8px">';
     backups.forEach(function(b, i){
@@ -1488,6 +1598,7 @@ function renderBackup(){
     saveDB().then(function(){ toast('آرشیو شد','success'); render(); });
   };
 }
+
 function csvCell(c){ var s = String(c==null?'':c); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
 function download(name, content, type){
   var a = document.createElement('a');
@@ -1546,7 +1657,7 @@ function openStudentForm(student){
 }
 
 /* ============================================================
-   بررسی نسخه‌ی جدید (آپدیت خودکار کد)
+   چک نسخه جدید
    ============================================================ */
 function compareVersions(a, b){
   function p(v){ return String(v||'0').split('.').map(function(x){ return parseInt(x,10)||0; }); }
@@ -1558,6 +1669,7 @@ function compareVersions(a, b){
   }
   return 0;
 }
+
 function checkForNewCode(){
   var base = location.href.split('#')[0].split('?')[0];
   var url = base + '?_=' + Date.now();
@@ -1575,7 +1687,7 @@ function checkForNewCode(){
         }
       }
     })
-    .catch(function(){ /* ignore */ });
+    .catch(function(){});
 }
 
 /* ============================================================
@@ -1585,6 +1697,7 @@ document.addEventListener('click', function(e){
   var nav = e.target.closest ? e.target.closest('.nav a') : null;
   if (nav){ e.preventDefault(); navigate(nav.dataset.route); }
 });
+
 document.getElementById('addStudentBtn').onclick = function(){ openStudentForm(null); };
 document.getElementById('menuBtn').onclick = function(){ document.getElementById('sidebar').classList.toggle('open'); };
 window.addEventListener('hashchange', render);
@@ -1626,7 +1739,6 @@ window.undoViolation = undoViolation;
       var boot = document.getElementById('boot'); if (boot) boot.style.display = 'none';
       render();
       startPolling();
-      // چک نسخه جدید
       setTimeout(checkForNewCode, 1500);
       setInterval(checkForNewCode, 5 * 60 * 1000);
       window.addEventListener('online', function(){
