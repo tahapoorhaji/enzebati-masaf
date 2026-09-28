@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="app-version" content="4.0.2">
+<meta name="app-version" content="4.1.0">
 <title>سامانه مدیریت انضباطی مدرسه</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -12,19 +12,28 @@
 html,body{height:100%;margin:0}
 body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .bg-grid,.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0}
-.bg-grid{background-image:linear-gradient(rgba(0,229,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse at 50% 30%,#000 40%,transparent 90%)}
+.bg-grid{background-image:linear-gradient(rgba(0,229,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse at 50% 30%,#000 40%,transparent 90%);animation:gridMove 24s linear infinite}
 .bg-glow{background:radial-gradient(ellipse 60% 40% at 15% 0%,rgba(0,229,255,.10),transparent 60%),radial-gradient(ellipse 50% 40% at 90% 100%,rgba(255,43,214,.08),transparent 60%)}
+@keyframes gridMove{0%{background-position:0 0}100%{background-position:52px 52px}}
+@keyframes neonPulse{0%,100%{box-shadow:0 0 12px rgba(0,229,255,.5),0 0 24px rgba(0,229,255,.3),0 0 40px rgba(255,43,214,.2)}50%{box-shadow:0 0 22px rgba(0,229,255,.85),0 0 45px rgba(0,229,255,.5),0 0 70px rgba(255,43,214,.4)}}
+@keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes borderGlow{0%,100%{border-color:rgba(0,229,255,.35);box-shadow:inset 0 0 12px rgba(0,229,255,.05)}50%{border-color:rgba(0,229,255,.7);box-shadow:inset 0 0 20px rgba(0,229,255,.12)}}
+@keyframes textGlow{0%,100%{text-shadow:0 0 10px currentColor,0 0 20px currentColor}50%{text-shadow:0 0 18px currentColor,0 0 35px currentColor,0 0 55px currentColor}}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+@keyframes toastIn{from{transform:translateY(120%) scale(.9);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes statLift{to{transform:translateY(-3px);box-shadow:0 10px 34px rgba(0,229,255,.18)}}
 .app{display:grid;grid-template-columns:262px 1fr;min-height:100vh;position:relative;z-index:1}
 .sidebar{background:linear-gradient(180deg,rgba(10,13,22,.92),rgba(8,10,18,.86));border-left:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;backdrop-filter:blur(20px)}
 .brand{display:flex;align-items:center;gap:12px;padding:4px 6px 18px;border-bottom:1px solid var(--border)}
-.brand-mark{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:22px;color:#04060c;background:linear-gradient(135deg,var(--cyan),var(--magenta));box-shadow:0 0 20px rgba(0,229,255,.5)}
+.brand-mark{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:22px;color:#04060c;background:linear-gradient(135deg,var(--cyan),var(--magenta),var(--cyan));background-size:200% 200%;box-shadow:0 0 20px rgba(0,229,255,.5);animation:neonPulse 3s ease-in-out infinite,gradientShift 4s ease infinite}
 .brand-text{display:flex;flex-direction:column;line-height:1.25}
 .brand-text strong{font-size:15px}
 .brand-text span{font-size:11px;color:var(--text-dim)}
 .nav{display:flex;flex-direction:column;gap:4px;flex:1}
 .nav a{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;border:1px solid transparent;transition:all .18s;position:relative;cursor:pointer}
-.nav a:hover{color:var(--text);background:rgba(255,255,255,.03)}
-.nav a.active{color:var(--cyan);background:linear-gradient(90deg,rgba(0,229,255,.10),rgba(0,229,255,.01));border-color:rgba(0,229,255,.30)}
+.nav a:hover{color:var(--text);background:rgba(255,255,255,.03);box-shadow:inset 0 0 16px rgba(0,229,255,.08)}
+.nav a.active{color:var(--cyan);background:linear-gradient(90deg,rgba(0,229,255,.10),rgba(0,229,255,.01));border-color:rgba(0,229,255,.30);animation:borderGlow 3s ease-in-out infinite}
 .nav a.active::before{content:'';position:absolute;right:-17px;top:8px;bottom:8px;width:3px;background:var(--cyan);border-radius:3px;box-shadow:0 0 12px var(--cyan)}
 .nav-ico{width:22px;text-align:center;font-size:14px;opacity:.85}
 .sidebar-foot{display:flex;flex-direction:column;gap:8px}
@@ -33,10 +42,10 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 .storage-badge.local{color:var(--text-dim);background:rgba(255,255,255,.03);border-color:var(--border)}
 .storage-badge.cloud{color:var(--green);background:rgba(0,255,157,.08);border-color:rgba(0,255,157,.30)}
 .storage-badge.file{color:var(--yellow);background:rgba(255,214,10,.08);border-color:rgba(255,214,10,.30)}
-.storage-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.storage-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;animation:dotPulse 2s infinite}
 .hint{font-size:10.5px;color:var(--text-mute);text-align:center}
 .main{display:flex;flex-direction:column;min-width:0}
-.topbar{display:flex;align-items:center;gap:16px;padding:18px 30px;border-bottom:1px solid var(--border);background:rgba(6,9,16,.55);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20}
+.topbar{display:flex;align-items:center;gap:16px;padding:18px 30px;border-bottom:1px solid var(--border);background:rgba(6,9,16,.55);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20;box-shadow:0 2px 24px rgba(0,229,255,.08)}
 .topbar h1{font-size:19px;font-weight:700;margin:0}
 .topbar-actions{margin-right:auto;display:flex;gap:12px;align-items:center}
 .search-wrap{position:relative}
@@ -51,18 +60,23 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 .view{padding:28px 30px 60px;flex:1;min-width:0}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:all .18s;text-decoration:none}
 .btn:hover{background:rgba(255,255,255,.07)}
-.btn-primary{background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(0,229,255,.04));border-color:rgba(0,229,255,.55);color:var(--cyan)}
+.btn-primary{background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(0,229,255,.04));border-color:rgba(0,229,255,.55);color:var(--cyan);position:relative;overflow:hidden}
+.btn-primary:hover{background:linear-gradient(135deg,rgba(0,229,255,.25),rgba(0,229,255,.08));box-shadow:0 0 22px rgba(0,229,255,.6),0 0 44px rgba(0,229,255,.3)}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:translateX(-100%);transition:transform .65s}
+.btn-primary:hover::after{transform:translateX(100%)}
 .btn-danger{border-color:rgba(255,58,94,.5);color:#ff8ba3;background:rgba(255,58,94,.06)}
 .btn-ghost{background:transparent}
 .btn-sm{padding:6px 11px;font-size:11.5px;border-radius:8px}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .icon-btn{background:transparent;border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
 .only-mobile{display:none}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;transition:box-shadow .3s ease,border-color .3s ease,transform .3s ease}
+.card:hover{border-color:rgba(0,229,255,.35);box-shadow:0 0 26px rgba(0,229,255,.14),inset 0 0 26px rgba(0,229,255,.03)}
 .card-title{font-size:13px;font-weight:600;color:var(--text-dim);letter-spacing:.4px;text-transform:uppercase;margin:0 0 16px;display:flex;align-items:center;gap:8px}
-.card-title::before{content:'';width:3px;height:14px;background:var(--cyan);border-radius:2px}
+.card-title::before{content:'';width:3px;height:14px;background:var(--cyan);border-radius:2px;box-shadow:0 0 8px var(--cyan)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;transition:transform .25s ease,box-shadow .25s ease}
+.stat:hover{animation:statLift .25s forwards}
 .stat::after{content:'';position:absolute;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.5}
 .stat.s-mag::after{background:linear-gradient(90deg,transparent,var(--magenta),transparent)}
 .stat.s-grn::after{background:linear-gradient(90deg,transparent,var(--green),transparent)}
@@ -74,7 +88,8 @@ body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);co
 table{width:100%;border-collapse:collapse;font-size:13px}
 thead th{text-align:right;padding:13px 16px;font-weight:600;color:var(--text-dim);font-size:11.5px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap}
 tbody td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
-tbody tr:hover{background:rgba(0,229,255,.035)}
+tbody tr{transition:box-shadow .2s ease}
+tbody tr:hover{background:rgba(0,229,255,.035);box-shadow:inset 0 0 22px rgba(0,229,255,.07)}
 tbody tr:last-child td{border-bottom:none}
 .row-name{font-weight:600;cursor:pointer}
 .row-name:hover{color:var(--cyan)}
@@ -89,7 +104,7 @@ tbody tr:last-child td{border-bottom:none}
 .pill-purple{color:var(--purple);background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.30)}
 .pill-dim{color:var(--text-dim);background:rgba(255,255,255,.04);border-color:var(--border)}
 .score-card{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;padding:26px 30px;margin-bottom:24px}
-.score-num{font-size:78px;font-weight:900;line-height:1;letter-spacing:-3px}
+.score-num{font-size:78px;font-weight:900;line-height:1;letter-spacing:-3px;animation:textGlow 3s ease-in-out infinite}
 .score-num small{font-size:20px;font-weight:500;opacity:.6;margin-right:8px}
 .score-meta{display:flex;flex-direction:column;gap:12px;min-width:0}
 .score-label{font-size:12px;color:var(--text-dim)}
@@ -107,7 +122,7 @@ tbody tr:last-child td{border-bottom:none}
 .stack{display:flex;flex-direction:column;gap:20px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .modal-mask{position:fixed;inset:0;background:rgba(2,4,8,.72);backdrop-filter:blur(6px);z-index:100;display:grid;place-items:center;padding:24px}
-.modal{background:linear-gradient(160deg,rgba(14,18,30,.98),rgba(10,13,22,.98));border:1px solid var(--border-2);border-radius:18px;width:min(640px,100%);max-height:88vh;overflow:auto;box-shadow:0 30px 100px rgba(0,0,0,.7)}
+.modal{background:linear-gradient(160deg,rgba(14,18,30,.98),rgba(10,13,22,.98));border:1px solid var(--border-2);border-radius:18px;width:min(640px,100%);max-height:88vh;overflow:auto;box-shadow:0 30px 100px rgba(0,0,0,.7);animation:modalIn .3s cubic-bezier(.4,0,.2,1)}
 .modal.wide{width:min(900px,100%)}
 .modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .modal-head h3{margin:0;font-size:16px}
@@ -124,7 +139,7 @@ tbody tr:last-child td{border-bottom:none}
 .type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:6px}
 .type-tile{padding:12px 14px;border-radius:10px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.02);display:flex;justify-content:space-between;gap:10px;align-items:center;transition:all .15s;text-align:right}
 .type-tile:hover{border-color:rgba(0,229,255,.35)}
-.type-tile.selected{border-color:var(--cyan);background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(0,229,255,.02))}
+.type-tile.selected{border-color:var(--cyan);background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(0,229,255,.02));animation:borderGlow 2.5s ease-in-out infinite}
 .type-tile .tt-label{font-size:12.5px;line-height:1.5}
 .type-tile .tt-pts{font-weight:800;font-size:15px;color:var(--cyan);background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);padding:4px 10px;border-radius:8px;white-space:nowrap}
 .preview{padding:18px;border-radius:12px;background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(255,43,214,.04));border:1px dashed rgba(0,229,255,.4);display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:center}
@@ -142,7 +157,7 @@ tbody tr:last-child td{border-bottom:none}
 .rung h4{margin:0 0 4px;font-size:14.5px}
 .rung p{margin:0;font-size:12px;color:var(--text-dim)}
 .toast{position:fixed;bottom:26px;left:26px;padding:13px 20px;border-radius:12px;background:rgba(12,16,26,.98);border:1px solid var(--border-2);color:var(--text);font-size:13px;box-shadow:0 10px 40px rgba(0,0,0,.5);transform:translateY(120%);transition:transform .35s;z-index:200;max-width:420px}
-.toast.show{transform:translateY(0)}
+.toast.show{transform:translateY(0);animation:toastIn .4s cubic-bezier(.4,0,.2,1)}
 .toast.success{border-color:rgba(0,255,157,.5)}
 .toast.error{border-color:rgba(255,58,94,.6)}
 .mode-card{padding:16px 18px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.02);cursor:pointer;transition:all .18s;display:flex;gap:14px;align-items:flex-start}
@@ -160,9 +175,6 @@ tbody tr:last-child td{border-bottom:none}
 #boot .spin{width:44px;height:44px;border:3px solid rgba(0,229,255,.15);border-top-color:var(--cyan);border-radius:50%;animation:sp 1s linear infinite;margin:0 auto 14px}
 @keyframes sp{to{transform:rotate(360deg)}}
 #errBox{display:none;position:fixed;top:0;right:0;left:0;background:#ff3a5e;color:#fff;padding:14px 20px;font-family:'Vazirmatn',sans-serif;z-index:9999;font-size:13px;direction:rtl}
-#updateBanner{display:none;position:fixed;top:0;right:0;left:0;background:linear-gradient(90deg,#00e5ff,#00ff9d);color:#04060c;padding:12px 20px;font-family:'Vazirmatn',sans-serif;z-index:9998;direction:rtl;font-weight:700;font-size:13px;align-items:center;gap:14px;justify-content:center;box-shadow:0 4px 20px rgba(0,229,255,.4)}
-#updateBanner.show{display:flex}
-#updateBanner button{background:#04060c;color:#00e5ff;border:none;padding:8px 16px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:12px}
 @media (max-width:900px){
   .app{grid-template-columns:1fr}
   .sidebar{position:fixed;right:0;top:0;bottom:0;width:260px;z-index:50;transform:translateX(100%);transition:transform .25s}
@@ -183,10 +195,6 @@ tbody tr:last-child td{border-bottom:none}
 <body>
 
 <div id="errBox"></div>
-<div id="updateBanner">
-  <span>🚀 نسخه جدید آماده است</span>
-  <button onclick="location.reload(true)">به‌روزرسانی</button>
-</div>
 <div id="boot"><div><div class="spin"></div><div>در حال بارگذاری…</div></div></div>
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
@@ -214,7 +222,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="storage-badge local" id="storageBadge" onclick="location.hash='#/settings'">
         <span class="dot"></span><span id="storageText">لوکال</span>
       </div>
-      <div class="hint" id="verHint">نسخه ۴.۰.۲</div>
+      <div class="hint" id="verHint">نسخه ۴.۱.۰</div>
     </div>
   </aside>
 
@@ -242,7 +250,7 @@ tbody tr:last-child td{border-bottom:none}
 /* ============================================================
    ثابت‌ها
    ============================================================ */
-var APP_VERSION = '4.0.2';
+var APP_VERSION = '4.1.0';
 var STORAGE_KEY = 'sd-v3';
 var BACKUP_KEY  = 'sd-backups-v3';
 var CFG_KEY     = 'sd-cfg-v3';
@@ -276,6 +284,26 @@ var Jalali = (function(){
     var jd = 1 + ((days < 186) ? (days%31) : ((days-186)%30));
     return [jy, jm, jd];
   }
+  function toGregorian(jy, jm, jd){
+    jy += 1595;
+    var days = -355668 + (365 * jy) + (~~(jy / 33) * 8) + ~~(((jy % 33) + 3) / 4) + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+    var gy = 400 * ~~(days / 146097);
+    days %= 146097;
+    if (days > 36524){
+      gy += 100 * ~~(--days / 36524);
+      days %= 36524;
+      if (days >= 365) days++;
+    }
+    gy += 4 * ~~(days / 1461);
+    days %= 1461;
+    if (days > 365){ gy += ~~((days - 1) / 365); days = (days - 1) % 365; }
+    var gd = days + 1;
+    var leap = (gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0);
+    var sal_a = [0, 31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var gm;
+    for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
+    return [gy, gm, gd];
+  }
   var FA = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
   function fa(n){ return String(n).replace(/\d/g, function(d){ return FA[+d]; }); }
   function fmt(iso, opts){
@@ -301,7 +329,7 @@ var Jalali = (function(){
     if (mo < 12) return fa(mo) + ' ماه پیش';
     return fa(Math.floor(mo/12)) + ' سال پیش';
   }
-  return { toJalali:toJalali, fa:fa, fmt:fmt, relative:relative };
+  return { toJalali:toJalali, toGregorian:toGregorian, fa:fa, fmt:fmt, relative:relative };
 })();
 var fa = Jalali.fa, fmt = Jalali.fmt, relative = Jalali.relative;
 
@@ -318,7 +346,9 @@ var DEFAULT_TYPES = [
   { id:'t07', label:'غیبت غیرموجه', points:6 },
   { id:'t08', label:'آسیب زدن عمدی به اموال مدرسه', points:7 },
   { id:'t09', label:'استفاده از الفاظ ناشایست و رکیک', points:10 },
-  { id:'t10', label:'نزاع، درگیری فیزیکی و ایجاد تنش در مدرسه', points:15 }
+  { id:'t10', label:'نزاع، درگیری فیزیکی و ایجاد تنش در مدرسه', points:15 },
+  { id:'t11', label:'تخلف اردو مطالعاتی', points:2 },
+  { id:'t12', label:'سایر موارد', points:1 }
 ];
 var DEFAULT_STATIONS = [
   { id:'s1', threshold:15,  name:'ایستگاه اول — هشدار', sports:'محرومیت از زنگ ورزش', actions:['کسر ۰.۵ نمره انضباط','ایستادن رو به دیوار','رونویسی از آیین‌نامه'] },
@@ -335,12 +365,12 @@ function defaultDB(){
     violationTypes: JSON.parse(JSON.stringify(DEFAULT_TYPES)),
     stations: JSON.parse(JSON.stringify(DEFAULT_STATIONS)),
     settings: { schoolName:'دبیرستان نمونه', academicYear:'۱۴۰۴-۱۴۰۵', yearStartISO: new Date(now.getFullYear(),2,21).toISOString(), resetMonths:2 },
-    meta: { version:4, lastModified: new Date().toISOString(), lastModifiedBy:'', pendingSync:false }
+    meta: { version:5, lastModified: new Date().toISOString(), lastModifiedBy:'', pendingSync:false }
   };
 }
 
 /* ============================================================
-   متغیرهای سراسری
+   متغیرها
    ============================================================ */
 var CFG = {};
 try { CFG = JSON.parse(localStorage.getItem(CFG_KEY) || '{}') || {}; } catch(e){ CFG = {}; }
@@ -385,9 +415,13 @@ function normalizeDB(db){
   db.students = Array.isArray(db.students) ? db.students : [];
   db.violations = Array.isArray(db.violations) ? db.violations : [];
   db.violationTypes = Array.isArray(db.violationTypes) && db.violationTypes.length ? db.violationTypes : JSON.parse(JSON.stringify(DEFAULT_TYPES));
+  // اطمینان از وجود t11 و t12
+  var ids = db.violationTypes.map(function(t){ return t.id; });
+  if (ids.indexOf('t11') < 0) db.violationTypes.push({ id:'t11', label:'تخلف اردو مطالعاتی', points:2 });
+  if (ids.indexOf('t12') < 0) db.violationTypes.push({ id:'t12', label:'سایر موارد', points:1 });
   db.stations = Array.isArray(db.stations) && db.stations.length ? db.stations : JSON.parse(JSON.stringify(DEFAULT_STATIONS));
   db.settings = db.settings || defaultDB().settings;
-  db.meta = db.meta || { version:4 };
+  db.meta = db.meta || { version:5 };
   return db;
 }
 
@@ -427,7 +461,7 @@ function updateStorageBadge(){
 }
 
 /* ============================================================
-   بارگذاری و ذخیره‌سازی
+   بارگذاری / ذخیره‌سازی
    ============================================================ */
 function loadDB(){
   var mode = activeMode();
@@ -485,10 +519,8 @@ function saveDB(){
   DB.meta = DB.meta || {};
   DB.meta.lastModified = new Date().toISOString();
   DB.meta.lastModifiedBy = CFG.userName || '';
-
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
   saveLocalBackup(DB);
-
   var mode = activeMode();
   if (mode === 'cloud'){
     return pushToCloud().then(function(ok){
@@ -522,11 +554,7 @@ function pullFromCloud(silent){
   if (activeMode() !== 'cloud') return Promise.resolve();
   if (DB && DB.meta && DB.meta.pendingSync){
     return pushToCloud().then(function(ok){
-      if (ok){
-        DB.meta.pendingSync = false;
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
-        if (!silent) toast('همگام شد','success');
-      }
+      if (ok){ DB.meta.pendingSync = false; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}; if (!silent) toast('همگام شد','success'); }
       updateStorageBadge();
     });
   }
@@ -549,17 +577,12 @@ document.addEventListener('visibilitychange', function(){ if (!document.hidden) 
 window.addEventListener('focus', function(){ pullFromCloud(true); });
 
 /* ============================================================
-   ساخت Bin جدید و اتصال
+   ساخت Bin و اتصال
    ============================================================ */
 function createSharedBin(apiKey){
   return fetch('https://api.jsonbin.io/v3/b', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Master-Key': apiKey,
-      'X-Bin-Name': 'school-discipline',
-      'X-Bin-Private': 'true'
-    },
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey, 'X-Bin-Name': 'school-discipline', 'X-Bin-Private': 'true' },
     body: JSON.stringify(DB || defaultDB())
   }).then(function(r){
     if (r.status === 401 || r.status === 403) throw new Error('کلید X-Master-Key نامعتبر (HTTP '+r.status+')');
@@ -572,26 +595,19 @@ function createSharedBin(apiKey){
 }
 
 function connectCloud(apiKey, binId){
-  return fetch('https://api.jsonbin.io/v3/b/'+binId+'/latest', {
-    headers: { 'X-Master-Key': apiKey }
-  }).then(function(r){
-    if (r.status === 401 || r.status === 403) throw new Error('کلید X-Master-Key نامعتبر (HTTP '+r.status+')');
-    if (r.status === 404) throw new Error('Bin ID پیدا نشد (HTTP 404)');
-    if (!r.ok) throw new Error('خطا در اتصال (HTTP '+r.status+')');
-    return r.json();
-  }).then(function(){
-    CFG.cloud = { apiKey: apiKey, binId: binId };
-    CFG.mode = 'cloud';
-    saveCFG();
-    try { localStorage.setItem(BIN_ID_KEY, binId); } catch(e){}
-    return loadDB();
-  }).then(function(){ return saveDB(); })
-    .then(function(){
-      setupMode = null;
-      startPolling();
-      toast('☁️ اتصال ابری برقرار شد', 'success');
-      render();
-    });
+  return fetch('https://api.jsonbin.io/v3/b/'+binId+'/latest', { headers:{ 'X-Master-Key': apiKey } })
+    .then(function(r){
+      if (r.status === 401 || r.status === 403) throw new Error('کلید X-Master-Key نامعتبر (HTTP '+r.status+')');
+      if (r.status === 404) throw new Error('Bin ID پیدا نشد (HTTP 404)');
+      if (!r.ok) throw new Error('خطا در اتصال (HTTP '+r.status+')');
+      return r.json();
+    }).then(function(){
+      CFG.cloud = { apiKey: apiKey, binId: binId };
+      CFG.mode = 'cloud'; saveCFG();
+      try { localStorage.setItem(BIN_ID_KEY, binId); } catch(e){}
+      return loadDB();
+    }).then(function(){ return saveDB(); })
+      .then(function(){ setupMode = null; startPolling(); toast('☁️ اتصال ابری برقرار شد', 'success'); render(); });
 }
 
 function disconnectCloud(){
@@ -673,46 +689,13 @@ function activeViolationsOf(sid){
     .sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); });
 }
 function totalPointsOf(sid){ return activeViolationsOf(sid).reduce(function(s,v){ return s + v.pointsApplied; }, 0); }
-function typeCountsOf(sid){
-  var m = {};
-  activeViolationsOf(sid).forEach(function(v){ m[v.typeId] = (m[v.typeId]||0)+1; });
-  return m;
-}
+function typeCountsOf(sid){ var m = {}; activeViolationsOf(sid).forEach(function(v){ m[v.typeId] = (m[v.typeId]||0)+1; }); return m; }
 function countPriorOccurrences(sid, tid){ return typeCountsOf(sid)[tid] || 0; }
-function multiplierFor(prior){
-  var k = prior + 1;
-  if (k <= 2) return 1;
-  if (k <= 4) return 2;
-  if (k <= 6) return 3;
-  return 4;
-}
-function currentStation(points){
-  var cur = null; DB.stations.forEach(function(s){ if (points >= s.threshold) cur = s; }); return cur;
-}
-function nextStation(points){
-  for (var i=0;i<DB.stations.length;i++) if (points < DB.stations[i].threshold) return DB.stations[i];
-  return null;
-}
-function scoreColor(p){
-  if (p===0) return 'var(--green)';
-  if (p<15) return 'var(--cyan)';
-  if (p<30) return 'var(--yellow)';
-  if (p<45) return 'var(--orange)';
-  if (p<65) return 'var(--red)';
-  if (p<80) return '#ff1f4d';
-  if (p<100) return 'var(--magenta)';
-  return 'var(--purple)';
-}
-function scorePillClass(p){
-  if (p===0) return 'pill-green';
-  if (p<15) return 'pill-cyan';
-  if (p<30) return 'pill-yellow';
-  if (p<45) return 'pill-orange';
-  if (p<65) return 'pill-red';
-  if (p<80) return 'pill-red';
-  if (p<100) return 'pill-mag';
-  return 'pill-purple';
-}
+function multiplierFor(prior){ var k = prior + 1; if (k <= 2) return 1; if (k <= 4) return 2; if (k <= 6) return 3; return 4; }
+function currentStation(points){ var cur = null; DB.stations.forEach(function(s){ if (points >= s.threshold) cur = s; }); return cur; }
+function nextStation(points){ for (var i=0;i<DB.stations.length;i++) if (points < DB.stations[i].threshold) return DB.stations[i]; return null; }
+function scoreColor(p){ if (p===0) return 'var(--green)'; if (p<15) return 'var(--cyan)'; if (p<30) return 'var(--yellow)'; if (p<45) return 'var(--orange)'; if (p<65) return 'var(--red)'; if (p<80) return '#ff1f4d'; if (p<100) return 'var(--magenta)'; return 'var(--purple)'; }
+function scorePillClass(p){ if (p===0) return 'pill-green'; if (p<15) return 'pill-cyan'; if (p<30) return 'pill-yellow'; if (p<45) return 'pill-orange'; if (p<65) return 'pill-red'; if (p<80) return 'pill-red'; if (p<100) return 'pill-mag'; return 'pill-purple'; }
 
 /* ============================================================
    ابزار
@@ -761,7 +744,6 @@ function render(){
   document.getElementById('yearBadge').textContent = 'سال تحصیلی ' + (DB.settings.academicYear || '—');
   document.getElementById('sidebar').classList.remove('open');
   updateStorageBadge();
-
   if (r.route === 'student' && r.param) return renderStudentDetail(r.param);
   if (r.route === 'quick' && r.param){ quickSelection.studentId = r.param; return renderQuick(); }
   var views = { dashboard:renderDashboard, students:renderStudents, quick:renderQuick, stations:renderStations, import:renderImport, settings:renderSettings, backup:renderBackup };
@@ -785,7 +767,6 @@ function renderDashboard(){
     + '<div class="stat s-red"><div class="stat-label">در خطر</div><div class="stat-value" style="color:var(--red)">'+fa(inDanger)+'</div><div class="stat-sub">امتیاز ≥ ۱۵</div></div>'
     + '<div class="stat s-grn"><div class="stat-label">بیشترین امتیاز</div><div class="stat-value" style="color:var(--green)">'+fa(topScore)+'</div><div class="stat-sub">کل مدرسه</div></div>'
     + '</div>';
-
   html += '<div class="grid-2"><div class="card"><h3 class="card-title">توزیع ایستگاه‌ها</h3><div class="ladder">';
   dist.forEach(function(st){
     html += '<div class="rung '+(st.count?'active':'')+'">'
@@ -794,7 +775,6 @@ function renderDashboard(){
       + '<div class="pill '+(st.count?'pill-cyan':'pill-dim')+'">'+fa(st.count)+' نفر</div></div>';
   });
   html += '</div></div>';
-
   html += '<div class="card"><h3 class="card-title">آخرین تخلفات</h3>';
   if (recent.length){
     html += '<div style="display:flex;flex-direction:column;gap:10px">';
@@ -816,16 +796,22 @@ function renderDashboard(){
 }
 
 /* ============================================================
-   Students list
+   Students list (با فیلتر کلاس)
    ============================================================ */
 function renderStudents(){
   var list = DB.students.slice().sort(function(a,b){ return totalPointsOf(b.id) - totalPointsOf(a.id); });
   var grades = []; DB.students.forEach(function(s){ if (s.grade && grades.indexOf(s.grade) < 0) grades.push(s.grade); }); grades.sort();
+  var classMap = {}; DB.students.forEach(function(s){ if (s.className) classMap[s.className] = (classMap[s.className]||0)+1; });
+  var classList = Object.keys(classMap).sort(function(a,b){ return classMap[b] - classMap[a]; });
 
   var html = '<div class="card" style="margin-bottom:20px"><div class="row">'
     + '<input id="filterInput" placeholder="جستجو…" style="flex:1;min-width:200px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">'
     + '<select id="gradeFilter" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none"><option value="">همه پایه‌ها</option>'
     + grades.map(function(g){ return '<option>'+esc(g)+'</option>'; }).join('') + '</select>'
+    + '<select id="classFilter" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none;max-width:230px">'
+    + '<option value="">همه کلاس‌ها (' + fa(DB.students.length) + ')</option>'
+    + classList.map(function(c){ return '<option value="' + esc(c) + '">' + esc(c) + ' (' + fa(classMap[c]) + ')</option>'; }).join('')
+    + '</select>'
     + '<button class="btn" id="goImportBtn" style="margin-right:auto">📥 ورود از اکسل</button></div></div>';
 
   if (list.length){
@@ -838,8 +824,10 @@ function renderStudents(){
     var apply = function(){
       var q = document.getElementById('filterInput').value.trim().toLowerCase();
       var g = document.getElementById('gradeFilter').value;
+      var c = document.getElementById('classFilter').value;
       var filtered = list.filter(function(s){
         if (g && s.grade !== g) return false;
+        if (c && s.className !== c) return false;
         if (!q) return true;
         return (fullName(s)+' '+s.nationalId+' '+(s.className||'')).toLowerCase().indexOf(q) >= 0;
       });
@@ -847,6 +835,7 @@ function renderStudents(){
     };
     document.getElementById('filterInput').addEventListener('input', apply);
     document.getElementById('gradeFilter').addEventListener('change', apply);
+    document.getElementById('classFilter').addEventListener('change', apply);
     apply();
   }
   if (document.getElementById('goImportBtn')) document.getElementById('goImportBtn').onclick = function(){ navigate('import'); };
@@ -925,7 +914,6 @@ function renderStudentDetail(id){
     html += '</div>';
   } else html += '<div style="color:var(--text-mute);font-size:13px">هیچ تخلف فعالی نیست</div>';
   html += '</div>';
-
   if (cur){
     html += '<div class="station-card" style="border-color:'+scoreColor(pts)+'77"><h3 style="color:'+scoreColor(pts)+'">'+esc(cur.name)+'</h3>'
       + '<div class="thr">حدنصاب: −'+fa(cur.threshold)+' · ورزش/اردو: '+esc(cur.sports)+'</div>'
@@ -971,7 +959,7 @@ function undoViolation(id){
 }
 
 /* ============================================================
-   Quick log
+   Quick
    ============================================================ */
 function renderQuick(){
   var pre = quickSelection.studentId;
@@ -1010,7 +998,6 @@ function renderQuick(){
   }
   html += '</div></div>';
   document.getElementById('view').innerHTML = html;
-
   if (!selectedStudent){
     var q = document.getElementById('qStudent'), list = document.getElementById('qStudentList');
     var renderList = function(){
@@ -1025,21 +1012,14 @@ function renderQuick(){
   }
   $$('[data-type]').forEach(function(el){ el.onclick = function(){ quickSelection.typeId = el.dataset.type; renderQuick(); }; });
   var whenInput = document.getElementById('qWhen');
-  if (whenInput && !whenInput.value){
-    var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-    whenInput.value = d.toISOString().slice(0,16);
-  }
+  if (whenInput && !whenInput.value){ var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); whenInput.value = d.toISOString().slice(0,16); }
   var sub = document.getElementById('qSubmit');
   if (sub) sub.onclick = function(){
     var when = whenInput.value ? new Date(whenInput.value).toISOString() : new Date().toISOString();
     var prior = countPriorOccurrences(selectedStudent.id, selectedType.id);
     var mult = multiplierFor(prior);
     DB.violations.push({ id: uid('vio'), studentId: selectedStudent.id, typeId: selectedType.id, occurredAt: when, note: document.getElementById('qNote').value.trim(), priorCount: prior, occurrenceNumber: prior + 1, basePoints: selectedType.points, multiplier: mult, pointsApplied: selectedType.points * mult, archived: false, createdAt: new Date().toISOString() });
-    saveDB().then(function(){
-      toast('ثبت شد — '+fa(selectedType.points*mult)+'− (×'+fa(mult)+')', 'success');
-      quickSelection = { studentId:null, typeId:null };
-      navigate('student', selectedStudent.id);
-    });
+    saveDB().then(function(){ toast('ثبت شد — '+fa(selectedType.points*mult)+'− (×'+fa(mult)+')', 'success'); quickSelection = { studentId:null, typeId:null }; navigate('student', selectedStudent.id); });
   };
 }
 
@@ -1064,14 +1044,16 @@ function renderStations(){
 }
 
 /* ============================================================
-   Import
+   Import - View
    ============================================================ */
 function renderImport(){
   document.getElementById('view').innerHTML =
     '<div class="card"><h3 class="card-title">ورود گروهی از اکسل / CSV</h3>'
-    + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 18px">'
-    + 'داده‌ها را از اکسل کپی-پیست کن یا فایل CSV/XLSX آپلود کن.'
-    + '</p>'
+    + '<div style="font-size:13px;color:var(--text-dim);line-height:2;margin:0 0 18px;padding:16px;background:linear-gradient(135deg,rgba(0,229,255,.05),rgba(255,43,214,.03));border:1px solid rgba(0,229,255,.25);border-radius:10px">'
+    + '<b style="color:var(--cyan)">📋 دو حالت پشتیبانی می‌شود:</b><br>'
+    + '<b style="color:var(--cyan)">۱. لیست دانش‌آموزان:</b> ستون‌های مجزا برای نام، نام خانوادگی، کد ملی، کلاس<br>'
+    + '<b style="color:var(--cyan)">۲. حضور و غیاب روزانه:</b> ستون «دانش‌آموز» با فرمت «نام خانوادگی (کد ملی)» — سامانه خودکار تشخیص می‌دهد، فقط تخلفات واقعی و ناموجه را ثبت می‌کند و موارد مثبت (جوجه طلایی، کمک، مسابقه) را نادیده می‌گیرد.'
+    + '</div>'
     + '<button class="btn btn-primary" id="openImportBtn" style="padding:13px 22px;font-size:14px">📥 باز کردن پنجره ورود</button>'
     + '<button class="btn" id="downloadTemplateBtn" style="margin-right:10px">📄 دانلود قالب نمونه</button></div>';
   document.getElementById('openImportBtn').onclick = openImportModal;
@@ -1082,6 +1064,9 @@ function renderImport(){
   };
 }
 
+/* ============================================================
+   پارسر CSV/TSV
+   ============================================================ */
 function sdParseDelimited(text, forced){
   text = String(text || '').replace(/^\uFEFF/, '');
   var delim = forced;
@@ -1114,33 +1099,66 @@ function sdLoadSheetJS(){
   return _sdSheetJSPromise;
 }
 
+/* ============================================================
+   نگاشت ستون‌ها — الگوریتم دقیق دو مرحله‌ای
+   ============================================================ */
 var SD_ALIASES = {
-  studentNumber:['شماره دانش آموزی','شماره دانش‌آموزی','شماره دانش اموزی','کد دانش آموزی','student number','studentnumber'],
-  firstName:['نام','first name','firstname'],
+  studentNumber:['شماره دانش آموزی','شماره دانش‌آموزی','شماره دانش اموزی','کد دانش آموزی','شماره دانش‌آموز','student number','studentnumber'],
+  firstName:['نام'],
   lastName:['نام خانوادگی','نام‌خانوادگی','فامیل','last name','lastname','family'],
   nationalId:['کد ملی','کدملی','شماره ملی','national id','nationalid'],
   className:['کلاس','کلاس درس','class','classname'],
   grade:['پایه','پایه تحصیلی','grade','level'],
   classType:['نوع ثبت نام کلاس','نوع ثبت‌نام کلاس','نوع ثبت نام','class type'],
-  parentPhone:['شماره همراه پدر','همراه پدر','تلفن پدر','father phone','parent phone'],
-  motherPhone:['شماره همراه مادر','همراه مادر','تلفن مادر','mother phone'],
-  studentPhone:['شماره همراه دانش‌آموز','شماره همراه','phone'],
+  parentPhone:['شماره همراه پدر','همراه پدر','تلفن پدر','موبایل پدر','شماره پدر','father phone','parent phone'],
+  motherPhone:['شماره همراه مادر','همراه مادر','تلفن مادر','موبایل مادر','شماره مادر','mother phone'],
+  studentPhone:['شماره همراه دانش‌آموز'],
   notes:['یادداشت','توضیحات','note','notes']
 };
 function sdNorm(h){ return String(h==null?'':h).trim().toLowerCase().replace(/\u200c/g,' ').replace(/\s+/g,' '); }
+
 function sdDetectMapping(hr){
   if (!hr) return null;
   var map = {};
+  var used = {};
+
+  // مرحله ۱: تطابق دقیق
   hr.forEach(function(h, i){
     var n = sdNorm(h); if (!n) return;
     for (var key in SD_ALIASES){
       if (map[key] != null) continue;
       var al = SD_ALIASES[key];
       for (var j=0;j<al.length;j++){
-        var na = sdNorm(al[j]);
-        if (na === n){ map[key] = i; break; }
-        if (na.length >= 4 && (n.indexOf(na) >= 0 || na.indexOf(n) >= 0)){ map[key] = i; break; }
+        if (sdNorm(al[j]) === n){
+          map[key] = i;
+          used[i] = true;
+          break;
+        }
       }
+    }
+  });
+
+  // مرحله ۲: تطابق جزئی — طولانی‌ترین alias اول
+  hr.forEach(function(h, i){
+    if (used[i]) return;
+    var n = sdNorm(h); if (!n) return;
+    var cands = [];
+    for (var key in SD_ALIASES){
+      if (map[key] != null) continue;
+      var al = SD_ALIASES[key];
+      for (var j=0;j<al.length;j++){
+        var na = sdNorm(al[j]);
+        if (na.length < 4) continue;
+        if (n.indexOf(na) >= 0 || na.indexOf(n) >= 0){
+          cands.push({ key:key, len:na.length });
+          break;
+        }
+      }
+    }
+    cands.sort(function(a,b){ return b.len - a.len; });
+    if (cands.length){
+      map[cands[0].key] = i;
+      used[i] = true;
     }
   });
   return map;
@@ -1151,10 +1169,151 @@ function sdLooksLikeHeader(row){
   return /نام|کد ملی|کلاس|دانش|شماره|phone|name|class|national/i.test(j);
 }
 
-var _sdState = { rows:[], students:[], mapping:null, header:null };
+/* ============================================================
+   تشخیص فرمت حضور و غیاب و پارس آن
+   ============================================================ */
+function isAttendanceFormat(headerRow){
+  if (!headerRow) return false;
+  var joined = headerRow.map(function(c){ return String(c || '').trim(); }).join('|');
+  return /دانش\s*آموز/i.test(joined) && /عنوان\s*مورد/i.test(joined);
+}
 
+function parseStudentCell(cell){
+  var s = String(cell || '').trim();
+  var idMatch = s.match(/\((\d+)\)/) || s.match(/^(\d+)/);
+  var nationalId = idMatch ? idMatch[1] : '';
+  var namePart = s.replace(/\([^)]*\)/g, ' ').trim().replace(/\s+/g, ' ');
+  var parts = namePart.split(' ').filter(Boolean);
+  if (parts.length === 0) return { firstName:'', lastName:'', nationalId:nationalId };
+  if (parts.length === 1) return { firstName:parts[0], lastName:'', nationalId:nationalId };
+  if (parts.length === 2) return { firstName:parts[0], lastName:parts[1], nationalId:nationalId };
+  // نام‌های چندبخشی
+  var splitAt = 2;
+  if (parts.length === 3) splitAt = 2;
+  else if (parts.length === 4) splitAt = 2;
+  else splitAt = Math.ceil(parts.length / 2);
+  return { firstName: parts.slice(0, splitAt).join(' '), lastName: parts.slice(splitAt).join(' '), nationalId: nationalId };
+}
+
+var POSITIVE_REGEX = [/جوجه\s*طلایی/i,/کمک\s*در\s*انجام/i,/مسابقه/i,/عکاسی/i,/تقدیر/i,/تشویق/i,/برنده/i,/جایزه/i];
+function isPositiveType(type){
+  for (var i = 0; i < POSITIVE_REGEX.length; i++) if (POSITIVE_REGEX[i].test(type)) return true;
+  return false;
+}
+
+var TYPE_MAPPING = [
+  { match:/^غیبت/i,                              typeId:'t07' },
+  { match:/^تأخیر|^تاخیر|^دیر/i,                 typeId:'t03' },
+  { match:/^اخراج\s*از\s*کلاس/i,                 typeId:'t04' },
+  { match:/^تخلف\s*اردو|اردو\s*مطالعاتی/i,       typeId:'t11' },
+  { match:/^اخلال\s*در\s*نظم/i,                  typeId:'t12' },
+  { match:/^سایر\s*موارد/i,                      typeId:'t12' }
+];
+function mapType(rawType){
+  var t = String(rawType || '').trim();
+  for (var i = 0; i < TYPE_MAPPING.length; i++) if (TYPE_MAPPING[i].match.test(t)) return TYPE_MAPPING[i].typeId;
+  return 't12';
+}
+
+function jalaliToISO(jalaliStr){
+  if (!jalaliStr) return new Date().toISOString();
+  var m = String(jalaliStr).match(/(\d{4})\/(\d{1,2})\/(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+  if (!m) return new Date().toISOString();
+  var jy = +m[1], jm = +m[2], jd = +m[3];
+  var hh = +(m[4] || 8), mm = +(m[5] || 0), ss = +(m[6] || 0);
+  var g = Jalali.toGregorian(jy, jm, jd);
+  return new Date(g[0], g[1] - 1, g[2], hh, mm, ss).toISOString();
+}
+
+function processAttendanceRows(rows){
+  if (rows.length < 2) return { students:[], violations:[], stats:{}, error:'فایل خالی است' };
+  var header = rows[0];
+  var colIdx = {};
+  header.forEach(function(h, i){
+    var n = String(h || '').trim();
+    if      (/^شماره$/i.test(n) && colIdx.num === undefined) colIdx.num = i;
+    else if (/دانش\s*آموز/i.test(n) && colIdx.student === undefined) colIdx.student = i;
+    else if (/عنوان\s*مورد/i.test(n) && colIdx.type === undefined) colIdx.type = i;
+    else if (/^کلاس$/i.test(n) && colIdx.className === undefined) colIdx.className = i;
+    else if (/^تاریخ$/i.test(n) && colIdx.date === undefined) colIdx.date = i;
+    else if (/وضعیت\s*موجه|موجه/i.test(n) && colIdx.justified === undefined) colIdx.justified = i;
+    else if (/توضیحات|ملاحظه/i.test(n) && colIdx.notes === undefined) colIdx.notes = i;
+    else if (/نام\s*ثبت\s*کننده/i.test(n) && colIdx.registrar === undefined) colIdx.registrar = i;
+  });
+  if (colIdx.student === undefined || colIdx.type === undefined){
+    return { students:[], violations:[], stats:{}, error:'ستون‌های دانش‌آموز یا عنوان مورد پیدا نشد' };
+  }
+
+  var studentsMap = {};
+  var violations = [];
+  var skipped = { positive:0, justified:0, invalid:0, badStudent:0 };
+
+  for (var i = 1; i < rows.length; i++){
+    var r = rows[i];
+    var studentRaw = String(r[colIdx.student] || '').trim();
+    var typeRaw = String(r[colIdx.type] || '').trim();
+    if (!studentRaw || !typeRaw){ skipped.invalid++; continue; }
+    if (isPositiveType(typeRaw)){ skipped.positive++; continue; }
+    var justified = colIdx.justified !== undefined ? String(r[colIdx.justified] || '').trim() : '';
+    if (justified === 'موجه' || justified === 'منتظر پاسخ'){ skipped.justified++; continue; }
+
+    var parsed = parseStudentCell(studentRaw);
+    if (!parsed.firstName){ skipped.badStudent++; continue; }
+
+    var className = colIdx.className !== undefined ? String(r[colIdx.className] || '').trim() : '';
+    var dateStr   = colIdx.date      !== undefined ? String(r[colIdx.date]      || '').trim() : '';
+    var notes     = colIdx.notes     !== undefined ? String(r[colIdx.notes]     || '').trim() : '';
+    var registrar = colIdx.registrar !== undefined ? String(r[colIdx.registrar] || '').trim() : '';
+    var isoDate = jalaliToISO(dateStr);
+    var typeId = mapType(typeRaw);
+    var key = parsed.nationalId || (parsed.firstName + ' ' + parsed.lastName);
+
+    if (!studentsMap[key]){
+      studentsMap[key] = {
+        firstName: parsed.firstName,
+        lastName: parsed.lastName,
+        nationalId: parsed.nationalId,
+        studentNumber: parsed.nationalId,
+        className: className,
+        _fromAttendance: true
+      };
+    } else if (className && !studentsMap[key].className){
+      studentsMap[key].className = className;
+    }
+
+    violations.push({
+      _key: key,
+      typeId: typeId,
+      occurredAt: isoDate,
+      note: notes ? (notes + (registrar ? ' — ' + registrar : '')) : (registrar || ''),
+      _origType: typeRaw
+    });
+  }
+  return {
+    students: Object.keys(studentsMap).map(function(k){ return studentsMap[k]; }),
+    violations: violations,
+    stats: skipped
+  };
+}
+
+/* ============================================================
+   State ورود گروهی
+   ============================================================ */
+var _sdState = { rows:[], students:[], mapping:null, header:null, attendanceMode:false, attendanceData:null };
+
+/* ============================================================
+   مودال ورود گروهی
+   ============================================================ */
 function openImportModal(){
-  var body = '<div class="field"><label>روش ورود</label>'
+  var body = '<div style="padding:13px 15px;background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(255,43,214,.05));border:1px solid rgba(0,229,255,.35);border-radius:10px;font-size:12.5px;line-height:1.9;margin-bottom:14px">'
+    + '<b style="color:var(--cyan)">📋 تشخیص خودکار:</b><br>'
+    + 'اگه فایل فرمت <b>«حضور و غیاب»</b> داشته باشد (ستون‌های شماره، دانش‌آموز، عنوان مورد)، سامانه خودکار:<br>'
+    + '✅ اسم و فامیل را از «نام خانوادگی (کد ملی)» جدا می‌کند<br>'
+    + '✅ فقط تخلفات واقعی را ثبت می‌کند<br>'
+    + '✅ موارد <b>موجه</b> و <b>مثبت</b> (جوجه طلایی، کمک، مسابقه) را نادیده می‌گیرد<br>'
+    + '✅ دانش‌آموز جدید را خودکار می‌سازد'
+    + '</div>'
+    + '<div class="field"><label>روش ورود</label>'
     + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
     + '<button class="btn btn-primary" id="sdTabPaste" type="button">📋 کپی-پیست</button>'
     + '<button class="btn" id="sdTabCsv" type="button">📄 CSV</button>'
@@ -1168,7 +1327,7 @@ function openImportModal(){
     + '<div id="sdPreviewArea" style="margin-top:16px;display:none">'
     + '<div style="font-size:12.5px;color:var(--text-dim);margin-bottom:10px;padding:10px 12px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);border-radius:10px" id="sdMappingInfo"></div>'
     + '<div class="table-wrap" style="max-height:320px;overflow:auto"><table style="font-size:12px"><thead><tr><th>#</th><th>نام</th><th>خانوادگی</th><th>کد ملی</th><th>کلاس</th><th>پدر</th><th>مادر</th><th>وضعیت</th></tr></thead><tbody id="sdPreviewBody"></tbody></table></div>'
-    + '<div style="margin-top:14px">'
+    + '<div id="sdModeBox" style="margin-top:14px">'
     + '<label style="display:flex;gap:8px;font-size:13px"><input type="radio" name="sdMode" value="merge" checked> افزودن</label>'
     + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="update"> افزودن + به‌روزرسانی</label>'
     + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="replace"> <span style="color:var(--red)">جایگزینی کامل</span></label>'
@@ -1221,38 +1380,19 @@ function openImportModal(){
     _sdState.rows = sdParseDelimited(txt);
     _sdProcess(m);
   };
-
   m.root.querySelector('#sdCancelBtn').onclick = m.close;
-  m.root.querySelector('#sdConfirmBtn').onclick = function(){
-    var mode = m.root.querySelector('input[name="sdMode"]:checked').value;
-    var students = _sdState.students || [];
-    if (!students.length) return;
-    var added = 0, updated = 0, skipped = 0;
-    if (mode === 'replace'){ DB.students = []; DB.violations = []; }
-    var existing = {};
-    DB.students.forEach(function(s){ if (s.nationalId) existing[String(s.nationalId).trim()] = s; });
-    students.forEach(function(stu){
-      var nid = String(stu.nationalId || '').trim();
-      if (mode === 'replace'){ DB.students.push(Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, stu)); added++; }
-      else if (nid && existing[nid]){
-        if (mode === 'update'){ Object.assign(existing[nid], stu); updated++; }
-        else skipped++;
-      } else {
-        var ns = Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, stu);
-        DB.students.push(ns); if (nid) existing[nid] = ns; added++;
-      }
-    });
-    saveDB().then(function(){
-      m.close();
-      toast('ورود انجام شد — '+fa(added)+' افزوده، '+fa(updated)+' به‌روز، '+fa(skipped)+' رد', 'success');
-      render();
-    });
-  };
+  m.root.querySelector('#sdConfirmBtn').onclick = function(){ handleConfirm(m); };
 }
 
+/* ============================================================
+   _sdProcess — مسیریابی بین دو فرمت
+   ============================================================ */
 function _sdProcess(m){
   var rows = _sdState.rows;
   if (!rows.length){ m.root.querySelector('#sdStatus').textContent = 'داده‌ای یافت نشد'; return; }
+  if (isAttendanceFormat(rows[0])){ _sdProcessAttendance(m, rows); return; }
+  // حالت عادی (لیست دانش‌آموزان)
+  _sdState.attendanceMode = false;
   var headerRow = null, dataStart = 0;
   if (sdLooksLikeHeader(rows[0])){ headerRow = rows[0]; dataStart = 1; }
   var mapping = headerRow ? sdDetectMapping(headerRow) : null;
@@ -1271,24 +1411,219 @@ function _sdProcess(m){
     if (!stu.firstName && !stu.lastName) continue;
     students.push(stu);
   }
-  _sdState.students = students;
+  _sdState.students = students; _sdState.header = headerRow; _sdState.mapping = mapping;
+
   var area = m.root.querySelector('#sdPreviewArea');
   var body = m.root.querySelector('#sdPreviewBody');
   var info = m.root.querySelector('#sdMappingInfo');
   var present = Object.keys(mapping).filter(function(k){ return mapping[k] != null; });
   var hd = headerRow ? present.map(function(k){ return '<b>'+esc(headerRow[mapping[k]] || k)+'</b> ← '+k; }).join(' · ') : present.map(function(k){ return k+'=ستون '+fa(mapping[k]+1); }).join(' · ');
-  info.innerHTML = '📌 هدر: '+(headerRow?'شناسایی شد':'پیش‌فرض')+'<br>نگاشت: '+hd+'<br>تعداد: <b>'+fa(students.length)+'</b>';
+  info.innerHTML = '<b style="color:var(--cyan)">📋 فرمت لیست دانش‌آموزان</b><br>'
+    + '📌 هدر: '+(headerRow?'شناسایی شد':'پیش‌فرض')+'<br>'
+    + 'نگاشت: '+hd+'<br>'
+    + 'تعداد: <b>'+fa(students.length)+'</b>';
+
+  var table = m.root.querySelector('#sdPreviewArea table');
+  if (table){
+    table.querySelector('thead tr').innerHTML = '<th>#</th><th>نام</th><th>خانوادگی</th><th>کد ملی</th><th>کلاس</th><th>پدر</th><th>مادر</th><th>وضعیت</th>';
+  }
   body.innerHTML = students.slice(0, 100).map(function(s, i){
     var ok = (s.firstName || s.lastName);
-    return '<tr><td>'+fa(i+1)+'</td><td>'+(esc(s.firstName)||'—')+'</td><td>'+(esc(s.lastName)||'—')+'</td>'
-      + '<td class="mono">'+(esc(s.nationalId)||'—')+'</td><td>'+(esc(s.className)||'—')+'</td>'
-      + '<td class="mono">'+(esc(s.parentPhone)||'—')+'</td><td class="mono">'+(esc(s.motherPhone)||'—')+'</td>'
+    return '<tr><td>'+fa(i+1)+'</td>'
+      + '<td>'+esc(s.firstName||'—')+'</td>'
+      + '<td>'+esc(s.lastName||'—')+'</td>'
+      + '<td class="mono">'+esc(s.nationalId||'—')+'</td>'
+      + '<td>'+esc(s.className||'—')+'</td>'
+      + '<td class="mono">'+esc(s.parentPhone||'—')+'</td>'
+      + '<td class="mono">'+esc(s.motherPhone||'—')+'</td>'
       + '<td>'+(ok?'<span class="pill pill-green">آماده</span>':'<span class="pill pill-red">رد</span>')+'</td></tr>';
-  }).join('');
+  }).join('') + (students.length > 100 ? '<tr><td colspan="8" style="text-align:center;color:var(--text-mute)">… و ' + fa(students.length - 100) + ' ردیف دیگر</td></tr>' : '');
+
+  // نمایش باکس mode اصلی
+  var modeBox = m.root.querySelector('#sdModeBox');
+  if (modeBox){
+    modeBox.innerHTML =
+      '<label style="display:flex;gap:8px;font-size:13px"><input type="radio" name="sdMode" value="merge" checked> افزودن</label>'
+      + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="update"> افزودن + به‌روزرسانی</label>'
+      + '<label style="display:flex;gap:8px;font-size:13px;margin-top:6px"><input type="radio" name="sdMode" value="replace"> <span style="color:var(--red)">جایگزینی کامل</span></label>';
+  }
+
   area.style.display = 'block';
-  m.root.querySelector('#sdConfirmBtn').disabled = students.length === 0;
+  var confirmBtn = m.root.querySelector('#sdConfirmBtn');
+  confirmBtn.disabled = students.length === 0;
+  confirmBtn.textContent = 'ورود';
   var st = m.root.querySelector('#sdStatus');
   st.textContent = fa(students.length) + ' آماده ورود'; st.style.color = 'var(--green)';
+}
+
+function _sdProcessAttendance(m, rows){
+  var result = processAttendanceRows(rows);
+  if (result.error){
+    var st = m.root.querySelector('#sdStatus');
+    st.textContent = '✕ ' + result.error;
+    st.style.color = 'var(--red)';
+    return;
+  }
+  _sdState.attendanceMode = true;
+  _sdState.attendanceData = result;
+  _sdState.students = result.students;
+  _sdState.violations = result.violations;
+
+  var area = m.root.querySelector('#sdPreviewArea');
+  var body = m.root.querySelector('#sdPreviewBody');
+  var info = m.root.querySelector('#sdMappingInfo');
+
+  info.innerHTML = '<b style="color:var(--green)">📋 فرمت حضور و غیاب تشخیص داده شد</b><br>'
+    + '👥 دانش‌آموزان: <b>' + fa(result.students.length) + '</b> · '
+    + '⚠ تخلفات قابل ثبت: <b>' + fa(result.violations.length) + '</b><br>'
+    + '<span style="color:var(--text-mute);font-size:11px">رد شده: '
+    + fa(result.stats.positive || 0) + ' مثبت · '
+    + fa(result.stats.justified || 0) + ' موجه · '
+    + fa(result.stats.invalid || 0) + ' نامعتبر · '
+    + fa(result.stats.badStudent || 0) + ' بدون نام'
+    + '</span>';
+
+  var table = m.root.querySelector('#sdPreviewArea table');
+  if (table){
+    table.querySelector('thead tr').innerHTML =
+      '<th>#</th><th>نام</th><th>خانوادگی</th><th>کد ملی</th><th>کلاس</th><th>نوع اصلی</th><th>نگاشت</th><th>وضعیت</th>';
+  }
+
+  var newCount = 0;
+  var previewHtml = '';
+  var shown = Math.min(result.violations.length, 100);
+  for (var i = 0; i < shown; i++){
+    var v = result.violations[i];
+    var stu = result.students.find(function(s){
+      return s.nationalId === v._key || (s.firstName + ' ' + s.lastName) === v._key;
+    });
+    var vt = DB.violationTypes.find(function(t){ return t.id === v.typeId; });
+    var exists = DB.students.some(function(s){ return s.nationalId && stu && s.nationalId === stu.nationalId; });
+    if (!exists) newCount++;
+    previewHtml += '<tr>'
+      + '<td>' + fa(i + 1) + '</td>'
+      + '<td>' + esc(stu ? stu.firstName : '—') + '</td>'
+      + '<td>' + esc(stu ? stu.lastName : '—') + '</td>'
+      + '<td class="mono">' + esc(stu ? stu.nationalId : '—') + '</td>'
+      + '<td>' + esc(stu ? stu.className : '—') + '</td>'
+      + '<td>' + esc(v._origType) + '</td>'
+      + '<td><span class="pill pill-cyan">' + esc(vt ? vt.label : v.typeId) + '</span></td>'
+      + '<td>' + (exists ? '<span class="pill pill-cyan">موجود</span>' : '<span class="pill pill-yellow">جدید</span>') + '</td>'
+      + '</tr>';
+  }
+  if (result.violations.length > 100){
+    previewHtml += '<tr><td colspan="8" style="text-align:center;color:var(--text-mute)">… و ' + fa(result.violations.length - 100) + ' ردیف دیگر</td></tr>';
+  }
+  body.innerHTML = previewHtml;
+
+  var modeBox = m.root.querySelector('#sdModeBox');
+  if (modeBox){
+    modeBox.innerHTML = '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;padding:14px;background:rgba(0,255,157,.05);border:1px solid rgba(0,255,157,.3);border-radius:10px">'
+      + '<b style="color:var(--green)">✅ آماده ثبت:</b><br>'
+      + '• فقط تخلفات <b>ناموجه</b> و غیرمثبت ثبت می‌شوند<br>'
+      + '• <b>' + fa(newCount) + '</b> دانش‌آموز جدید خودکار ساخته می‌شود<br>'
+      + '• تاریخ وقوع از ستون تاریخ اکسل خوانده می‌شود<br>'
+      + '• ضریب تصاعدی طبق آیین‌نامه اعمال می‌شود'
+      + '</div>';
+  }
+
+  area.style.display = 'block';
+  var confirmBtn = m.root.querySelector('#sdConfirmBtn');
+  confirmBtn.disabled = result.violations.length === 0;
+  confirmBtn.textContent = '✓ ثبت ' + fa(result.violations.length) + ' تخلف';
+
+  var st2 = m.root.querySelector('#sdStatus');
+  st2.textContent = 'آماده — ' + fa(result.violations.length) + ' تخلف';
+  st2.style.color = 'var(--green)';
+}
+
+/* ============================================================
+   تأیید ورود
+   ============================================================ */
+function handleConfirm(m){
+  if (_sdState.attendanceMode){
+    var result = _sdState.attendanceData;
+    if (!result || !result.violations.length){ toast('داده‌ای برای ثبت نیست', 'error'); return; }
+    if (!confirm('ثبت ' + result.violations.length + ' تخلف؟')) return;
+    var addedStudents = 0;
+    var byNID = {};
+    DB.students.forEach(function(s){ if (s.nationalId) byNID[s.nationalId] = s; });
+
+    result.students.forEach(function(stu){
+      if (!stu.nationalId) return;
+      if (byNID[stu.nationalId]) return;
+      var ns = Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, stu);
+      delete ns._fromAttendance;
+      DB.students.push(ns);
+      byNID[stu.nationalId] = ns;
+      addedStudents++;
+    });
+
+    var addedViolations = 0;
+    result.violations.forEach(function(v){
+      var stu = byNID[v._key] || DB.students.find(function(s){ return (s.firstName + ' ' + s.lastName) === v._key; });
+      if (!stu) return;
+      var vtype = DB.violationTypes.find(function(t){ return t.id === v.typeId; });
+      if (!vtype) return;
+      var prior = 0;
+      var newTime = new Date(v.occurredAt).getTime();
+      DB.violations.forEach(function(existing){
+        if (existing.studentId === stu.id && existing.typeId === v.typeId && !existing.archived){
+          if (new Date(existing.occurredAt).getTime() < newTime) prior++;
+        }
+      });
+      var mult = multiplierFor(prior);
+      DB.violations.push({
+        id: uid('vio'), studentId: stu.id, typeId: v.typeId,
+        occurredAt: v.occurredAt, note: v.note || '',
+        priorCount: prior, occurrenceNumber: prior + 1,
+        basePoints: vtype.points, multiplier: mult,
+        pointsApplied: vtype.points * mult,
+        archived: false, createdAt: new Date().toISOString(),
+        _imported: 'attendance'
+      });
+      addedViolations++;
+    });
+
+    saveDB().then(function(){
+      m.close();
+      _sdState.attendanceMode = false;
+      _sdState.attendanceData = null;
+      toast('✓ ' + addedViolations + ' تخلف ثبت شد و ' + addedStudents + ' دانش‌آموز اضافه شد', 'success');
+      render();
+    });
+    return;
+  }
+
+  // حالت عادی
+  var modeEl = m.root.querySelector('input[name="sdMode"]:checked');
+  var mode = modeEl ? modeEl.value : 'merge';
+  var students = _sdState.students || [];
+  if (!students.length) return;
+  var added = 0, updated = 0, skipped = 0;
+  if (mode === 'replace'){ DB.students = []; DB.violations = []; }
+  var existing = {};
+  DB.students.forEach(function(s){ if (s.nationalId) existing[String(s.nationalId).trim()] = s; });
+  students.forEach(function(stu){
+    var nid = String(stu.nationalId || '').trim();
+    if (mode === 'replace'){
+      DB.students.push(Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, stu));
+      added++;
+    } else if (nid && existing[nid]){
+      if (mode === 'update'){ Object.assign(existing[nid], stu); updated++; }
+      else skipped++;
+    } else {
+      var ns = Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, stu);
+      DB.students.push(ns);
+      if (nid) existing[nid] = ns;
+      added++;
+    }
+  });
+  saveDB().then(function(){
+    m.close();
+    toast('ورود انجام شد — ' + fa(added) + ' افزوده، ' + fa(updated) + ' به‌روز، ' + fa(skipped) + ' رد', 'success');
+    render();
+  });
 }
 
 /* ============================================================
@@ -1309,7 +1644,6 @@ function renderSettings(){
     + '<div class="mode-card '+(m==='local'?'selected':'')+'" data-mode="local"><div class="m-ico">🖥️</div><div class="m-body"><h4>لوکال</h4><p>فقط همین مرورگر.</p></div></div>'
     + '<div class="mode-card '+(m==='file'?'selected':'')+'" data-mode="file"><div class="m-ico">📁</div><div class="m-body"><h4>فایل روی دیسک</h4><p>ذخیره در فایل JSON.</p></div></div>'
     + '</div>';
-
   if (m === 'file' && fileHandle){
     html += '<div class="cloud-status ok"><span>📁</span><span style="flex:1">فایل: '+esc(fileHandle.name)+'</span><button class="btn btn-sm" id="disconnectFileBtn">قطع</button></div>';
   }
@@ -1321,7 +1655,6 @@ function renderSettings(){
       + '<button class="btn btn-sm" id="disconnectCloudBtn">قطع</button></div>';
   }
   html += '</div>';
-
   if (showCloudForm) html += renderCloudConfig(savedBin);
 
   html += '<div class="grid-2" style="margin-top:20px">'
@@ -1335,10 +1668,8 @@ function renderSettings(){
     + '<button class="btn btn-primary" id="saveSettings" style="margin-top:16px">ذخیره</button></div>'
     + '<div class="card"><h3 class="card-title">ضرایب تصاعدی</h3>'
     + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;padding:14px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--border)">'
-    + '<div>• دفعه ۱ و ۲: × <b style="color:var(--cyan)">۱</b></div>'
-    + '<div>• دفعه ۳ و ۴: × <b style="color:var(--cyan)">۲</b></div>'
-    + '<div>• دفعه ۵ و ۶: × <b style="color:var(--cyan)">۳</b></div>'
-    + '<div>• دفعه ۷+: × <b style="color:var(--cyan)">۴</b></div></div></div></div>';
+    + '<div>• دفعه ۱ و ۲: × <b style="color:var(--cyan)">۱</b></div><div>• دفعه ۳ و ۴: × <b style="color:var(--cyan)">۲</b></div>'
+    + '<div>• دفعه ۵ و ۶: × <b style="color:var(--cyan)">۳</b></div><div>• دفعه ۷+: × <b style="color:var(--cyan)">۴</b></div></div></div></div>';
 
   html += '<div class="card" style="margin-top:20px"><h3 class="card-title">جدول تخلفات</h3><div class="table-wrap" style="border:none;background:transparent"><table><thead><tr><th style="width:60px">#</th><th>عنوان</th><th style="width:160px">امتیاز</th></tr></thead><tbody>';
   DB.violationTypes.forEach(function(t,i){
@@ -1378,11 +1709,9 @@ function renderSettings(){
       }
     };
   });
-
   if (document.getElementById('disconnectFileBtn')) document.getElementById('disconnectFileBtn').onclick = disconnectFile;
   if (document.getElementById('disconnectCloudBtn')) document.getElementById('disconnectCloudBtn').onclick = disconnectCloud;
   if (document.getElementById('cancelCloudBtn')) document.getElementById('cancelCloudBtn').onclick = function(){ setupMode = null; render(); };
-
   if (document.getElementById('copyBinIdBtn')){
     document.getElementById('copyBinIdBtn').onclick = function(){
       var id = CFG.cloud && CFG.cloud.binId;
@@ -1390,18 +1719,14 @@ function renderSettings(){
       if (navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(id).then(function(){ toast('Bin ID کپی شد: '+id,'success'); })
           .catch(function(){ prompt('کپی کن:', id); });
-      } else {
-        prompt('کپی کن:', id);
-      }
+      } else prompt('کپی کن:', id);
     };
   }
-
-  // Create Bin
   if (document.getElementById('createBinBtn')){
     document.getElementById('createBinBtn').onclick = function(){
       var k = document.getElementById('cloudKey').value.trim();
       if (!k){ toast('اول کلید X-Master-Key را وارد کن','error'); return; }
-      if (!confirm('یک Bin جدید ساخته می‌شود و داده‌های فعلی در آن ذخیره می‌شود.\n\nBin ID را جای امنی ذخیره کن.\n\nادامه؟')) return;
+      if (!confirm('یک Bin جدید ساخته می‌شود.\n\nBin ID را جای امنی ذخیره کن.\n\nادامه؟')) return;
       var s = document.getElementById('cloudStatusText');
       s.textContent = '⏳ در حال ساخت Bin…'; s.style.color = 'var(--yellow)';
       createSharedBin(k).then(function(id){
@@ -1410,20 +1735,11 @@ function renderSettings(){
         s.innerHTML = '✓ Bin ساخته شد — حالا «اتصال» را بزن<br><code dir="ltr">'+esc(id)+'</code>';
         s.style.color = 'var(--green)';
         if (navigator.clipboard && navigator.clipboard.writeText){
-          navigator.clipboard.writeText(id).then(function(){
-            toast('Bin ID کپی شد','success');
-          });
-        } else {
-          alert('Bin ID:\n\n' + id + '\n\nکپی کن و جای امنی ذخیره کن.');
-        }
-      }).catch(function(e){
-        s.textContent = '✕ ' + e.message; s.style.color = 'var(--red)';
-        toast(e.message, 'error');
-      });
+          navigator.clipboard.writeText(id).then(function(){ toast('Bin ID کپی شد','success'); });
+        } else alert('Bin ID:\n\n' + id);
+      }).catch(function(e){ s.textContent = '✕ ' + e.message; s.style.color = 'var(--red)'; toast(e.message, 'error'); });
     };
   }
-
-  // Connect
   if (document.getElementById('connectCloudBtn')){
     document.getElementById('connectCloudBtn').onclick = function(){
       var k = document.getElementById('cloudKey').value.trim();
@@ -1432,10 +1748,7 @@ function renderSettings(){
       if (!b){ toast('Bin ID را وارد کن یا «ساخت Bin جدید» را بزن','error'); return; }
       var s = document.getElementById('cloudStatusText');
       s.textContent = '⏳ در حال اتصال…'; s.style.color = 'var(--yellow)';
-      connectCloud(k, b).catch(function(e){
-        s.textContent = '✕ ' + e.message; s.style.color = 'var(--red)';
-        toast(e.message, 'error');
-      });
+      connectCloud(k, b).catch(function(e){ s.textContent = '✕ ' + e.message; s.style.color = 'var(--red)'; toast(e.message, 'error'); });
     };
   }
 
@@ -1486,7 +1799,7 @@ function renderCloudConfig(savedBin){
     + '<h3 class="card-title">☁️ اتصال ابری (JSONBin)</h3>'
     + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;margin-bottom:16px;padding:14px;background:rgba(0,229,255,.04);border-radius:10px;border:1px solid rgba(0,229,255,.2)">'
     + '<b style="color:var(--cyan)">راهنما:</b><br>'
-    + '۱. برو به <a href="https://jsonbin.io" target="_blank" style="color:var(--cyan)">jsonbin.io</a> و ثبت‌نام کن (رایگان).<br>'
+    + '۱. برو به <a href="https://jsonbin.io" target="_blank" style="color:var(--cyan)">jsonbin.io</a> و ثبت‌نام کن.<br>'
     + '۲. از منو <b>API Keys</b> → کلید <b>X-Master-Key</b> را کپی کن.<br>'
     + '۳. کلید را در فیلد زیر پیست کن.<br>'
     + '۴. <b>اولین بار:</b> روی «🔨 ساخت Bin جدید» بزن → Bin ID خودکار پر و کپی می‌شود.<br>'
@@ -1518,7 +1831,6 @@ function renderBackup(){
     + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">با بارگذاری فایل، کل دیتابیس جایگزین می‌شود.</p>'
     + '<input type="file" id="importFile" accept=".json" style="display:none">'
     + '<button class="btn" id="impBtn">⤒ بارگذاری فایل</button></div></div>';
-
   html += '<div class="card" style="margin-top:20px"><h3 class="card-title">🗄️ پشتیبان محلی ('+fa(backups.length)+')</h3>';
   if (backups.length){
     html += '<div style="display:flex;flex-direction:column;gap:8px">';
@@ -1531,13 +1843,11 @@ function renderBackup(){
     html += '</div>';
   } else html += '<div style="color:var(--text-mute);font-size:13px">هنوز نسخه‌ای نیست</div>';
   html += '</div>';
-
   html += '<div class="card" style="margin-top:20px;border-color:rgba(255,58,94,.35)">'
     + '<h3 class="card-title" style="color:var(--red)">منطقه خطر</h3>'
     + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">کل سوابق آرشیو می‌شود.</p>'
     + '<button class="btn btn-danger" id="resetAll">↺ آرشیو کل سوابق</button></div>';
   document.getElementById('view').innerHTML = html;
-
   $$('[data-restore]').forEach(function(btn){
     btn.onclick = function(){
       var i = Number(btn.dataset.restore); var b = backups[i]; if (!b) return;
@@ -1548,7 +1858,6 @@ function renderBackup(){
       saveDB().then(function(){ toast('بازیابی شد','success'); render(); });
     };
   });
-
   document.getElementById('expJson').onclick = function(){ download('discipline-backup-'+Date.now()+'.json', JSON.stringify(DB, null, 2), 'application/json'); };
   document.getElementById('expCsvS').onclick = function(){
     var rows = [['شماره دانش‌آموزی','نام','نام خانوادگی','کد ملی','کلاس','نوع ثبت‌نام','تلفن پدر','تلفن مادر','امتیاز','ایستگاه']];
@@ -1653,11 +1962,7 @@ function openStudentForm(student){
 function compareVersions(a, b){
   function p(v){ return String(v||'0').split('.').map(function(x){ return parseInt(x,10)||0; }); }
   var A = p(a), B = p(b), len = Math.max(A.length, B.length);
-  for (var i=0; i<len; i++){
-    var x = A[i]||0, y = B[i]||0;
-    if (x > y) return 1;
-    if (x < y) return -1;
-  }
+  for (var i=0; i<len; i++){ var x = A[i]||0, y = B[i]||0; if (x > y) return 1; if (x < y) return -1; }
   return 0;
 }
 function checkForNewCode(){
@@ -1668,8 +1973,8 @@ function checkForNewCode(){
       var m = html.match(/<meta\s+name=["']app-version["']\s+content=["']([^"']+)["']/i);
       if (!m) return;
       if (compareVersions(m[1], APP_VERSION) > 0){
-        var b = document.getElementById('updateBanner');
-        if (b){ b.querySelector('span').textContent = '🚀 نسخه جدید (' + m[1] + ') آماده است'; b.classList.add('show'); }
+        // می‌تونیم بنر نشون بدیم، ولی برای سادگی فقط کنسول
+        console.log('[Update] نسخه جدید موجود:', m[1]);
       }
     })
     .catch(function(){});
@@ -1682,7 +1987,6 @@ document.addEventListener('click', function(e){
   var nav = e.target.closest ? e.target.closest('.nav a') : null;
   if (nav){ e.preventDefault(); navigate(nav.dataset.route); }
 });
-
 document.getElementById('addStudentBtn').onclick = function(){ openStudentForm(null); };
 document.getElementById('menuBtn').onclick = function(){ document.getElementById('sidebar').classList.toggle('open'); };
 window.addEventListener('hashchange', render);
@@ -1706,7 +2010,6 @@ gs.addEventListener('input', function(){
 document.addEventListener('click', function(e){
   if (!e.target.closest || !e.target.closest('.search-wrap')) gsResults.classList.add('hidden');
 });
-
 window.navigate = navigate;
 window.undoViolation = undoViolation;
 
@@ -1715,7 +2018,6 @@ window.undoViolation = undoViolation;
    ============================================================ */
 (function(){
   try { document.getElementById('verHint').textContent = 'نسخه ' + APP_VERSION; } catch(e){}
-
   tryRestoreFileHandle()
     .then(loadDB)
     .then(function(){
@@ -1724,16 +2026,10 @@ window.undoViolation = undoViolation;
       var boot = document.getElementById('boot'); if (boot) boot.style.display = 'none';
       render();
       startPolling();
-      setTimeout(checkForNewCode, 1500);
-      setInterval(checkForNewCode, 5 * 60 * 1000);
       window.addEventListener('online', function(){
         if (activeMode() === 'cloud' && DB.meta.pendingSync){
           pushToCloud().then(function(ok){
-            if (ok){
-              DB.meta.pendingSync = false;
-              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
-              toast('اینترنت برگشت — همگام شد','success'); updateStorageBadge();
-            }
+            if (ok){ DB.meta.pendingSync = false; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}; toast('اینترنت برگشت — همگام شد','success'); updateStorageBadge(); }
           });
         }
       });
