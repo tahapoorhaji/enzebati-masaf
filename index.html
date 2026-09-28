@@ -4,180 +4,86 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>سامانه مدیریت انضباطی مدرسه</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#04060c; --panel:rgba(14,18,30,.78); --border:rgba(110,150,220,.14);
-  --border-2:rgba(0,229,255,.4); --text:#e7eefc; --text-dim:#8d97b0; --text-mute:#5b6478;
-  --cyan:#00e5ff; --magenta:#ff2bd6; --green:#00ff9d; --yellow:#ffd60a;
-  --orange:#ff8c1a; --red:#ff3a5e; --purple:#a855f7;
-  --r:14px;
+  --bg:#04060c;--panel:rgba(14,18,30,.78);--border:rgba(110,150,220,.14);
+  --border-2:rgba(0,229,255,.4);--text:#e7eefc;--text-dim:#8d97b0;--text-mute:#5b6478;
+  --cyan:#00e5ff;--magenta:#ff2bd6;--green:#00ff9d;--yellow:#ffd60a;
+  --orange:#ff8c1a;--red:#ff3a5e;--purple:#a855f7;--r:14px;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;
-  background:var(--bg);color:var(--text);overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
+html,body{height:100%;margin:0}
+body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .bg-grid,.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0}
-.bg-grid{
-  background-image:linear-gradient(rgba(0,229,255,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,229,255,.035) 1px,transparent 1px);
-  background-size:52px 52px;
-  mask-image:radial-gradient(ellipse at 50% 30%,#000 40%,transparent 90%);
-}
-.bg-glow{
-  background:radial-gradient(ellipse 60% 40% at 15% 0%,rgba(0,229,255,.10),transparent 60%),
-    radial-gradient(ellipse 50% 40% at 90% 100%,rgba(255,43,214,.08),transparent 60%),
-    radial-gradient(ellipse 70% 50% at 50% 50%,rgba(168,85,247,.05),transparent 70%);
-}
+.bg-grid{background-image:linear-gradient(rgba(0,229,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse at 50% 30%,#000 40%,transparent 90%)}
+.bg-glow{background:radial-gradient(ellipse 60% 40% at 15% 0%,rgba(0,229,255,.10),transparent 60%),radial-gradient(ellipse 50% 40% at 90% 100%,rgba(255,43,214,.08),transparent 60%),radial-gradient(ellipse 70% 50% at 50% 50%,rgba(168,85,247,.05),transparent 70%)}
 .app{display:grid;grid-template-columns:262px 1fr;min-height:100vh;position:relative;z-index:1}
-/* sidebar */
-.sidebar{
-  background:linear-gradient(180deg,rgba(10,13,22,.92),rgba(8,10,18,.86));
-  border-left:1px solid var(--border);padding:22px 16px;
-  display:flex;flex-direction:column;gap:22px;
-  position:sticky;top:0;height:100vh;backdrop-filter:blur(20px);
-}
+.sidebar{background:linear-gradient(180deg,rgba(10,13,22,.92),rgba(8,10,18,.86));border-left:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;backdrop-filter:blur(20px)}
 .brand{display:flex;align-items:center;gap:12px;padding:4px 6px 18px;border-bottom:1px solid var(--border)}
-.brand-mark{
-  width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
-  font-weight:900;font-size:22px;color:#04060c;
-  background:linear-gradient(135deg,var(--cyan),var(--magenta));
-  box-shadow:0 0 20px rgba(0,229,255,.5),0 0 40px rgba(255,43,214,.25);
-}
+.brand-mark{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:22px;color:#04060c;background:linear-gradient(135deg,var(--cyan),var(--magenta));box-shadow:0 0 20px rgba(0,229,255,.5),0 0 40px rgba(255,43,214,.25)}
 .brand-text{display:flex;flex-direction:column;line-height:1.25}
-.brand-text strong{font-size:15px;letter-spacing:.3px}
+.brand-text strong{font-size:15px}
 .brand-text span{font-size:11px;color:var(--text-dim)}
 .nav{display:flex;flex-direction:column;gap:4px;flex:1}
-.nav a{
-  display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;
-  color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;
-  border:1px solid transparent;transition:all .18s;position:relative;cursor:pointer;
-}
+.nav a{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;border:1px solid transparent;transition:all .18s;position:relative;cursor:pointer}
 .nav a:hover{color:var(--text);background:rgba(255,255,255,.03);border-color:var(--border)}
-.nav a.active{
-  color:var(--cyan);background:linear-gradient(90deg,rgba(0,229,255,.10),rgba(0,229,255,.01));
-  border-color:rgba(0,229,255,.30);box-shadow:inset 0 0 20px rgba(0,229,255,.06);
-}
-.nav a.active::before{
-  content:'';position:absolute;right:-17px;top:8px;bottom:8px;width:3px;
-  background:var(--cyan);border-radius:3px;box-shadow:0 0 12px var(--cyan);
-}
+.nav a.active{color:var(--cyan);background:linear-gradient(90deg,rgba(0,229,255,.10),rgba(0,229,255,.01));border-color:rgba(0,229,255,.30)}
+.nav a.active::before{content:'';position:absolute;right:-17px;top:8px;bottom:8px;width:3px;background:var(--cyan);border-radius:3px;box-shadow:0 0 12px var(--cyan)}
 .nav-ico{width:22px;text-align:center;font-size:14px;opacity:.85}
 .sidebar-foot{display:flex;flex-direction:column;gap:8px}
-.year-badge{
-  font-size:12px;color:var(--cyan);padding:8px 12px;border-radius:8px;
-  background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.20);text-align:center;
-}
+.year-badge{font-size:12px;color:var(--cyan);padding:8px 12px;border-radius:8px;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.20);text-align:center}
+.storage-badge{font-size:11px;padding:7px 12px;border-radius:8px;text-align:center;border:1px solid;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.storage-badge.local{color:var(--text-dim);background:rgba(255,255,255,.03);border-color:var(--border)}
+.storage-badge.file{color:var(--yellow);background:rgba(255,214,10,.08);border-color:rgba(255,214,10,.30)}
+.storage-badge.cloud{color:var(--green);background:rgba(0,255,157,.08);border-color:rgba(0,255,157,.30)}
+.storage-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
 .hint{font-size:10.5px;color:var(--text-mute);text-align:center}
-/* main */
 .main{display:flex;flex-direction:column;min-width:0}
-.topbar{
-  display:flex;align-items:center;gap:16px;padding:18px 30px;
-  border-bottom:1px solid var(--border);background:rgba(6,9,16,.55);
-  backdrop-filter:blur(14px);position:sticky;top:0;z-index:20;
-}
-.topbar h1{font-size:19px;font-weight:700;margin:0;letter-spacing:.4px}
+.topbar{display:flex;align-items:center;gap:16px;padding:18px 30px;border-bottom:1px solid var(--border);background:rgba(6,9,16,.55);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20}
+.topbar h1{font-size:19px;font-weight:700;margin:0}
 .topbar-actions{margin-right:auto;display:flex;gap:12px;align-items:center}
 .search-wrap{position:relative}
 .search-ico{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-mute);font-size:16px;pointer-events:none}
-.search-wrap input{
-  width:290px;padding:10px 38px 10px 14px;background:rgba(255,255,255,.03);
-  border:1px solid var(--border);border-radius:10px;color:var(--text);
-  font-family:inherit;font-size:13px;outline:none;transition:all .2s;
-}
-.search-wrap input:focus{
-  border-color:var(--border-2);box-shadow:0 0 0 3px rgba(0,229,255,.08);
-  background:rgba(0,229,255,.03);
-}
-.search-results{
-  position:absolute;top:calc(100% + 8px);right:0;left:0;
-  background:rgba(12,16,26,.98);border:1px solid var(--border-2);
-  border-radius:12px;max-height:340px;overflow:auto;
-  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 24px rgba(0,229,255,.35);z-index:30;
-}
+.search-wrap input{width:290px;padding:10px 38px 10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:13px;outline:none}
+.search-wrap input:focus{border-color:var(--border-2);background:rgba(0,229,255,.03)}
+.search-results{position:absolute;top:calc(100% + 8px);right:0;left:0;background:rgba(12,16,26,.98);border:1px solid var(--border-2);border-radius:12px;max-height:340px;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);z-index:30}
 .search-results.hidden{display:none}
-.search-item{
-  padding:11px 14px;cursor:pointer;font-size:13px;
-  border-bottom:1px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center;gap:10px;
-}
+.search-item{padding:11px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
 .search-item:last-child{border-bottom:none}
 .search-item:hover{background:rgba(0,229,255,.06)}
 .view{padding:28px 30px 60px;flex:1;min-width:0}
-/* buttons */
-.btn{
-  display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;
-  font-family:inherit;font-size:13px;font-weight:600;border:1px solid var(--border);
-  background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:all .18s;
-  text-decoration:none;
-}
-.btn:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18)}
-.btn-primary{
-  background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(0,229,255,.04));
-  border-color:rgba(0,229,255,.55);color:var(--cyan);
-  box-shadow:0 0 20px rgba(0,229,255,.15);
-}
-.btn-primary:hover{box-shadow:0 0 30px rgba(0,229,255,.35);background:linear-gradient(135deg,rgba(0,229,255,.25),rgba(0,229,255,.08))}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:all .18s;text-decoration:none}
+.btn:hover{background:rgba(255,255,255,.07)}
+.btn-primary{background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(0,229,255,.04));border-color:rgba(0,229,255,.55);color:var(--cyan)}
+.btn-primary:hover{background:linear-gradient(135deg,rgba(0,229,255,.25),rgba(0,229,255,.08))}
 .btn-danger{border-color:rgba(255,58,94,.5);color:#ff8ba3;background:rgba(255,58,94,.06)}
-.btn-danger:hover{background:rgba(255,58,94,.14)}
 .btn-ghost{background:transparent}
 .btn-sm{padding:6px 11px;font-size:11.5px;border-radius:8px}
 .icon-btn{background:transparent;border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
 .only-mobile{display:none}
-/* cards */
-.card{
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
-  padding:20px;backdrop-filter:blur(16px);position:relative;overflow:hidden;
-}
-.card::before{
-  content:'';position:absolute;inset:0;border-radius:var(--r);padding:1px;
-  background:linear-gradient(135deg,rgba(0,229,255,.20),transparent 40%,transparent 60%,rgba(255,43,214,.15));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
-}
-.card-title{
-  font-size:13px;font-weight:600;color:var(--text-dim);letter-spacing:.4px;
-  text-transform:uppercase;margin:0 0 16px;display:flex;align-items:center;gap:8px;
-}
-.card-title::before{content:'';width:3px;height:14px;background:var(--cyan);border-radius:2px;box-shadow:0 0 8px var(--cyan)}
-/* stats */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
+.card-title{font-size:13px;font-weight:600;color:var(--text-dim);letter-spacing:.4px;text-transform:uppercase;margin:0 0 16px;display:flex;align-items:center;gap:8px}
+.card-title::before{content:'';width:3px;height:14px;background:var(--cyan);border-radius:2px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.stat{
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
-  padding:18px 20px;position:relative;overflow:hidden;backdrop-filter:blur(14px);
-}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden}
 .stat::after{content:'';position:absolute;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.5}
 .stat.s-mag::after{background:linear-gradient(90deg,transparent,var(--magenta),transparent)}
 .stat.s-grn::after{background:linear-gradient(90deg,transparent,var(--green),transparent)}
 .stat.s-red::after{background:linear-gradient(90deg,transparent,var(--red),transparent)}
-.stat-label{font-size:11.5px;color:var(--text-dim);letter-spacing:.4px;margin-bottom:10px}
-.stat-value{font-size:32px;font-weight:800;line-height:1;letter-spacing:-.5px}
+.stat-label{font-size:11.5px;color:var(--text-dim);margin-bottom:10px}
+.stat-value{font-size:32px;font-weight:800;line-height:1}
 .stat-sub{font-size:11px;color:var(--text-mute);margin-top:8px}
-/* table */
 .table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);background:var(--panel)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{
-  text-align:right;padding:13px 16px;font-weight:600;color:var(--text-dim);
-  font-size:11.5px;letter-spacing:.5px;text-transform:uppercase;
-  border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap;
-}
+thead th{text-align:right;padding:13px 16px;font-weight:600;color:var(--text-dim);font-size:11.5px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap}
 tbody td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
-tbody tr{transition:background .15s}
 tbody tr:hover{background:rgba(0,229,255,.035)}
 tbody tr:last-child td{border-bottom:none}
 .row-name{font-weight:600;cursor:pointer}
 .row-name:hover{color:var(--cyan)}
-.mono{font-family:'SF Mono',Consolas,monospace;font-size:12px;color:var(--text-dim);letter-spacing:.5px}
-/* pills */
-.pill{
-  display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;
-  font-size:11px;font-weight:600;letter-spacing:.3px;border:1px solid;
-}
+.mono{font-family:Consolas,monospace;font-size:12px;color:var(--text-dim)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid}
 .pill-green{color:var(--green);background:rgba(0,255,157,.08);border-color:rgba(0,255,157,.30)}
 .pill-cyan{color:var(--cyan);background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.30)}
 .pill-yellow{color:var(--yellow);background:rgba(255,214,10,.08);border-color:rgba(255,214,10,.30)}
@@ -186,18 +92,16 @@ tbody tr:last-child td{border-bottom:none}
 .pill-mag{color:var(--magenta);background:rgba(255,43,214,.08);border-color:rgba(255,43,214,.30)}
 .pill-purple{color:var(--purple);background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.30)}
 .pill-dim{color:var(--text-dim);background:rgba(255,255,255,.04);border-color:var(--border)}
-/* score */
 .score-card{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;padding:26px 30px;margin-bottom:24px}
-.score-num{font-size:78px;font-weight:900;line-height:1;letter-spacing:-3px;text-shadow:0 0 30px currentColor,0 0 60px currentColor;font-variant-numeric:tabular-nums}
-.score-num small{font-size:20px;font-weight:500;opacity:.6;margin-right:8px;letter-spacing:0}
+.score-num{font-size:78px;font-weight:900;line-height:1;letter-spacing:-3px}
+.score-num small{font-size:20px;font-weight:500;opacity:.6;margin-right:8px}
 .score-meta{display:flex;flex-direction:column;gap:12px;min-width:0}
-.score-label{font-size:12px;color:var(--text-dim);letter-spacing:.4px}
-.progress{height:10px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.05)}
-.progress-fill{height:100%;border-radius:6px;transition:width .6s cubic-bezier(.4,0,.2,1);box-shadow:0 0 14px currentColor}
+.score-label{font-size:12px;color:var(--text-dim)}
+.progress{height:10px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.05)}
+.progress-fill{height:100%;border-radius:6px;transition:width .6s}
 .progress-marks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-mute);margin-top:5px}
-/* station */
-.station-card{padding:22px;border-radius:var(--r);border:1px solid var(--border-2);background:linear-gradient(160deg,rgba(0,229,255,.05),transparent 60%);position:relative;overflow:hidden}
-.station-card h3{margin:0 0 4px;font-size:16px;font-weight:700}
+.station-card{padding:22px;border-radius:var(--r);border:1px solid var(--border-2);background:linear-gradient(160deg,rgba(0,229,255,.05),transparent 60%)}
+.station-card h3{margin:0 0 4px;font-size:16px}
 .station-card .thr{font-size:12px;color:var(--text-dim);margin-bottom:14px}
 .station-actions{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .station-actions li{display:flex;gap:10px;font-size:13px;line-height:1.6;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid var(--border)}
@@ -206,79 +110,59 @@ tbody tr:last-child td{border-bottom:none}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .stack{display:flex;flex-direction:column;gap:20px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-/* modal */
-.modal-mask{position:fixed;inset:0;background:rgba(2,4,8,.72);backdrop-filter:blur(6px);z-index:100;display:grid;place-items:center;padding:24px;animation:fadeIn .18s}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
-.modal{
-  background:linear-gradient(160deg,rgba(14,18,30,.98),rgba(10,13,22,.98));
-  border:1px solid var(--border-2);border-radius:18px;width:min(640px,100%);
-  max-height:88vh;overflow:auto;box-shadow:0 30px 100px rgba(0,0,0,.7),0 0 40px rgba(0,229,255,.12);
-  animation:popIn .22s;
-}
-.modal.wide{width:min(860px,100%)}
+.modal-mask{position:fixed;inset:0;background:rgba(2,4,8,.72);backdrop-filter:blur(6px);z-index:100;display:grid;place-items:center;padding:24px}
+.modal{background:linear-gradient(160deg,rgba(14,18,30,.98),rgba(10,13,22,.98));border:1px solid var(--border-2);border-radius:18px;width:min(640px,100%);max-height:88vh;overflow:auto;box-shadow:0 30px 100px rgba(0,0,0,.7)}
 .modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.modal-head h3{margin:0;font-size:16px;font-weight:700}
-.modal-close{background:transparent;border:none;color:var(--text-dim);font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:8px}
+.modal-head h3{margin:0;font-size:16px}
+.modal-close{background:transparent;border:none;color:var(--text-dim);font-size:22px;cursor:pointer;padding:4px 8px;border-radius:8px}
 .modal-close:hover{background:rgba(255,255,255,.06);color:var(--text)}
 .modal-body{padding:22px 24px;display:flex;flex-direction:column;gap:16px}
 .modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
-/* forms */
 .field{display:flex;flex-direction:column;gap:7px}
-.field label{font-size:12px;color:var(--text-dim);font-weight:500}
-.field input,.field select,.field textarea{
-  padding:10px 13px;background:rgba(255,255,255,.03);border:1px solid var(--border);
-  border-radius:10px;color:var(--text);font-family:inherit;font-size:13.5px;outline:none;transition:all .18s;
-}
+.field label{font-size:12px;color:var(--text-dim)}
+.field input,.field textarea{padding:10px 13px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:13.5px;outline:none}
 .field textarea{resize:vertical;min-height:70px}
-.field input:focus,.field select:focus,.field textarea:focus{
-  border-color:var(--border-2);box-shadow:0 0 0 3px rgba(0,229,255,.08);background:rgba(0,229,255,.03);
-}
+.field input:focus,.field textarea:focus{border-color:var(--border-2);background:rgba(0,229,255,.03)}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-/* type grid */
 .type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:6px}
-.type-tile{
-  padding:12px 14px;border-radius:10px;cursor:pointer;border:1px solid var(--border);
-  background:rgba(255,255,255,.02);display:flex;justify-content:space-between;gap:10px;
-  align-items:center;transition:all .15s;text-align:right;
-}
+.type-tile{padding:12px 14px;border-radius:10px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.02);display:flex;justify-content:space-between;gap:10px;align-items:center;transition:all .15s;text-align:right}
 .type-tile:hover{border-color:rgba(0,229,255,.35);background:rgba(0,229,255,.04)}
-.type-tile.selected{border-color:var(--cyan);background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(0,229,255,.02));box-shadow:0 0 20px rgba(0,229,255,.20)}
+.type-tile.selected{border-color:var(--cyan);background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(0,229,255,.02))}
 .type-tile .tt-label{font-size:12.5px;line-height:1.5}
-.type-tile .tt-pts{
-  font-weight:800;font-size:15px;color:var(--cyan);background:rgba(0,229,255,.08);
-  border:1px solid rgba(0,229,255,.25);padding:4px 10px;border-radius:8px;white-space:nowrap;
-}
-/* preview */
+.type-tile .tt-pts{font-weight:800;font-size:15px;color:var(--cyan);background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);padding:4px 10px;border-radius:8px;white-space:nowrap}
 .preview{padding:18px;border-radius:12px;background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(255,43,214,.04));border:1px dashed rgba(0,229,255,.4);display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:center}
 .preview .pv-item{display:flex;flex-direction:column;gap:4px}
 .preview .pv-label{font-size:11px;color:var(--text-dim)}
-.preview .pv-value{font-size:22px;font-weight:800;color:var(--cyan);text-shadow:0 0 12px currentColor}
+.preview .pv-value{font-size:22px;font-weight:800;color:var(--cyan)}
 .preview .pv-value.mag{color:var(--magenta)}
-/* empty */
 .empty{text-align:center;padding:60px 20px;color:var(--text-mute);border:1px dashed var(--border);border-radius:var(--r)}
 .empty .e-ico{font-size:44px;opacity:.35;margin-bottom:10px}
 .empty .e-txt{font-size:14px}
-/* ladder */
 .ladder{display:flex;flex-direction:column;gap:14px}
-.rung{display:grid;grid-template-columns:90px 1fr auto;gap:18px;align-items:center;padding:18px 22px;border-radius:14px;background:var(--panel);border:1px solid var(--border);position:relative}
-.rung.active{border-color:var(--border-2);box-shadow:0 0 24px rgba(0,229,255,.10)}
-.rung .thr-big{font-size:26px;font-weight:900;text-align:center;text-shadow:0 0 16px currentColor}
+.rung{display:grid;grid-template-columns:90px 1fr auto;gap:18px;align-items:center;padding:18px 22px;border-radius:14px;background:var(--panel);border:1px solid var(--border)}
+.rung.active{border-color:var(--border-2)}
+.rung .thr-big{font-size:26px;font-weight:900;text-align:center}
 .rung h4{margin:0 0 4px;font-size:14.5px}
 .rung p{margin:0;font-size:12px;color:var(--text-dim)}
-.rung .count-pill{font-size:11.5px;padding:5px 12px}
-/* toast */
-.toast{
-  position:fixed;bottom:26px;left:26px;padding:13px 20px;border-radius:12px;
-  background:rgba(12,16,26,.98);border:1px solid var(--border-2);color:var(--text);
-  font-size:13px;box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 24px rgba(0,229,255,.35);
-  transform:translateY(120%);transition:transform .35s cubic-bezier(.4,0,.2,1);
-  z-index:200;max-width:380px;
-}
+.toast{position:fixed;bottom:26px;left:26px;padding:13px 20px;border-radius:12px;background:rgba(12,16,26,.98);border:1px solid var(--border-2);color:var(--text);font-size:13px;box-shadow:0 10px 40px rgba(0,0,0,.5);transform:translateY(120%);transition:transform .35s;z-index:200;max-width:380px}
 .toast.show{transform:translateY(0)}
-.toast.success{border-color:rgba(0,255,157,.5);box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 24px rgba(0,255,157,.25)}
-.toast.error{border-color:rgba(255,58,94,.6);box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 24px rgba(255,58,94,.25)}
-/* responsive */
+.toast.success{border-color:rgba(0,255,157,.5)}
+.toast.error{border-color:rgba(255,58,94,.6)}
+.mode-card{padding:16px 18px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.02);cursor:pointer;transition:all .18s;display:flex;gap:14px;align-items:flex-start}
+.mode-card:hover{border-color:rgba(0,229,255,.3)}
+.mode-card.selected{border-color:var(--cyan);background:linear-gradient(135deg,rgba(0,229,255,.10),rgba(0,229,255,.02))}
+.mode-card .m-ico{font-size:22px;flex-shrink:0}
+.mode-card .m-body{flex:1;min-width:0}
+.mode-card h4{margin:0 0 4px;font-size:14px}
+.mode-card p{margin:0;font-size:12px;color:var(--text-dim);line-height:1.6}
+.cloud-status{padding:12px 14px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:10px;border:1px solid}
+.cloud-status.ok{color:var(--green);background:rgba(0,255,157,.06);border-color:rgba(0,255,157,.3)}
+.cloud-status.warn{color:var(--yellow);background:rgba(255,214,10,.06);border-color:rgba(255,214,10,.3)}
+.cloud-status.err{color:var(--red);background:rgba(255,58,94,.06);border-color:rgba(255,58,94,.3)}
+#boot{position:fixed;inset:0;background:var(--bg);z-index:999;display:grid;place-items:center;color:var(--text);font-family:'Vazirmatn',sans-serif}
+#boot .spin{width:44px;height:44px;border:3px solid rgba(0,229,255,.15);border-top-color:var(--cyan);border-radius:50%;animation:sp 1s linear infinite;margin:0 auto 14px}
+@keyframes sp{to{transform:rotate(360deg)}}
+#errBox{display:none;position:fixed;top:0;right:0;left:0;background:#ff3a5e;color:#fff;padding:14px 20px;font-family:'Vazirmatn',sans-serif;z-index:9999;font-size:13px;direction:rtl}
 @media (max-width: 900px){
   .app{grid-template-columns:1fr}
   .sidebar{position:fixed;right:0;top:0;bottom:0;width:260px;z-index:50;transform:translateX(100%);transition:transform .25s}
@@ -297,6 +181,9 @@ tbody tr:last-child td{border-bottom:none}
 </style>
 </head>
 <body>
+
+<div id="errBox"></div>
+<div id="boot"><div><div class="spin"></div><div>در حال بارگذاری…</div></div></div>
 
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
@@ -320,7 +207,10 @@ tbody tr:last-child td{border-bottom:none}
     </nav>
     <div class="sidebar-foot">
       <div id="yearBadge" class="year-badge">سال تحصیلی —</div>
-      <div class="hint">نسخه ۱.۰ · بدون سرور</div>
+      <div class="storage-badge local" id="storageBadge" onclick="location.hash='#/settings'">
+        <span class="dot"></span><span id="storageText">لوکال</span>
+      </div>
+      <div class="hint">نسخه ۳.۰</div>
     </div>
   </aside>
 
@@ -334,7 +224,7 @@ tbody tr:last-child td{border-bottom:none}
           <input id="globalSearch" type="search" placeholder="جستجو (نام یا کد ملی)…" autocomplete="off">
           <div id="searchResults" class="search-results hidden"></div>
         </div>
-        <button class="btn btn-primary" id="addStudentBtn"><span>＋</span> دانش‌آموز جدید</button>
+        <button class="btn btn-primary" id="addStudentBtn">＋ دانش‌آموز جدید</button>
       </div>
     </header>
     <div id="view" class="view"></div>
@@ -346,60 +236,66 @@ tbody tr:last-child td{border-bottom:none}
 
 <script>
 /* ============================================================
-   سامانه مدیریت انضباطی — نسخه تک‌فایلی
-   ذخیره‌سازی در localStorage
+   نمایش خطا به‌صورت زنده
    ============================================================ */
+function showError(msg){
+  const el = document.getElementById('errBox');
+  el.style.display = 'block';
+  el.textContent = '⚠ خطا: ' + msg;
+}
+window.addEventListener('error', (e) => showError(e.message || String(e)));
+window.addEventListener('unhandledrejection', (e) => showError(e.reason?.message || String(e.reason)));
 
-/* ---------- تقویم شمسی ---------- */
-const Jalali = (function(){
+/* ============================================================
+   تقویم شمسی
+   ============================================================ */
+var Jalali = (function(){
   const gdm = [0,31,59,90,120,151,181,212,243,273,304,334];
   function toJalali(gy, gm, gd){
     let jy = (gy <= 1600) ? 0 : 979;
     gy -= (gy <= 1600) ? 621 : 1600;
     const gy2 = (gm > 2) ? (gy + 1) : gy;
-    let days = (365*gy) + Math.floor((gy2+3)/4) - Math.floor((gy2+99)/100)
-             + Math.floor((gy2+399)/400) - 80 + gd + gdm[gm-1];
-    jy += 33 * Math.floor(days/12053);
-    days %= 12053;
-    jy += 4 * Math.floor(days/1461);
-    days %= 1461;
-    if (days > 365) { jy += Math.floor((days-1)/365); days = (days-1) % 365; }
+    let days = (365*gy) + Math.floor((gy2+3)/4) - Math.floor((gy2+99)/100) + Math.floor((gy2+399)/400) - 80 + gd + gdm[gm-1];
+    jy += 33 * Math.floor(days/12053); days %= 12053;
+    jy += 4 * Math.floor(days/1461); days %= 1461;
+    if (days > 365){ jy += Math.floor((days-1)/365); days = (days-1) % 365; }
     const jm = (days < 186) ? 1 + Math.floor(days/31) : 7 + Math.floor((days-186)/30);
     const jd = 1 + ((days < 186) ? (days%31) : ((days-186)%30));
     return [jy, jm, jd];
   }
   const FA = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
   function fa(n){ return String(n).replace(/\d/g, d => FA[+d]); }
-  function fmt(iso, opts={}){
+  function fmt(iso, opts){
+    opts = opts || {};
     if (!iso) return '—';
     const d = new Date(iso);
-    const [jy, jm, jd] = toJalali(d.getFullYear(), d.getMonth()+1, d.getDate());
-    const date = `${fa(jy)}/${fa(String(jm).padStart(2,'0'))}/${fa(String(jd).padStart(2,'0'))}`;
+    const j = toJalali(d.getFullYear(), d.getMonth()+1, d.getDate());
+    const date = fa(j[0])+'/'+fa(String(j[1]).padStart(2,'0'))+'/'+fa(String(j[2]).padStart(2,'0'));
     if (opts.dateOnly) return date;
-    const hh = fa(String(d.getHours()).padStart(2,'0'));
-    const mm = fa(String(d.getMinutes()).padStart(2,'0'));
-    return `${date} — ${hh}:${mm}`;
+    return date + ' — ' + fa(String(d.getHours()).padStart(2,'0')) + ':' + fa(String(d.getMinutes()).padStart(2,'0'));
   }
   function relative(iso){
     if (!iso) return '';
     const diff = Date.now() - new Date(iso).getTime();
     const min = Math.floor(diff/60000);
     if (min < 1) return 'همین حالا';
-    if (min < 60) return `${fa(min)} دقیقه پیش`;
+    if (min < 60) return fa(min) + ' دقیقه پیش';
     const h = Math.floor(min/60);
-    if (h < 24) return `${fa(h)} ساعت پیش`;
+    if (h < 24) return fa(h) + ' ساعت پیش';
     const d = Math.floor(h/24);
-    if (d < 30) return `${fa(d)} روز پیش`;
+    if (d < 30) return fa(d) + ' روز پیش';
     const mo = Math.floor(d/30);
-    if (mo < 12) return `${fa(mo)} ماه پیش`;
-    return `${fa(Math.floor(mo/12))} سال پیش`;
+    if (mo < 12) return fa(mo) + ' ماه پیش';
+    return fa(Math.floor(mo/12)) + ' سال پیش';
   }
-  return { toJalali, fa, fmt, relative };
+  return { toJalali:toJalali, fa:fa, fmt:fmt, relative:relative };
 })();
-const { fa, fmt, relative } = Jalali;
+var fa = Jalali.fa, fmt = Jalali.fmt, relative = Jalali.relative;
 
-/* ---------- دیتای پیش‌فرض ---------- */
-const DEFAULT_TYPES = [
+/* ============================================================
+   داده پیش‌فرض
+   ============================================================ */
+var DEFAULT_TYPES = [
   { id:'t01', label:'عدم رعایت آراستگی ظاهری (مو)', points:1 },
   { id:'t02', label:'تأخیر در ورود به کلاس (بعد از اتمام زنگ تفریح و نماز)', points:1 },
   { id:'t03', label:'تأخیر در ورود به مدرسه (مراسم صبحگاه)', points:2 },
@@ -409,657 +305,753 @@ const DEFAULT_TYPES = [
   { id:'t07', label:'غیبت غیرموجه', points:6 },
   { id:'t08', label:'آسیب زدن عمدی به اموال مدرسه', points:7 },
   { id:'t09', label:'استفاده از الفاظ ناشایست و رکیک', points:10 },
-  { id:'t10', label:'نزاع، درگیری فیزیکی و ایجاد تنش در مدرسه', points:15 },
+  { id:'t10', label:'نزاع، درگیری فیزیکی و ایجاد تنش در مدرسه', points:15 }
 ];
-const DEFAULT_STATIONS = [
-  { id:'s1', threshold:15,  name:'ایستگاه اول — هشدار', sports:'محرومیت از زنگ ورزش',
-    actions:['کسر ۰.۵ نمره انضباط','ایستادن رو به دیوار در زنگ تفریح','رونویسی با خودکار از آیین‌نامه انضباطی'] },
-  { id:'s2', threshold:30,  name:'ایستگاه دوم — احضار ولی', sports:'محرومیت از اولین اردوی پیش‌رو',
-    actions:['احضار قطعی اولیا','کسر ۱ نمره انضباط','اخذ تعهد کتبی','رونویسی با خودکار از آیین‌نامه انضباطی'] },
-  { id:'s3', threshold:45,  name:'ایستگاه سوم — بایکوت', sports:'محرومیت کامل از ورزش تا یک ماه',
-    actions:['بایکوت محیطی (۱ روز کامل استقرار در حیاط/راهرو در سکوت)','رونویسی با خودکار از آیین‌نامه انضباطی دو مرتبه'] },
-  { id:'s4', threshold:65,  name:'ایستگاه چهارم — ضمانت اول', sports:'لغو تمامی امتیازات تفریحی و ورزشی به مدت دوماه',
-    actions:['وصول چک یا سفته ضمانت اول','کسر ۱.۵ نمره انضباط','رونویسی با خودکار از آیین‌نامه انضباطی'] },
-  { id:'s5', threshold:80,  name:'ایستگاه پنجم — ضمانت دوم', sports:'محرومیت از تمامی اردوهای سال تحصیلی',
-    actions:['وصول چک یا سفته ضمانت دوم','۲ روز بایکوت محیطی','رونویسی با خودکار از آیین‌نامه انضباطی','عدم احراز صلاحیت ثبت‌نام سال آینده (پایه دوازدهم)','محرومیت از باشگاه فارغ‌التحصیلان (پایه دوازدهم)'] },
-  { id:'s6', threshold:100, name:'ایستگاه ششم — کمیسیون', sports:'تحویل پرونده به کمیسیون انضباطی',
-    actions:['وصول چک ضمانت سوم','تحویل پرونده به کمیسیون انضباطی مدرسه'] },
+var DEFAULT_STATIONS = [
+  { id:'s1', threshold:15,  name:'ایستگاه اول — هشدار', sports:'محرومیت از زنگ ورزش', actions:['کسر ۰.۵ نمره انضباط','ایستادن رو به دیوار در زنگ تفریح','رونویسی با خودکار از آیین‌نامه'] },
+  { id:'s2', threshold:30,  name:'ایستگاه دوم — احضار ولی', sports:'محرومیت از اولین اردوی پیش‌رو', actions:['احضار قطعی اولیا','کسر ۱ نمره انضباط','اخذ تعهد کتبی','رونویسی'] },
+  { id:'s3', threshold:45,  name:'ایستگاه سوم — بایکوت', sports:'محرومیت کامل از ورزش تا یک ماه', actions:['بایکوت محیطی (۱ روز کامل در حیاط/راهرو)','رونویسی دو مرتبه'] },
+  { id:'s4', threshold:65,  name:'ایستگاه چهارم — ضمانت اول', sports:'لغو تمامی امتیازات تفریحی و ورزشی به مدت ۲ ماه', actions:['وصول چک/سفته ضمانت اول','کسر ۱.۵ نمره انضباط','رونویسی'] },
+  { id:'s5', threshold:80,  name:'ایستگاه پنجم — ضمانت دوم', sports:'محرومیت از تمامی اردوهای سال تحصیلی', actions:['وصول چک/سفته ضمانت دوم','۲ روز بایکوت','رونویسی','عدم احراز صلاحیت ثبت‌نام سال آینده (دوازدهم)','محرومیت از باشگاه فارغ‌التحصیلان'] },
+  { id:'s6', threshold:100, name:'ایستگاه ششم — کمیسیون', sports:'تحویل پرونده به کمیسیون انضباطی', actions:['وصول چک ضمانت سوم','تحویل پرونده به کمیسیون'] }
 ];
-
-/* ---------- ذخیره‌سازی ---------- */
-const STORAGE_KEY = 'school-discipline-v1';
 function defaultDB(){
-  const now = new Date();
+  var now = new Date();
   return {
-    students: [],
-    violations: [],
+    students: [], violations: [],
     violationTypes: JSON.parse(JSON.stringify(DEFAULT_TYPES)),
     stations: JSON.parse(JSON.stringify(DEFAULT_STATIONS)),
     settings: {
       schoolName: 'دبیرستان نمونه',
       academicYear: '۱۴۰۴-۱۴۰۵',
       yearStartISO: new Date(now.getFullYear(), 2, 21).toISOString(),
-      resetMonths: 2,
+      resetMonths: 2
     },
-    meta: { version: 1 },
+    meta: { version:3, lastModified: new Date().toISOString(), lastModifiedBy:'', pendingSync:false }
   };
 }
-let DB = loadDB();
+
+/* ============================================================
+   ذخیره‌سازی
+   ============================================================ */
+var STORAGE_KEY = 'sd-v3';
+var BACKUP_KEY  = 'sd-backups-v3';
+var CFG_KEY     = 'sd-cfg-v3';
+var MAX_BACKUPS = 5;
+
+var CFG = {};
+try { CFG = JSON.parse(localStorage.getItem(CFG_KEY) || '{}') || {}; } catch(e){ CFG = {}; }
+function saveCFG(){ try { localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); } catch(e){} }
+
+var DB = null;
+var fileHandle = null;
+var cloudOnline = false;
+var pollTimer = null;
+var setupMode = null;
+var quickSelection = { studentId:null, typeId:null };
+
+/* IndexedDB ساده */
+var IDB = {
+  _db: null,
+  open: function(){
+    var self = this;
+    if (self._db) return Promise.resolve(self._db);
+    return new Promise(function(res, rej){
+      if (!window.indexedDB){ rej(new Error('IndexedDB پشتیبانی نمی‌شود')); return; }
+      var req = indexedDB.open('sd-h3', 1);
+      req.onupgradeneeded = function(){ try { req.result.createObjectStore('h'); } catch(e){} };
+      req.onsuccess = function(){ self._db = req.result; res(self._db); };
+      req.onerror = function(){ rej(req.error); };
+    });
+  },
+  set: function(k,v){ return this.open().then(function(db){ return new Promise(function(res,rej){ var tx=db.transaction('h','readwrite'); tx.objectStore('h').put(v,k); tx.oncomplete=function(){res()}; tx.onerror=function(){rej(tx.error)}; }); }); },
+  get: function(k){ return this.open().then(function(db){ return new Promise(function(res,rej){ var tx=db.transaction('h','readonly'); var r=tx.objectStore('h').get(k); r.onsuccess=function(){res(r.result)}; r.onerror=function(){rej(r.error)}; }); }); },
+  del: function(k){ return this.open().then(function(db){ return new Promise(function(res,rej){ var tx=db.transaction('h','readwrite'); tx.objectStore('h').delete(k); tx.oncomplete=function(){res()}; tx.onerror=function(){rej(tx.error)}; }); }); }
+};
+
+function activeMode(){
+  if (CFG.cloud && CFG.cloud.apiKey && CFG.cloud.binId) return 'cloud';
+  if (fileHandle) return 'file';
+  return 'local';
+}
+
+function normalizeDB(db){
+  if (!db || typeof db !== 'object') return defaultDB();
+  db.students = Array.isArray(db.students) ? db.students : [];
+  db.violations = Array.isArray(db.violations) ? db.violations : [];
+  db.violationTypes = Array.isArray(db.violationTypes) && db.violationTypes.length ? db.violationTypes : JSON.parse(JSON.stringify(DEFAULT_TYPES));
+  db.stations = Array.isArray(db.stations) && db.stations.length ? db.stations : JSON.parse(JSON.stringify(DEFAULT_STATIONS));
+  db.settings = db.settings || defaultDB().settings;
+  db.meta = db.meta || { version:3 };
+  return db;
+}
+
+function saveLocalBackup(db){
+  try {
+    var backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]');
+    var last = backups[0];
+    if (!last || (last.meta && last.meta.lastModified) !== (db.meta && db.meta.lastModified)){
+      var clone = JSON.parse(JSON.stringify(db));
+      clone._backedUpAt = new Date().toISOString();
+      backups.unshift(clone);
+      while (backups.length > MAX_BACKUPS) backups.pop();
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(backups));
+    }
+  } catch(e){}
+}
 
 function loadDB(){
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaultDB();
-    const db = JSON.parse(raw);
-    db.violationTypes ||= JSON.parse(JSON.stringify(DEFAULT_TYPES));
-    db.stations       ||= JSON.parse(JSON.stringify(DEFAULT_STATIONS));
-    db.settings       ||= defaultDB().settings;
-    db.students       ||= [];
-    db.violations     ||= [];
-    return db;
-  } catch(e){
-    console.error('DB error:', e);
-    return defaultDB();
+  var mode = activeMode();
+  var promise;
+  if (mode === 'cloud'){
+    promise = fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId+'/latest', { headers:{ 'X-Master-Key': CFG.cloud.apiKey } })
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(j){
+        cloudOnline = true;
+        var remote = normalizeDB(j.record || j);
+        var local = null;
+        try { local = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch(e){}
+        if (local && local.meta && local.meta.pendingSync){ DB = normalizeDB(local); }
+        else { DB = remote; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){} }
+      })
+      .catch(function(e){
+        cloudOnline = false;
+        try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
+        catch(x){ DB = defaultDB(); }
+      });
+  } else if (mode === 'file' && fileHandle){
+    promise = fileHandle.queryPermission({ mode:'readwrite' })
+      .then(function(p){
+        if (p === 'granted') return;
+        return fileHandle.requestPermission({ mode:'readwrite' }).then(function(p2){ if (p2 !== 'granted') throw new Error('اجازه داده نشد'); });
+      })
+      .then(function(){ return fileHandle.getFile(); })
+      .then(function(f){ return f.text(); })
+      .then(function(text){
+        if (text && text.trim()) DB = normalizeDB(JSON.parse(text));
+        else DB = defaultDB();
+      })
+      .catch(function(e){
+        try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
+        catch(x){ DB = defaultDB(); }
+      });
+  } else {
+    promise = Promise.resolve().then(function(){
+      try { DB = normalizeDB(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
+      catch(e){ DB = defaultDB(); }
+    });
   }
-}
-function saveDB(){
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); }
-  catch(e){ toast('خطا در ذخیره‌سازی: '+e.message, 'error'); }
+  return promise.then(function(){
+    if (!DB) DB = defaultDB();
+  });
 }
 
-/* ---------- منطق آیین‌نامه ---------- */
-function applyAutoReset(){
-  const months = Number(DB.settings.resetMonths) || 2;
-  const resetMs = months * 30 * 24 * 60 * 60 * 1000;
-  const now = Date.now();
-  const groups = new Map();
-  for (const v of DB.violations){
-    if (v.archived) continue;
-    const key = v.studentId + '|' + v.typeId;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(v);
+function pushToCloud(){
+  return fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId, {
+    method:'PUT',
+    headers:{ 'Content-Type':'application/json', 'X-Master-Key': CFG.cloud.apiKey },
+    body: JSON.stringify(DB)
+  }).then(function(r){ cloudOnline = r.ok; return r.ok; })
+    .catch(function(){ cloudOnline = false; return false; });
+}
+
+function saveDB(){
+  if (!DB) return Promise.resolve();
+  DB.meta = DB.meta || {};
+  DB.meta.lastModified = new Date().toISOString();
+  DB.meta.lastModifiedBy = CFG.userName || '';
+
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
+  saveLocalBackup(DB);
+
+  var mode = activeMode();
+  if (mode === 'cloud'){
+    return pushToCloud().then(function(ok){
+      DB.meta.pendingSync = !ok;
+      if (!ok) toast('اینترنت قطع — داده محلی ذخیره شد', 'info');
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
+      updateStorageBadge();
+    });
   }
-  let changed = false;
-  for (const [, list] of groups){
-    const latest = Math.max(...list.map(v => new Date(v.occurredAt).getTime()));
+  if (mode === 'file' && fileHandle){
+    return fileHandle.createWritable()
+      .then(function(w){ return w.write(JSON.stringify(DB,null,2)).then(function(){ return w.close(); }); })
+      .then(function(){ DB.meta.pendingSync = false; updateStorageBadge(); })
+      .catch(function(e){ DB.meta.pendingSync = true; toast('خطای فایل: '+e.message,'error'); updateStorageBadge(); });
+  }
+  DB.meta.pendingSync = false;
+  updateStorageBadge();
+  return Promise.resolve();
+}
+
+function startPolling(){
+  if (pollTimer) clearInterval(pollTimer);
+  if (activeMode() !== 'cloud') return;
+  pollTimer = setInterval(function(){
+    if (DB && DB.meta && DB.meta.pendingSync){
+      pushToCloud().then(function(ok){
+        if (ok){ DB.meta.pendingSync = false; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){} toast('همگام شد','success'); }
+        updateStorageBadge();
+      });
+      return;
+    }
+    fetch('https://api.jsonbin.io/v3/b/'+CFG.cloud.binId+'/latest', { headers:{ 'X-Master-Key': CFG.cloud.apiKey } })
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(j){
+        cloudOnline = true;
+        var remote = normalizeDB(j.record || j);
+        if (remote.meta && DB.meta && remote.meta.lastModified !== DB.meta.lastModified){
+          DB = remote;
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
+          render();
+          toast('داده توسط کاربر دیگری به‌روز شد','info');
+        }
+        updateStorageBadge();
+      })
+      .catch(function(){ cloudOnline = false; updateStorageBadge(); });
+  }, 15000);
+}
+
+function updateStorageBadge(){
+  var badge = document.getElementById('storageBadge');
+  var text  = document.getElementById('storageText');
+  if (!badge) return;
+  var m = activeMode();
+  var pending = DB && DB.meta && DB.meta.pendingSync;
+  badge.className = 'storage-badge ' + m;
+  var label;
+  if (m === 'cloud') label = pending ? 'ابری — در صف' : (cloudOnline ? 'ابری — متصل' : 'ابری — قطع (محلی)');
+  else if (m === 'file') label = pending ? 'فایل — خطا' : 'فایل روی دیسک';
+  else label = 'لوکال (مرورگر)';
+  text.textContent = label;
+}
+
+/* اتصال به فایل */
+function connectFile(){
+  if (!window.showSaveFilePicker){
+    toast('مرورگر پشتیبانی نمی‌کند — از Chrome یا Edge استفاده کن','error');
+    return Promise.resolve();
+  }
+  var pick;
+  if (window.showOpenFilePicker){
+    pick = window.showOpenFilePicker({
+      types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }],
+      multiple:false
+    }).then(function(arr){ return arr[0]; })
+    .catch(function(e){
+      if (e.name === 'AbortError') throw e;
+      return window.showSaveFilePicker({
+        suggestedName:'discipline-data.json',
+        types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }]
+      });
+    });
+  } else {
+    pick = window.showSaveFilePicker({ suggestedName:'discipline-data.json' });
+  }
+  return pick.then(function(h){
+    fileHandle = h;
+    return IDB.set('fileHandle', fileHandle);
+  }).then(function(){
+    CFG.mode = 'file'; saveCFG();
+    return loadDB();
+  }).then(function(){
+    return saveDB();
+  }).then(function(){
+    setupMode = null;
+    toast('فایل متصل شد','success');
+    render();
+  }).catch(function(e){
+    if (e.name !== 'AbortError') toast('خطا: '+e.message,'error');
+  });
+}
+
+function disconnectFile(){
+  fileHandle = null;
+  return IDB.del('fileHandle').then(function(){
+    if (CFG.mode === 'file'){ delete CFG.mode; saveCFG(); }
+    toast('اتصال فایل قطع شد','success');
+    render();
+  });
+}
+
+function tryRestoreFileHandle(){
+  return IDB.get('fileHandle').then(function(h){ if (h) fileHandle = h; }).catch(function(){});
+}
+
+/* JSONBin */
+function testCloud(apiKey, binId){
+  return fetch('https://api.jsonbin.io/v3/b/'+binId+'/latest', { headers:{ 'X-Master-Key': apiKey } })
+    .then(function(r){ if (!r.ok) throw new Error('کلید یا Bin نامعتبر (HTTP '+r.status+')'); return true; });
+}
+function createBin(apiKey){
+  return fetch('https://api.jsonbin.io/v3/b', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', 'X-Master-Key':apiKey, 'X-Bin-Name':'school-discipline', 'X-Bin-Private':'true' },
+    body: JSON.stringify(DB || defaultDB())
+  }).then(function(r){ if(!r.ok) throw new Error('خطا در ساخت Bin (HTTP '+r.status+')'); return r.json(); })
+    .then(function(j){ return j.metadata.id; });
+}
+function connectCloud(apiKey, binId){
+  return testCloud(apiKey, binId).then(function(){
+    CFG.cloud = { apiKey:apiKey, binId:binId };
+    CFG.mode = 'cloud';
+    saveCFG();
+    return loadDB();
+  }).then(function(){
+    return saveDB();
+  }).then(function(){
+    setupMode = null;
+    startPolling();
+    toast('اتصال ابری برقرار شد','success');
+    render();
+  });
+}
+function disconnectCloud(){
+  delete CFG.cloud;
+  if (CFG.mode === 'cloud') CFG.mode = 'local';
+  saveCFG();
+  if (pollTimer) clearInterval(pollTimer);
+  cloudOnline = false;
+  toast('اتصال ابری قطع شد','success');
+  render();
+}
+
+/* ============================================================
+   منطق آیین‌نامه
+   ============================================================ */
+function applyAutoReset(){
+  if (!DB) return false;
+  var months = Number(DB.settings.resetMonths) || 2;
+  var resetMs = months * 30 * 24 * 60 * 60 * 1000;
+  var now = Date.now();
+  var groups = {};
+  for (var i=0; i<DB.violations.length; i++){
+    var v = DB.violations[i];
+    if (v.archived) continue;
+    var key = v.studentId + '|' + v.typeId;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(v);
+  }
+  var changed = false;
+  for (var k in groups){
+    var list = groups[k];
+    var latest = Math.max.apply(null, list.map(function(x){ return new Date(x.occurredAt).getTime(); }));
     if (now - latest > resetMs){
-      list.forEach(v => { v.archived = true; v.archivedAt = new Date().toISOString(); v.archiveReason = 'auto-reset'; });
+      list.forEach(function(x){ x.archived = true; x.archivedAt = new Date().toISOString(); x.archiveReason = 'auto-reset'; });
       changed = true;
     }
   }
-  if (changed) saveDB();
+  return changed;
 }
-function yearStartMs(){
-  return DB.settings.yearStartISO ? new Date(DB.settings.yearStartISO).getTime() : 0;
-}
+function yearStartMs(){ return DB.settings.yearStartISO ? new Date(DB.settings.yearStartISO).getTime() : 0; }
 function activeViolationsOf(studentId){
-  const ys = yearStartMs();
-  return DB.violations
-    .filter(v => v.studentId===studentId && !v.archived && new Date(v.occurredAt).getTime() >= ys)
-    .sort((a,b) => new Date(b.occurredAt) - new Date(a.occurredAt));
+  var ys = yearStartMs();
+  return DB.violations.filter(function(v){
+    return v.studentId === studentId && !v.archived && new Date(v.occurredAt).getTime() >= ys;
+  }).sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); });
 }
 function totalPointsOf(studentId){
-  return activeViolationsOf(studentId).reduce((s,v)=>s+v.pointsApplied, 0);
+  return activeViolationsOf(studentId).reduce(function(s,v){ return s + v.pointsApplied; }, 0);
 }
 function typeCountsOf(studentId){
-  const m = {};
-  for (const v of activeViolationsOf(studentId)) m[v.typeId] = (m[v.typeId]||0)+1;
+  var m = {};
+  activeViolationsOf(studentId).forEach(function(v){ m[v.typeId] = (m[v.typeId] || 0) + 1; });
   return m;
 }
-function countPriorOccurrences(studentId, typeId){
-  return typeCountsOf(studentId)[typeId] || 0;
-}
+function countPriorOccurrences(studentId, typeId){ return typeCountsOf(studentId)[typeId] || 0; }
 function multiplierFor(prior){
-  const k = prior + 1;
+  var k = prior + 1;
   if (k <= 2) return 1;
   if (k <= 4) return 2;
   if (k <= 6) return 3;
   return 4;
 }
 function currentStation(points){
-  let cur = null;
-  for (const s of DB.stations) if (points >= s.threshold) cur = s;
+  var cur = null;
+  DB.stations.forEach(function(s){ if (points >= s.threshold) cur = s; });
   return cur;
 }
 function nextStation(points){
-  for (const s of DB.stations) if (points < s.threshold) return s;
+  for (var i=0; i<DB.stations.length; i++) if (points < DB.stations[i].threshold) return DB.stations[i];
   return null;
 }
 function scoreColor(points){
   if (points === 0) return 'var(--green)';
-  if (points < 15)  return 'var(--cyan)';
-  if (points < 30)  return 'var(--yellow)';
-  if (points < 45)  return 'var(--orange)';
-  if (points < 65)  return 'var(--red)';
-  if (points < 80)  return '#ff1f4d';
+  if (points < 15) return 'var(--cyan)';
+  if (points < 30) return 'var(--yellow)';
+  if (points < 45) return 'var(--orange)';
+  if (points < 65) return 'var(--red)';
+  if (points < 80) return '#ff1f4d';
   if (points < 100) return 'var(--magenta)';
   return 'var(--purple)';
 }
 function scorePillClass(points){
   if (points === 0) return 'pill-green';
-  if (points < 15)  return 'pill-cyan';
-  if (points < 30)  return 'pill-yellow';
-  if (points < 45)  return 'pill-orange';
-  if (points < 65)  return 'pill-red';
-  if (points < 80)  return 'pill-red';
+  if (points < 15) return 'pill-cyan';
+  if (points < 30) return 'pill-yellow';
+  if (points < 45) return 'pill-orange';
+  if (points < 65) return 'pill-red';
+  if (points < 80) return 'pill-red';
   if (points < 100) return 'pill-mag';
   return 'pill-purple';
 }
 
-/* ---------- ابزارها ---------- */
-const $  = (s, r=document) => r.querySelector(s);
-const $$ = (s, r=document) => [...r.querySelectorAll(s)];
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fullName = (s) => [s.firstName, s.lastName].filter(Boolean).join(' ') || 'بی‌نام';
-const uid = (p) => p + '_' + Math.random().toString(36).slice(2,10);
+/* ============================================================
+   ابزار
+   ============================================================ */
+function $(s, r){ return (r||document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function fullName(s){ return [s.firstName, s.lastName].filter(Boolean).join(' ') || 'بی‌نام'; }
+function uid(p){ return p + '_' + Math.random().toString(36).slice(2,10); }
 
-function toast(msg, kind='info'){
-  const el = $('#toast');
+function toast(msg, kind){
+  var el = document.getElementById('toast');
   el.className = 'toast show ' + (kind==='success'?'success':kind==='error'?'error':'');
   el.textContent = msg;
   clearTimeout(toast._t);
-  toast._t = setTimeout(() => el.classList.remove('show'), 3200);
+  toast._t = setTimeout(function(){ el.classList.remove('show'); }, 3400);
 }
 
-function openModal({title, body, footer, wide}){
-  const root = $('#modalRoot');
-  root.innerHTML = `
-    <div class="modal-mask" id="modalMask">
-      <div class="modal ${wide?'wide':''}">
-        <div class="modal-head">
-          <h3>${esc(title)}</h3>
-          <button class="modal-close" id="modalClose">✕</button>
-        </div>
-        <div class="modal-body">${body}</div>
-        ${footer ? `<div class="modal-foot">${footer}</div>` : ''}
-      </div>
-    </div>`;
-  const close = () => { root.innerHTML = ''; };
-  $('#modalClose').onclick = close;
-  $('#modalMask').onclick = (e) => { if (e.target.id==='modalMask') close(); };
-  return { close, root };
+function openModal(opts){
+  var root = document.getElementById('modalRoot');
+  root.innerHTML = '<div class="modal-mask" id="modalMask"><div class="modal '+(opts.wide?'wide':'')+'"><div class="modal-head"><h3>'+esc(opts.title)+'</h3><button class="modal-close" id="modalClose">✕</button></div><div class="modal-body">'+opts.body+'</div>'+(opts.footer?'<div class="modal-foot">'+opts.footer+'</div>':'')+'</div></div>';
+  var close = function(){ root.innerHTML = ''; };
+  document.getElementById('modalClose').onclick = close;
+  document.getElementById('modalMask').onclick = function(e){ if (e.target.id === 'modalMask') close(); };
+  return { close: close, root: root };
 }
 
 /* ============================================================
    Router
    ============================================================ */
-const ROUTES = ['dashboard','students','student','quick','stations','settings','backup'];
 function getRoute(){
-  const h = location.hash.replace(/^#\/?/, '');
-  const [r, param] = h.split('/');
-  return { route: r || 'dashboard', param };
+  var h = location.hash.replace(/^#\/?/, '');
+  var parts = h.split('/');
+  return { route: parts[0] || 'dashboard', param: parts[1] };
 }
 function navigate(route, param){
-  location.hash = param ? `#/${route}/${param}` : `#/${route}`;
+  location.hash = param ? '#/'+route+'/'+param : '#/'+route;
 }
 function render(){
-  applyAutoReset();
-  const { route, param } = getRoute();
-  $$('.nav a').forEach(a => a.classList.toggle('active', a.dataset.route === route));
-  const titles = {
-    dashboard:'داشبورد', students:'دانش‌آموزان', student:'پرونده دانش‌آموز',
-    quick:'ثبت تخلف', stations:'ایستگاه‌های تنبیهی', settings:'تنظیمات آیین‌نامه',
-    backup:'پشتیبان‌گیری و گزارش',
-  };
-  $('#pageTitle').textContent = titles[route] || 'داشبورد';
-  $('#brandSchool').textContent = DB.settings.schoolName || 'دبیرستان';
-  $('#yearBadge').textContent = 'سال تحصیلی ' + (DB.settings.academicYear || '—');
-  $('#sidebar').classList.remove('open');
+  if (!DB){ document.getElementById('view').innerHTML = '<div class="empty">در حال بارگذاری…</div>'; return; }
+  if (applyAutoReset()) saveDB();
+  var r = getRoute();
+  $$('.nav a').forEach(function(a){ a.classList.toggle('active', a.dataset.route === r.route); });
+  var titles = { dashboard:'داشبورد', students:'دانش‌آموزان', student:'پرونده دانش‌آموز', quick:'ثبت تخلف', stations:'ایستگاه‌های تنبیهی', settings:'تنظیمات', backup:'پشتیبان‌گیری' };
+  document.getElementById('pageTitle').textContent = titles[r.route] || 'داشبورد';
+  document.getElementById('brandSchool').textContent = DB.settings.schoolName || 'دبیرستان';
+  document.getElementById('yearBadge').textContent = 'سال تحصیلی ' + (DB.settings.academicYear || '—');
+  document.getElementById('sidebar').classList.remove('open');
+  updateStorageBadge();
 
-  if (route === 'student' && param) return renderStudentDetail(param);
-  if (route === 'quick' && param)   { quickSelection.studentId = param; return renderQuick(); }
-  const views = {
-    dashboard: renderDashboard,
-    students:  renderStudents,
-    quick:     renderQuick,
-    stations:  renderStations,
-    settings:  renderSettings,
-    backup:    renderBackup,
-  };
-  (views[route] || renderDashboard)();
+  if (r.route === 'student' && r.param) return renderStudentDetail(r.param);
+  if (r.route === 'quick' && r.param){ quickSelection.studentId = r.param; return renderQuick(); }
+
+  var views = { dashboard:renderDashboard, students:renderStudents, quick:renderQuick, stations:renderStations, settings:renderSettings, backup:renderBackup };
+  (views[r.route] || renderDashboard)();
 }
 
 /* ============================================================
    Dashboard
    ============================================================ */
 function renderDashboard(){
-  const totalStudents = DB.students.length;
-  const activeVios = DB.violations.filter(v => !v.archived).length;
-  const inDanger = DB.students.filter(s => totalPointsOf(s.id) >= 15).length;
-  const topScore = DB.students.reduce((m,s) => Math.max(m, totalPointsOf(s.id)), 0);
+  var totalStudents = DB.students.length;
+  var activeVios = DB.violations.filter(function(v){ return !v.archived; }).length;
+  var inDanger = DB.students.filter(function(s){ return totalPointsOf(s.id) >= 15; }).length;
+  var topScore = DB.students.reduce(function(m,s){ return Math.max(m, totalPointsOf(s.id)); }, 0);
+  var dist = DB.stations.map(function(st){
+    return Object.assign({}, st, {
+      count: DB.students.filter(function(s){ var c = currentStation(totalPointsOf(s.id)); return c && c.id === st.id; }).length
+    });
+  });
+  var recent = DB.violations.slice().sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); }).slice(0,8);
 
-  const dist = DB.stations.map(st => ({
-    ...st,
-    count: DB.students.filter(s => {
-      const p = totalPointsOf(s.id);
-      const cur = currentStation(p);
-      return cur && cur.id === st.id;
-    }).length
-  }));
+  var html = '<div class="stats">'
+    + '<div class="stat"><div class="stat-label">دانش‌آموزان</div><div class="stat-value">'+fa(totalStudents)+'</div><div class="stat-sub">ثبت‌شده</div></div>'
+    + '<div class="stat s-mag"><div class="stat-label">تخلفات فعال</div><div class="stat-value" style="color:var(--magenta)">'+fa(activeVios)+'</div><div class="stat-sub">سال جاری</div></div>'
+    + '<div class="stat s-red"><div class="stat-label">در خطر</div><div class="stat-value" style="color:var(--red)">'+fa(inDanger)+'</div><div class="stat-sub">امتیاز ≥ ۱۵</div></div>'
+    + '<div class="stat s-grn"><div class="stat-label">بیشترین امتیاز</div><div class="stat-value" style="color:var(--green)">'+fa(topScore)+'</div><div class="stat-sub">کل مدرسه</div></div>'
+    + '</div>';
 
-  const recent = [...DB.violations]
-    .sort((a,b) => new Date(b.occurredAt) - new Date(a.occurredAt))
-    .slice(0, 8);
+  html += '<div class="grid-2"><div class="card"><h3 class="card-title">توزیع ایستگاه‌ها</h3><div class="ladder">';
+  dist.forEach(function(st){
+    html += '<div class="rung '+(st.count?'active':'')+'">'
+      + '<div class="thr-big" style="color:'+scoreColor(st.threshold)+'">−'+fa(st.threshold)+'</div>'
+      + '<div><h4>'+esc(st.name)+'</h4><p>'+esc(st.sports)+'</p></div>'
+      + '<div class="pill '+(st.count?'pill-cyan':'pill-dim')+'">'+fa(st.count)+' نفر</div>'
+      + '</div>';
+  });
+  html += '</div></div>';
 
-  $('#view').innerHTML = `
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">دانش‌آموزان</div>
-        <div class="stat-value">${fa(totalStudents)}</div>
-        <div class="stat-sub">ثبت‌شده در سامانه</div>
-      </div>
-      <div class="stat s-mag">
-        <div class="stat-label">تخلفات فعال</div>
-        <div class="stat-value" style="color:var(--magenta)">${fa(activeVios)}</div>
-        <div class="stat-sub">در سال تحصیلی جاری</div>
-      </div>
-      <div class="stat s-red">
-        <div class="stat-label">دانش‌آموزان در خطر</div>
-        <div class="stat-value" style="color:var(--red)">${fa(inDanger)}</div>
-        <div class="stat-sub">امتیاز ≥ ۱۵</div>
-      </div>
-      <div class="stat s-grn">
-        <div class="stat-label">بیشترین امتیاز منفی</div>
-        <div class="stat-value" style="color:var(--green)">${fa(topScore)}</div>
-        <div class="stat-sub">در کل مدرسه</div>
-      </div>
-    </div>
+  html += '<div class="card"><h3 class="card-title">آخرین تخلفات</h3>';
+  if (recent.length){
+    html += '<div style="display:flex;flex-direction:column;gap:10px">';
+    recent.forEach(function(v){
+      var st = DB.students.filter(function(s){ return s.id === v.studentId; })[0];
+      var ty = DB.violationTypes.filter(function(t){ return t.id === v.typeId; })[0];
+      if (!st || !ty) return;
+      html += '<div style="display:flex;justify-content:space-between;gap:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border)">'
+        + '<div style="min-width:0"><div style="font-weight:600;font-size:13px;cursor:pointer" onclick="navigate(\'student\',\''+st.id+'\')">'+esc(fullName(st))+'</div>'
+        + '<div style="font-size:11.5px;color:var(--text-dim);margin-top:3px">'+esc(ty.label)+'</div>'
+        + '<div style="font-size:10.5px;color:var(--text-mute);margin-top:4px">'+relative(v.occurredAt)+' · '+fmt(v.occurredAt)+'</div></div>'
+        + '<div style="text-align:left"><div style="font-weight:800;font-size:18px;color:'+(v.multiplier>1?'var(--magenta)':'var(--cyan)')+'">−'+fa(v.pointsApplied)+'</div>'
+        + (v.multiplier>1?'<div style="font-size:10px;color:var(--text-dim)">×'+fa(v.multiplier)+'</div>':'')+'</div></div>';
+    });
+    html += '</div>';
+  } else html += '<div class="empty"><div class="e-ico">◌</div><div class="e-txt">هنوز تخلفی ثبت نشده</div></div>';
+  html += '</div></div>';
 
-    <div class="grid-2">
-      <div class="card">
-        <h3 class="card-title">توزیع دانش‌آموزان در ایستگاه‌ها</h3>
-        <div class="ladder">
-          ${dist.map(st => `
-            <div class="rung ${st.count?'active':''}">
-              <div class="thr-big" style="color:${scoreColor(st.threshold)}">−${fa(st.threshold)}</div>
-              <div>
-                <h4>${esc(st.name)}</h4>
-                <p>${esc(st.sports)}</p>
-              </div>
-              <div class="pill ${st.count?'pill-cyan':'pill-dim'} count-pill">${fa(st.count)} نفر</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 class="card-title">آخرین تخلفات ثبت‌شده</h3>
-        ${recent.length ? `
-          <div style="display:flex;flex-direction:column;gap:10px">
-            ${recent.map(v => {
-              const st = DB.students.find(s => s.id === v.studentId);
-              const ty = DB.violationTypes.find(t => t.id === v.typeId);
-              if (!st || !ty) return '';
-              return `
-                <div style="display:flex;justify-content:space-between;gap:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border)">
-                  <div style="min-width:0">
-                    <div style="font-weight:600;font-size:13px;cursor:pointer" onclick="navigate('student','${st.id}')">${esc(fullName(st))}</div>
-                    <div style="font-size:11.5px;color:var(--text-dim);margin-top:3px">${esc(ty.label)}</div>
-                    <div style="font-size:10.5px;color:var(--text-mute);margin-top:4px">${relative(v.occurredAt)} · ${fmt(v.occurredAt)}</div>
-                  </div>
-                  <div style="text-align:left;flex-shrink:0">
-                    <div style="font-weight:800;font-size:18px;color:${v.multiplier>1?'var(--magenta)':'var(--cyan)'};text-shadow:0 0 10px currentColor">−${fa(v.pointsApplied)}</div>
-                    ${v.multiplier>1?`<div style="font-size:10px;color:var(--text-dim);margin-top:2px">×${fa(v.multiplier)}</div>`:''}
-                  </div>
-                </div>`;
-            }).join('')}
-          </div>
-        ` : `<div class="empty"><div class="e-ico">◌</div><div class="e-txt">هنوز تخلفی ثبت نشده است</div></div>`}
-      </div>
-    </div>
-  `;
+  document.getElementById('view').innerHTML = html;
 }
 
 /* ============================================================
-   Students list
+   Students
    ============================================================ */
 function renderStudents(){
-  const list = [...DB.students].sort((a,b) => totalPointsOf(b.id) - totalPointsOf(a.id));
-  $('#view').innerHTML = `
-    <div class="card" style="margin-bottom:20px">
-      <div class="row">
-        <input id="filterInput" placeholder="جستجو در دانش‌آموزان…" style="flex:1;min-width:200px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">
-        <select id="gradeFilter" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">
-          <option value="">همه پایه‌ها</option>
-          ${[...new Set(DB.students.map(s=>s.grade).filter(Boolean))].sort().map(g=>`<option>${esc(g)}</option>`).join('')}
-        </select>
-      </div>
-    </div>
-    ${list.length ? `
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>نام</th><th>کد ملی</th><th>پایه / کلاس</th>
-              <th>امتیاز منفی</th><th>ایستگاه</th><th>آخرین تخلف</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="studentsTbody"></tbody>
-        </table>
-      </div>
-    ` : `<div class="empty"><div class="e-ico">◉</div><div class="e-txt">هنوز دانش‌آموزی ثبت نشده — با دکمه «دانش‌آموز جدید» شروع کنید</div></div>`}
-  `;
+  var list = DB.students.slice().sort(function(a,b){ return totalPointsOf(b.id) - totalPointsOf(a.id); });
+  var grades = [];
+  DB.students.forEach(function(s){ if (s.grade && grades.indexOf(s.grade) < 0) grades.push(s.grade); });
+  grades.sort();
 
-  const tbody = $('#studentsTbody');
+  var html = '<div class="card" style="margin-bottom:20px"><div class="row">'
+    + '<input id="filterInput" placeholder="جستجو…" style="flex:1;min-width:200px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">'
+    + '<select id="gradeFilter" style="padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;outline:none">'
+    + '<option value="">همه پایه‌ها</option>'
+    + grades.map(function(g){ return '<option>'+esc(g)+'</option>'; }).join('')
+    + '</select></div></div>';
+
+  if (list.length){
+    html += '<div class="table-wrap"><table><thead><tr><th>نام</th><th>کد ملی</th><th>پایه/کلاس</th><th>امتیاز</th><th>ایستگاه</th><th>آخرین تخلف</th><th></th></tr></thead><tbody id="studentsTbody"></tbody></table></div>';
+  } else {
+    html += '<div class="empty"><div class="e-ico">◉</div><div class="e-txt">هنوز دانش‌آموزی ثبت نشده</div></div>';
+  }
+  document.getElementById('view').innerHTML = html;
+
+  var tbody = document.getElementById('studentsTbody');
   if (!tbody) return;
-  const apply = () => {
-    const q = $('#filterInput').value.trim().toLowerCase();
-    const g = $('#gradeFilter').value;
-    const filtered = list.filter(s => {
+  function apply(){
+    var q = document.getElementById('filterInput').value.trim().toLowerCase();
+    var g = document.getElementById('gradeFilter').value;
+    var filtered = list.filter(function(s){
       if (g && s.grade !== g) return false;
       if (!q) return true;
-      return (fullName(s)+' '+s.nationalId+' '+(s.className||'')).toLowerCase().includes(q);
+      return (fullName(s)+' '+s.nationalId+' '+(s.className||'')).toLowerCase().indexOf(q) >= 0;
     });
-    tbody.innerHTML = filtered.map(s => studentRow(s)).join('') ||
-      '<tr><td colspan="7" style="text-align:center;color:var(--text-mute);padding:30px">نتیجه‌ای یافت نشد</td></tr>';
-  };
-  $('#filterInput').addEventListener('input', apply);
-  $('#gradeFilter').addEventListener('change', apply);
+    tbody.innerHTML = filtered.map(studentRow).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-mute);padding:30px">نتیجه‌ای یافت نشد</td></tr>';
+  }
+  document.getElementById('filterInput').addEventListener('input', apply);
+  document.getElementById('gradeFilter').addEventListener('change', apply);
   apply();
 }
 function studentRow(s){
-  const pts = totalPointsOf(s.id);
-  const cur = currentStation(pts);
-  const viols = activeViolationsOf(s.id);
-  const last = viols[0];
-  const lastTxt = last ? relative(last.occurredAt) : '—';
-  return `
-    <tr>
-      <td><span class="row-name" onclick="navigate('student','${s.id}')">${esc(fullName(s))}</span></td>
-      <td class="mono">${esc(s.nationalId || '—')}</td>
-      <td>${esc(s.grade||'—')}${s.className?' / '+esc(s.className):''}</td>
-      <td><span class="pill ${scorePillClass(pts)}" style="font-size:13px;font-weight:800;padding:5px 12px">−${fa(pts)}</span></td>
-      <td>${cur ? `<span class="pill pill-mag">${esc(cur.name.split('—')[0].trim())}</span>` : `<span class="pill pill-green">پاک</span>`}</td>
-      <td style="color:var(--text-dim);font-size:12px">${lastTxt}</td>
-      <td>
-        <button class="btn btn-sm" onclick="navigate('student','${s.id}')">مشاهده</button>
-      </td>
-    </tr>
-  `;
+  var pts = totalPointsOf(s.id);
+  var cur = currentStation(pts);
+  var viols = activeViolationsOf(s.id);
+  var last = viols[0];
+  return '<tr>'
+    + '<td><span class="row-name" onclick="navigate(\'student\',\''+s.id+'\')">'+esc(fullName(s))+'</span></td>'
+    + '<td class="mono">'+esc(s.nationalId || '—')+'</td>'
+    + '<td>'+esc(s.grade||'—')+(s.className?' / '+esc(s.className):'')+'</td>'
+    + '<td><span class="pill '+scorePillClass(pts)+'" style="font-size:13px;font-weight:800;padding:5px 12px">−'+fa(pts)+'</span></td>'
+    + '<td>'+(cur ? '<span class="pill pill-mag">'+esc(cur.name.split('—')[0].trim())+'</span>' : '<span class="pill pill-green">پاک</span>')+'</td>'
+    + '<td style="color:var(--text-dim);font-size:12px">'+(last ? relative(last.occurredAt) : '—')+'</td>'
+    + '<td><button class="btn btn-sm" onclick="navigate(\'student\',\''+s.id+'\')">مشاهده</button></td>'
+    + '</tr>';
 }
 
 /* ============================================================
    Student detail
    ============================================================ */
 function renderStudentDetail(id){
-  const s = DB.students.find(x => x.id === id);
-  if (!s) { $('#view').innerHTML = `<div class="empty">دانش‌آموز یافت نشد</div>`; return; }
-  const pts = totalPointsOf(s.id);
-  const cur = currentStation(pts);
-  const nxt = nextStation(pts);
-  const viols = activeViolationsOf(s.id);
-  const tcounts = typeCountsOf(s.id);
+  var s = DB.students.filter(function(x){ return x.id === id; })[0];
+  if (!s){ document.getElementById('view').innerHTML = '<div class="empty">دانش‌آموز یافت نشد</div>'; return; }
+  var pts = totalPointsOf(s.id);
+  var cur = currentStation(pts);
+  var nxt = nextStation(pts);
+  var viols = activeViolationsOf(s.id);
+  var tcounts = typeCountsOf(s.id);
+  var prevThr = cur ? cur.threshold : 0;
+  var nextThr = nxt ? nxt.threshold : Math.max(pts, 100);
+  var pct = nextThr > prevThr ? Math.min(100, ((pts - prevThr)/(nextThr - prevThr))*100) : 100;
 
-  const prevThr = cur ? cur.threshold : 0;
-  const nextThr = nxt ? nxt.threshold : Math.max(pts, 100);
-  const pct = nextThr > prevThr ? Math.min(100, ((pts - prevThr)/(nextThr - prevThr))*100) : 100;
+  var html = '<div class="row" style="margin-bottom:16px">'
+    + '<button class="btn btn-ghost btn-sm" onclick="navigate(\'students\')">→ بازگشت</button>'
+    + '<button class="btn btn-sm" id="editStudentBtn">✎ ویرایش</button>'
+    + '<button class="btn btn-primary btn-sm" id="quickForStudentBtn">✦ ثبت تخلف</button>'
+    + '<button class="btn btn-danger btn-sm" id="deleteStudentBtn" style="margin-right:auto">حذف</button>'
+    + '</div>';
 
-  $('#view').innerHTML = `
-    <div class="row" style="margin-bottom:16px">
-      <button class="btn btn-ghost btn-sm" onclick="navigate('students')">→ بازگشت</button>
-      <button class="btn btn-sm" id="editStudentBtn">✎ ویرایش</button>
-      <button class="btn btn-primary btn-sm" id="quickForStudentBtn">✦ ثبت تخلف</button>
-      <button class="btn btn-danger btn-sm" id="deleteStudentBtn" style="margin-right:auto">حذف دانش‌آموز</button>
-    </div>
+  html += '<div class="card score-card" style="border-color:'+scoreColor(pts)+'33">'
+    + '<div class="score-num" style="color:'+scoreColor(pts)+'">−'+fa(pts)+'<small>امتیاز</small></div>'
+    + '<div class="score-meta"><div class="score-label">'+esc(fullName(s))+' · '+esc(s.grade||'—')+(s.className?' / '+esc(s.className):'')+(s.nationalId?' · '+esc(s.nationalId):'')+'</div>'
+    + '<div class="progress"><div class="progress-fill" style="width:'+pct+'%;background:linear-gradient(90deg,var(--cyan),'+scoreColor(pts)+')"></div></div>'
+    + '<div class="progress-marks"><span>'+(cur?esc(cur.name):'بدون ایستگاه')+'</span><span>'+(nxt ? 'ایستگاه بعدی: −'+fa(nxt.threshold) : 'بالاترین ایستگاه')+'</span></div>'
+    + ((s.parentPhone||s.studentPhone||s.address) ? '<div style="font-size:11.5px;color:var(--text-dim);display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">'
+      + (s.parentPhone?'<span>📞 ولی: '+esc(s.parentPhone)+'</span>':'')
+      + (s.studentPhone?'<span>📱 دانش‌آموز: '+esc(s.studentPhone)+'</span>':'')
+      + (s.address?'<span>📍 '+esc(s.address)+'</span>':'')
+      + '</div>' : '')
+    + '</div></div>';
 
-    <div class="card score-card" style="border-color:${scoreColor(pts)}33">
-      <div class="score-num" style="color:${scoreColor(pts)}">−${fa(pts)}<small>امتیاز</small></div>
-      <div class="score-meta">
-        <div class="score-label">${esc(fullName(s))} · ${esc(s.grade||'—')}${s.className?' / '+esc(s.className):''} ${s.nationalId?'· کد ملی '+esc(s.nationalId):''}</div>
-        <div class="progress"><div class="progress-fill" style="width:${pct}%;color:${scoreColor(pts)};background:linear-gradient(90deg,var(--cyan),${scoreColor(pts)})"></div></div>
-        <div class="progress-marks">
-          <span>${cur?esc(cur.name):'بدون ایستگاه'}</span>
-          <span>${nxt ? `ایستگاه بعدی: −${fa(nxt.threshold)}` : 'بالاترین ایستگاه'}</span>
-        </div>
-        ${s.parentPhone||s.studentPhone||s.address ? `
-          <div style="font-size:11.5px;color:var(--text-dim);display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">
-            ${s.parentPhone?`<span>📞 ولی: ${esc(s.parentPhone)}</span>`:''}
-            ${s.studentPhone?`<span>📱 دانش‌آموز: ${esc(s.studentPhone)}</span>`:''}
-            ${s.address?`<span>📍 ${esc(s.address)}</span>`:''}
-          </div>`:''}
-      </div>
-    </div>
+  html += '<div class="grid-2"><div class="stack"><div class="card"><h3 class="card-title">تفکیک تخلفات</h3>';
+  var keys = Object.keys(tcounts);
+  if (keys.length){
+    html += '<div style="display:flex;flex-direction:column;gap:8px">';
+    DB.violationTypes.forEach(function(t){
+      var c = tcounts[t.id] || 0;
+      if (!c) return;
+      var nm = multiplierFor(c);
+      var sum = viols.filter(function(v){ return v.typeId === t.id; }).reduce(function(a,v){ return a + v.pointsApplied; }, 0);
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;gap:10px">'
+        + '<div style="min-width:0"><div style="font-size:12.5px">'+esc(t.label)+'</div>'
+        + '<div style="font-size:11px;color:var(--text-dim);margin-top:3px">'+fa(c)+' بار · پایه −'+fa(t.points)+' · بعدی ×'+fa(nm)+'</div></div>'
+        + '<div style="font-weight:800;color:var(--magenta);font-size:15px">−'+fa(sum)+'</div></div>';
+    });
+    html += '</div>';
+  } else html += '<div style="color:var(--text-mute);font-size:13px">هیچ تخلف فعالی نیست</div>';
+  html += '</div>';
 
-    <div class="grid-2">
-      <div class="stack">
-        <div class="card">
-          <h3 class="card-title">تفکیک تخلفات (فعال در سال جاری)</h3>
-          ${Object.keys(tcounts).length ? `
-            <div style="display:flex;flex-direction:column;gap:8px">
-              ${DB.violationTypes.map(t => {
-                const c = tcounts[t.id] || 0;
-                if (!c) return '';
-                const nm = multiplierFor(c);
-                const sum = viols.filter(v=>v.typeId===t.id).reduce((a,v)=>a+v.pointsApplied,0);
-                return `
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;gap:10px">
-                    <div style="min-width:0">
-                      <div style="font-size:12.5px">${esc(t.label)}</div>
-                      <div style="font-size:11px;color:var(--text-dim);margin-top:3px">
-                        ${fa(c)} بار · پایه −${fa(t.points)} · تکرار بعدی ×${fa(nm)}
-                      </div>
-                    </div>
-                    <div style="font-weight:800;color:var(--magenta);font-size:15px;white-space:nowrap">−${fa(sum)}</div>
-                  </div>`;
-              }).join('') || '<div style="color:var(--text-mute);font-size:13px">—</div>'}
-            </div>
-          ` : `<div style="color:var(--text-mute);font-size:13px;padding:10px 0">هیچ تخلف فعالی ثبت نشده</div>`}
-        </div>
+  if (cur){
+    html += '<div class="station-card" style="border-color:'+scoreColor(pts)+'77"><h3 style="color:'+scoreColor(pts)+'">'+esc(cur.name)+'</h3>'
+      + '<div class="thr">حدنصاب: −'+fa(cur.threshold)+' · ورزش/اردو: '+esc(cur.sports)+'</div>'
+      + '<ul class="station-actions">'+cur.actions.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')+'</ul></div>';
+  } else {
+    html += '<div class="station-card" style="border-color:rgba(0,255,157,.3)"><h3 style="color:var(--green)">وضعیت پاک</h3><div class="thr">هیچ ایستگاه فعالی نیست. تبریک!</div></div>';
+  }
+  html += '</div>';
 
-        ${cur ? `
-          <div class="station-card" style="border-color:${scoreColor(pts)}77">
-            <h3 style="color:${scoreColor(pts)}">${esc(cur.name)}</h3>
-            <div class="thr">حدنصاب: −${fa(cur.threshold)} امتیاز · ورزش/اردو: ${esc(cur.sports)}</div>
-            <ul class="station-actions">
-              ${cur.actions.map(a => `<li>${esc(a)}</li>`).join('')}
-            </ul>
-          </div>
-        ` : `
-          <div class="station-card" style="border-color:rgba(0,255,157,.3)">
-            <h3 style="color:var(--green)">وضعیت پاک</h3>
-            <div class="thr">هیچ ایستگاه تنبیهی فعال نیست. تبریک!</div>
-          </div>
-        `}
-      </div>
+  html += '<div class="card"><h3 class="card-title">سابقه ('+fa(viols.length)+')</h3>';
+  if (viols.length){
+    html += '<div style="display:flex;flex-direction:column;gap:10px;max-height:560px;overflow:auto">';
+    viols.forEach(function(v){
+      var t = DB.violationTypes.filter(function(x){ return x.id === v.typeId; })[0];
+      html += '<div style="padding:12px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border)">'
+        + '<div style="display:flex;justify-content:space-between;gap:12px">'
+        + '<div style="min-width:0"><div style="font-size:12.5px;font-weight:600">'+esc(t?t.label:'—')+'</div>'
+        + '<div style="font-size:11px;color:var(--text-dim);margin-top:4px">'+fmt(v.occurredAt)+'</div>'
+        + (v.note?'<div style="font-size:11.5px;color:var(--text-mute);margin-top:5px;font-style:italic">«'+esc(v.note)+'»</div>':'')
+        + '</div>'
+        + '<div style="text-align:left"><div style="font-weight:800;font-size:16px;color:'+(v.multiplier>1?'var(--magenta)':'var(--cyan)')+'">−'+fa(v.pointsApplied)+'</div>'
+        + (v.multiplier>1?'<div style="font-size:10px;color:var(--text-dim)">'+fa(v.basePoints)+'×'+fa(v.multiplier)+'</div>':'')
+        + '<button class="btn btn-sm btn-danger" style="margin-top:6px" onclick="undoViolation(\''+v.id+'\')">حذف</button>'
+        + '</div></div></div>';
+    });
+    html += '</div>';
+  } else html += '<div style="color:var(--text-mute);font-size:13px">سابقه‌ای نیست</div>';
+  html += '</div></div>';
 
-      <div class="card">
-        <h3 class="card-title">سابقه تخلفات (${fa(viols.length)} مورد)</h3>
-        ${viols.length ? `
-          <div style="display:flex;flex-direction:column;gap:10px;max-height:560px;overflow:auto">
-            ${viols.map(v => {
-              const t = DB.violationTypes.find(x => x.id === v.typeId);
-              return `
-                <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border)">
-                  <div style="display:flex;justify-content:space-between;gap:12px">
-                    <div style="min-width:0">
-                      <div style="font-size:12.5px;font-weight:600">${esc(t?t.label:'—')}</div>
-                      <div style="font-size:11px;color:var(--text-dim);margin-top:4px">${fmt(v.occurredAt)}</div>
-                      ${v.note?`<div style="font-size:11.5px;color:var(--text-mute);margin-top:5px;font-style:italic">«${esc(v.note)}»</div>`:''}
-                    </div>
-                    <div style="text-align:left;flex-shrink:0">
-                      <div style="font-weight:800;font-size:16px;color:${v.multiplier>1?'var(--magenta)':'var(--cyan)'}">−${fa(v.pointsApplied)}</div>
-                      ${v.multiplier>1?`<div style="font-size:10px;color:var(--text-dim);margin-top:2px">${fa(v.basePoints)}×${fa(v.multiplier)}</div>`:''}
-                      <button class="btn btn-sm btn-danger" style="margin-top:6px" onclick="undoViolation('${v.id}')">حذف</button>
-                    </div>
-                  </div>
-                </div>`;
-            }).join('')}
-          </div>
-        ` : `<div style="color:var(--text-mute);font-size:13px;padding:10px 0">سابقه‌ای وجود ندارد</div>`}
-      </div>
-    </div>
-  `;
+  document.getElementById('view').innerHTML = html;
 
-  $('#editStudentBtn').onclick = () => openStudentForm(s);
-  $('#quickForStudentBtn').onclick = () => navigate('quick', s.id);
-  $('#deleteStudentBtn').onclick = () => {
-    if (!confirm(`دانش‌آموز «${fullName(s)}» و تمام سوابقش حذف شوند؟`)) return;
-    DB.students = DB.students.filter(x => x.id !== s.id);
-    DB.violations = DB.violations.filter(v => v.studentId !== s.id);
-    saveDB(); toast('دانش‌آموز حذف شد', 'success'); navigate('students');
+  document.getElementById('editStudentBtn').onclick = function(){ openStudentForm(s); };
+  document.getElementById('quickForStudentBtn').onclick = function(){ navigate('quick', s.id); };
+  document.getElementById('deleteStudentBtn').onclick = function(){
+    if (!confirm('دانش‌آموز «'+fullName(s)+'» و سوابقش حذف شوند؟')) return;
+    DB.students = DB.students.filter(function(x){ return x.id !== s.id; });
+    DB.violations = DB.violations.filter(function(v){ return v.studentId !== s.id; });
+    saveDB().then(function(){ toast('حذف شد','success'); navigate('students'); });
   };
 }
 function undoViolation(id){
   if (!confirm('این تخلف حذف شود؟')) return;
-  DB.violations = DB.violations.filter(v => v.id !== id);
-  saveDB(); toast('تخلف حذف شد', 'success'); render();
+  DB.violations = DB.violations.filter(function(v){ return v.id !== id; });
+  saveDB().then(function(){ toast('حذف شد','success'); render(); });
 }
 
 /* ============================================================
-   Quick log
+   Quick
    ============================================================ */
-let quickSelection = { studentId:null, typeId:null };
-
 function renderQuick(){
-  const pre = quickSelection.studentId;
-  const selectedStudent = pre ? DB.students.find(s => s.id === pre) : null;
-  const selectedType = quickSelection.typeId ? DB.violationTypes.find(t=>t.id===quickSelection.typeId) : null;
+  var pre = quickSelection.studentId;
+  var selectedStudent = pre ? DB.students.filter(function(s){ return s.id === pre; })[0] : null;
+  var selectedType = quickSelection.typeId ? DB.violationTypes.filter(function(t){ return t.id === quickSelection.typeId; })[0] : null;
 
-  let previewHTML = '';
-  if (selectedStudent && selectedType) {
-    const prior = countPriorOccurrences(selectedStudent.id, selectedType.id);
-    const mult = multiplierFor(prior);
-    const applied = selectedType.points * mult;
-    previewHTML = `
-      <div class="preview">
-        <div class="pv-item">
-          <span class="pv-label">این چندمین بار</span>
-          <span class="pv-value">${fa(prior+1)}<small style="font-size:12px;opacity:.6"> مین</small></span>
-        </div>
-        <div class="pv-item">
-          <span class="pv-label">ضریب اعمال‌شده</span>
-          <span class="pv-value ${mult>1?'mag':''}">×${fa(mult)}</span>
-        </div>
-        <div class="pv-item">
-          <span class="pv-label">امتیاز نهایی</span>
-          <span class="pv-value ${mult>1?'mag':''}">−${fa(applied)}</span>
-        </div>
-      </div>
-    `;
+  var previewHTML = '';
+  if (selectedStudent && selectedType){
+    var prior = countPriorOccurrences(selectedStudent.id, selectedType.id);
+    var mult = multiplierFor(prior);
+    var applied = selectedType.points * mult;
+    previewHTML = '<div class="preview">'
+      + '<div class="pv-item"><span class="pv-label">این چندمین بار</span><span class="pv-value">'+fa(prior+1)+'</span></div>'
+      + '<div class="pv-item"><span class="pv-label">ضریب</span><span class="pv-value '+(mult>1?'mag':'')+'">×'+fa(mult)+'</span></div>'
+      + '<div class="pv-item"><span class="pv-label">امتیاز نهایی</span><span class="pv-value '+(mult>1?'mag':'')+'">−'+fa(applied)+'</span></div>'
+      + '</div>';
   }
 
-  $('#view').innerHTML = `
-    <div class="grid-2">
-      <div class="stack">
-        <div class="card">
-          <h3 class="card-title">۱. انتخاب دانش‌آموز</h3>
-          ${selectedStudent ? `
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:10px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.3);gap:10px">
-              <div style="min-width:0">
-                <div style="font-weight:600">${esc(fullName(selectedStudent))}</div>
-                <div style="font-size:11.5px;color:var(--text-dim);margin-top:3px">${esc(selectedStudent.grade||'—')}${selectedStudent.className?' / '+esc(selectedStudent.className):''} · امتیاز فعلی −${fa(totalPointsOf(selectedStudent.id))}</div>
-              </div>
-              <button class="btn btn-sm" id="changeStudent">تغییر</button>
-            </div>
-          ` : `
-            <div class="field">
-              <label>جستجو کنید…</label>
-              <input id="qStudent" placeholder="نام یا کد ملی…" autocomplete="off">
-              <div id="qStudentList" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;max-height:260px;overflow:auto"></div>
-            </div>
-          `}
-        </div>
+  var html = '<div class="grid-2"><div class="stack">'
+    + '<div class="card"><h3 class="card-title">۱. دانش‌آموز</h3>';
+  if (selectedStudent){
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:10px;background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.3);gap:10px">'
+      + '<div style="min-width:0"><div style="font-weight:600">'+esc(fullName(selectedStudent))+'</div>'
+      + '<div style="font-size:11.5px;color:var(--text-dim);margin-top:3px">'+esc(selectedStudent.grade||'—')+(selectedStudent.className?' / '+esc(selectedStudent.className):'')+' · امتیاز −'+fa(totalPointsOf(selectedStudent.id))+'</div></div>'
+      + '<button class="btn btn-sm" id="changeStudent">تغییر</button></div>';
+  } else {
+    html += '<div class="field"><label>جستجو…</label><input id="qStudent" placeholder="نام یا کد ملی…" autocomplete="off"><div id="qStudentList" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;max-height:260px;overflow:auto"></div></div>';
+  }
+  html += '</div>';
 
-        <div class="card">
-          <h3 class="card-title">۲. نوع تخلف</h3>
-          <div class="type-grid">
-            ${DB.violationTypes.map(t => `
-              <div class="type-tile ${quickSelection.typeId===t.id?'selected':''}" data-type="${t.id}">
-                <div class="tt-label">${esc(t.label)}</div>
-                <div class="tt-pts">−${fa(t.points)}</div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
+  html += '<div class="card"><h3 class="card-title">۲. نوع تخلف</h3><div class="type-grid">';
+  DB.violationTypes.forEach(function(t){
+    html += '<div class="type-tile '+(quickSelection.typeId===t.id?'selected':'')+'" data-type="'+t.id+'"><div class="tt-label">'+esc(t.label)+'</div><div class="tt-pts">−'+fa(t.points)+'</div></div>';
+  });
+  html += '</div></div></div>';
 
-      <div class="stack">
-        <div class="card">
-          <h3 class="card-title">۳. پیش‌نمایش اثر</h3>
-          ${previewHTML || `<div style="color:var(--text-mute);font-size:13px;padding:10px 0">دانش‌آموز و نوع تخلف را انتخاب کنید</div>`}
-        </div>
+  html += '<div class="stack"><div class="card"><h3 class="card-title">۳. پیش‌نمایش</h3>'+(previewHTML || '<div style="color:var(--text-mute);font-size:13px">انتخاب کن…</div>')+'</div>';
+  if (selectedStudent && selectedType){
+    html += '<div class="card"><h3 class="card-title">۴. تاریخ و یادداشت</h3>'
+      + '<div class="field"><label>تاریخ</label><input type="datetime-local" id="qWhen"></div>'
+      + '<div class="field" style="margin-top:12px"><label>یادداشت</label><textarea id="qNote"></textarea></div>'
+      + '<button class="btn btn-primary" id="qSubmit" style="margin-top:16px;width:100%;justify-content:center;padding:13px">ثبت تخلف</button></div>';
+  }
+  html += '</div></div>';
 
-        ${(selectedStudent && selectedType) ? `
-          <div class="card">
-            <h3 class="card-title">۴. تاریخ و یادداشت</h3>
-            <div class="field">
-              <label>تاریخ و ساعت وقوع</label>
-              <input type="datetime-local" id="qWhen">
-            </div>
-            <div class="field" style="margin-top:12px">
-              <label>یادداشت (اختیاری)</label>
-              <textarea id="qNote" placeholder="توضیح مختصر…"></textarea>
-            </div>
-            <button class="btn btn-primary" id="qSubmit" style="margin-top:16px;width:100%;justify-content:center;padding:13px">
-              ثبت تخلف و اعمال امتیاز
-            </button>
-          </div>
-        ` : ''}
-      </div>
-    </div>
-  `;
+  document.getElementById('view').innerHTML = html;
 
-  if (!selectedStudent) {
-    const q = $('#qStudent');
-    const list = $('#qStudentList');
-    const renderList = () => {
-      const v = q.value.trim().toLowerCase();
-      const items = DB.students.filter(s => !v || (fullName(s)+' '+s.nationalId).toLowerCase().includes(v)).slice(0, 30);
-      list.innerHTML = items.map(s => `
-        <div class="search-item" data-sid="${s.id}">
-          <span>${esc(fullName(s))}</span>
-          <span style="color:var(--text-mute);font-size:11px">−${fa(totalPointsOf(s.id))}</span>
-        </div>
-      `).join('') || '<div style="color:var(--text-mute);font-size:12.5px;padding:8px">موردی یافت نشد</div>';
-      list.querySelectorAll('[data-sid]').forEach(el => el.onclick = () => {
-        quickSelection.studentId = el.dataset.sid;
-        renderQuick();
+  if (!selectedStudent){
+    var q = document.getElementById('qStudent');
+    var list = document.getElementById('qStudentList');
+    var renderList = function(){
+      var v = q.value.trim().toLowerCase();
+      var items = DB.students.filter(function(s){ return !v || (fullName(s)+' '+s.nationalId).toLowerCase().indexOf(v) >= 0; }).slice(0, 30);
+      list.innerHTML = items.map(function(s){ return '<div class="search-item" data-sid="'+s.id+'"><span>'+esc(fullName(s))+'</span><span style="color:var(--text-mute);font-size:11px">−'+fa(totalPointsOf(s.id))+'</span></div>'; }).join('') || '<div style="color:var(--text-mute);font-size:12.5px;padding:8px">موردی یافت نشد</div>';
+      $$('[data-sid]', list).forEach(function(el){
+        el.onclick = function(){ quickSelection.studentId = el.dataset.sid; renderQuick(); };
       });
     };
     q.addEventListener('input', renderList);
     renderList();
     q.focus();
   } else {
-    $('#changeStudent').onclick = () => { quickSelection.studentId = null; renderQuick(); };
+    document.getElementById('changeStudent').onclick = function(){ quickSelection.studentId = null; renderQuick(); };
   }
-
-  $$('[data-type]').forEach(el => el.onclick = () => {
-    quickSelection.typeId = el.dataset.type;
-    renderQuick();
+  $$('[data-type]').forEach(function(el){
+    el.onclick = function(){ quickSelection.typeId = el.dataset.type; renderQuick(); };
   });
 
-  const whenInput = $('#qWhen');
-  if (whenInput && !whenInput.value) {
-    const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  var whenInput = document.getElementById('qWhen');
+  if (whenInput && !whenInput.value){
+    var d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
     whenInput.value = d.toISOString().slice(0,16);
   }
-
-  const sub = $('#qSubmit');
-  if (sub) sub.onclick = () => {
-    const when = whenInput.value ? new Date(whenInput.value).toISOString() : new Date().toISOString();
-    const prior = countPriorOccurrences(selectedStudent.id, selectedType.id);
-    const mult = multiplierFor(prior);
-    const applied = selectedType.points * mult;
-
-    const v = {
-      id: uid('vio'),
-      studentId: selectedStudent.id,
-      typeId: selectedType.id,
-      occurredAt: when,
-      note: $('#qNote').value.trim(),
-      priorCount: prior,
-      occurrenceNumber: prior + 1,
-      basePoints: selectedType.points,
-      multiplier: mult,
-      pointsApplied: applied,
-      archived: false,
-      createdAt: new Date().toISOString(),
-    };
-    DB.violations.push(v);
-    saveDB();
-    toast(`تخلف ثبت شد — ${fa(applied)}− امتیاز (×${fa(mult)})`, 'success');
-    quickSelection = { studentId:null, typeId:null };
-    navigate('student', selectedStudent.id);
+  var sub = document.getElementById('qSubmit');
+  if (sub) sub.onclick = function(){
+    var when = whenInput.value ? new Date(whenInput.value).toISOString() : new Date().toISOString();
+    var prior = countPriorOccurrences(selectedStudent.id, selectedType.id);
+    var mult = multiplierFor(prior);
+    DB.violations.push({
+      id: uid('vio'), studentId: selectedStudent.id, typeId: selectedType.id,
+      occurredAt: when, note: document.getElementById('qNote').value.trim(),
+      priorCount: prior, occurrenceNumber: prior + 1,
+      basePoints: selectedType.points, multiplier: mult,
+      pointsApplied: selectedType.points * mult,
+      archived: false, createdAt: new Date().toISOString()
+    });
+    saveDB().then(function(){
+      toast('ثبت شد — '+fa(selectedType.points*mult)+'− (×'+fa(mult)+')', 'success');
+      quickSelection = { studentId:null, typeId:null };
+      navigate('student', selectedStudent.id);
+    });
   };
 }
 
@@ -1067,354 +1059,438 @@ function renderQuick(){
    Stations
    ============================================================ */
 function renderStations(){
-  const nextThr = thr => {
-    for (const s of DB.stations) if (s.threshold > thr) return s.threshold;
-    return Infinity;
-  };
-  $('#view').innerHTML = `
-    <div style="margin-bottom:20px;color:var(--text-dim);font-size:13px;line-height:1.7">
-      با تجمیع امتیازات منفی، هر ایستگاه به‌صورت خودکار فعال می‌شود. هر ایستگاه شامل پیامدهای انباشته‌ی ایستگاه‌های قبلی نیز هست.
-    </div>
-    <div class="ladder">
-      ${DB.stations.map(st => {
-        const upper = nextThr(st.threshold);
-        const students = DB.students.filter(s => {
-          const p = totalPointsOf(s.id);
-          return p >= st.threshold && p < upper;
-        });
-        const isAny = DB.students.some(s => totalPointsOf(s.id) >= st.threshold);
-        return `
-          <div class="rung ${isAny?'active':''}">
-            <div class="thr-big" style="color:${scoreColor(st.threshold)}">−${fa(st.threshold)}</div>
-            <div>
-              <h4>${esc(st.name)}</h4>
-              <p style="color:var(--cyan);margin-bottom:8px">⚑ ${esc(st.sports)}</p>
-              <ul class="station-actions">
-                ${st.actions.map(a => `<li>${esc(a)}</li>`).join('')}
-              </ul>
-            </div>
-            <div style="text-align:center">
-              <div class="pill pill-cyan count-pill" style="font-size:14px;padding:8px 16px">${fa(students.length)}</div>
-              <div style="font-size:10.5px;color:var(--text-mute);margin-top:6px">دانش‌آموز</div>
-            </div>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
+  var nextThr = function(thr){ for (var i=0;i<DB.stations.length;i++) if (DB.stations[i].threshold > thr) return DB.stations[i].threshold; return Infinity; };
+  var html = '<div style="margin-bottom:20px;color:var(--text-dim);font-size:13px">با تجمیع امتیازات منفی، هر ایستگاه خودکار فعال می‌شود.</div><div class="ladder">';
+  DB.stations.forEach(function(st){
+    var upper = nextThr(st.threshold);
+    var students = DB.students.filter(function(s){ var p = totalPointsOf(s.id); return p >= st.threshold && p < upper; });
+    var isAny = DB.students.some(function(s){ return totalPointsOf(s.id) >= st.threshold; });
+    html += '<div class="rung '+(isAny?'active':'')+'">'
+      + '<div class="thr-big" style="color:'+scoreColor(st.threshold)+'">−'+fa(st.threshold)+'</div>'
+      + '<div><h4>'+esc(st.name)+'</h4><p style="color:var(--cyan);margin-bottom:8px">⚑ '+esc(st.sports)+'</p>'
+      + '<ul class="station-actions">'+st.actions.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')+'</ul></div>'
+      + '<div style="text-align:center"><div class="pill pill-cyan" style="font-size:14px;padding:8px 16px">'+fa(students.length)+'</div><div style="font-size:10.5px;color:var(--text-mute);margin-top:6px">دانش‌آموز</div></div>'
+      + '</div>';
+  });
+  html += '</div>';
+  document.getElementById('view').innerHTML = html;
 }
 
 /* ============================================================
    Settings
    ============================================================ */
 function renderSettings(){
-  $('#view').innerHTML = `
-    <div class="grid-2">
-      <div class="card">
-        <h3 class="card-title">اطلاعات مدرسه</h3>
-        <div class="field">
-          <label>نام مدرسه</label>
-          <input id="setSchool">
-        </div>
-        <div class="field-row" style="margin-top:12px">
-          <div class="field">
-            <label>سال تحصیلی</label>
-            <input id="setYear" placeholder="۱۴۰۴-۱۴۰۵">
-          </div>
-          <div class="field">
-            <label>دوره ریست خودکار (ماه)</label>
-            <input id="setReset" type="number" min="1" max="12">
-          </div>
-        </div>
-        <div class="field" style="margin-top:12px">
-          <label>تاریخ شروع سال تحصیلی (میلادی)</label>
-          <input id="setYearStart" type="date">
-        </div>
-        <button class="btn btn-primary" id="saveSettings" style="margin-top:16px">ذخیره تنظیمات</button>
-      </div>
+  var m = activeMode();
+  var showCloudForm = (m === 'cloud') || (setupMode === 'cloud');
 
-      <div class="card">
-        <h3 class="card-title">ضرایب تصاعدی</h3>
-        <div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;padding:14px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--border)">
-          <div>• دفعه ۱ و ۲: ضریب اصلی جدول × <strong style="color:var(--cyan)">۱</strong></div>
-          <div>• دفعه ۳ و ۴: ضریب اصلی جدول × <strong style="color:var(--cyan)">۲</strong></div>
-          <div>• دفعه ۵ و ۶: ضریب اصلی جدول × <strong style="color:var(--cyan)">۳</strong></div>
-          <div>• دفعه ۷ به بعد: ضریب اصلی جدول × <strong style="color:var(--cyan)">۴</strong></div>
-          <div style="margin-top:10px;color:var(--text-mute);font-size:11.5px">این ضرایب طبق آیین‌نامه ثابت هستند و به‌صورت خودکار اعمال می‌شوند.</div>
-        </div>
-      </div>
-    </div>
+  var html = '<div class="card" style="margin-bottom:20px"><h3 class="card-title">حالت ذخیره‌سازی</h3>'
+    + '<div style="font-size:12px;color:var(--text-mute);margin-bottom:14px;line-height:1.7">در هر سه حالت، داده‌ها <b style="color:var(--green)">همیشه در مرورگر شما هم ذخیره می‌شوند</b> (۵ نسخه پشتیبان).</div>'
+    + '<div class="grid-3" style="margin-bottom:16px">'
+    + '<div class="mode-card '+(m==='local'?'selected':'')+'" data-mode="local"><div class="m-ico">🖥️</div><div class="m-body"><h4>لوکال</h4><p>فقط روی همین مرورگر.</p></div></div>'
+    + '<div class="mode-card '+(m==='file'?'selected':'')+'" data-mode="file"><div class="m-ico">📁</div><div class="m-body"><h4>فایل روی دیسک</h4><p>ذخیره در فایل JSON. مناسب پشتیبان.</p></div></div>'
+    + '<div class="mode-card '+(m==='cloud'?'selected':'')+'" data-mode="cloud"><div class="m-ico">☁️</div><div class="m-body"><h4>ابری (چند کاربره)</h4><p>ذخیره در JSONBin. چند نفر هم‌زمان.</p></div></div>'
+    + '</div>';
 
-    <div class="card" style="margin-top:20px">
-      <h3 class="card-title">جدول انواع تخلف و امتیاز پایه</h3>
-      <div class="table-wrap" style="border:none;background:transparent">
-        <table>
-          <thead>
-            <tr><th style="width:60px">#</th><th>عنوان تخلف</th><th style="width:160px">امتیاز پایه</th></tr>
-          </thead>
-          <tbody id="typesTbody">
-            ${DB.violationTypes.map((t,i) => `
-              <tr>
-                <td>${fa(i+1)}</td>
-                <td><input data-tid="${t.id}" data-field="label" value="${esc(t.label)}" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>
-                <td><input data-tid="${t.id}" data-field="points" type="number" min="1" value="${t.points}" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;text-align:center"></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-      <button class="btn btn-primary" id="saveTypes" style="margin-top:14px">ذخیره جدول تخلفات</button>
-    </div>
+  if (m === 'file' && fileHandle){
+    html += '<div class="cloud-status ok"><span>📁</span><span style="flex:1">فایل: '+esc(fileHandle.name)+'</span><button class="btn btn-sm" id="disconnectFileBtn">قطع</button></div>';
+  }
+  if (m === 'cloud'){
+    html += '<div class="cloud-status '+(cloudOnline?'ok':'err')+'"><span>'+(cloudOnline?'✓':'✕')+'</span>'
+      + '<span style="flex:1">'+(cloudOnline ? 'متصل' : 'قطع — داده محلی ذخیره می‌شود')+' · Bin: <code dir="ltr">'+esc(CFG.cloud.binId)+'</code>'
+      + (DB && DB.meta && DB.meta.pendingSync ? ' · <b style="color:var(--yellow)">در صف</b>' : '')+'</span>'
+      + '<button class="btn btn-sm" id="disconnectCloudBtn">قطع</button></div>';
+  }
+  html += '</div>';
 
-    <div class="card" style="margin-top:20px">
-      <h3 class="card-title">ایستگاه‌های تنبیهی (حدنصاب‌ها)</h3>
-      <div class="table-wrap" style="border:none;background:transparent">
-        <table>
-          <thead>
-            <tr><th style="width:60px">#</th><th>عنوان</th><th style="width:130px">حدنصاب</th><th>وضعیت ورزش/اردو</th></tr>
-          </thead>
-          <tbody id="stationsTbody">
-            ${DB.stations.map((st,i) => `
-              <tr>
-                <td>${fa(i+1)}</td>
-                <td><input data-sid="${st.id}" data-field="name" value="${esc(st.name)}" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>
-                <td><input data-sid="${st.id}" data-field="threshold" type="number" value="${st.threshold}" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;text-align:center"></td>
-                <td><input data-sid="${st.id}" data-field="sports" value="${esc(st.sports)}" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-      <button class="btn btn-primary" id="saveStations" style="margin-top:14px">ذخیره ایستگاه‌ها</button>
-    </div>
-  `;
+  if (showCloudForm) html += renderCloudConfig();
+  if (m !== 'file' && setupMode !== 'cloud' && !CFG.cloud) html += renderFileConnectBtn();
 
-  $('#setSchool').value    = DB.settings.schoolName || '';
-  $('#setYear').value      = DB.settings.academicYear || '';
-  $('#setReset').value     = DB.settings.resetMonths || 2;
-  $('#setYearStart').value = DB.settings.yearStartISO ? DB.settings.yearStartISO.slice(0,10) : '';
+  html += '<div class="grid-2" style="margin-top:20px">'
+    + '<div class="card"><h3 class="card-title">اطلاعات مدرسه</h3>'
+    + '<div class="field"><label>نام مدرسه</label><input id="setSchool"></div>'
+    + '<div class="field" style="margin-top:12px"><label>نام شما</label><input id="setUserName" placeholder="مثلاً: مدیر"></div>'
+    + '<div class="field-row" style="margin-top:12px">'
+    + '<div class="field"><label>سال تحصیلی</label><input id="setYear"></div>'
+    + '<div class="field"><label>دوره ریست (ماه)</label><input id="setReset" type="number" min="1" max="12"></div>'
+    + '</div>'
+    + '<div class="field" style="margin-top:12px"><label>تاریخ شروع سال</label><input id="setYearStart" type="date"></div>'
+    + '<button class="btn btn-primary" id="saveSettings" style="margin-top:16px">ذخیره</button></div>'
 
-  $('#saveSettings').onclick = () => {
-    DB.settings.schoolName = $('#setSchool').value;
-    DB.settings.academicYear = $('#setYear').value;
-    DB.settings.resetMonths = Number($('#setReset').value) || 2;
-    DB.settings.yearStartISO = $('#setYearStart').value ? new Date($('#setYearStart').value).toISOString() : null;
-    saveDB(); toast('تنظیمات ذخیره شد', 'success'); render();
+    + '<div class="card"><h3 class="card-title">ضرایب تصاعدی</h3>'
+    + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;padding:14px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--border)">'
+    + '<div>• دفعه ۱ و ۲: × <b style="color:var(--cyan)">۱</b></div>'
+    + '<div>• دفعه ۳ و ۴: × <b style="color:var(--cyan)">۲</b></div>'
+    + '<div>• دفعه ۵ و ۶: × <b style="color:var(--cyan)">۳</b></div>'
+    + '<div>• دفعه ۷+: × <b style="color:var(--cyan)">۴</b></div>'
+    + '</div></div></div>';
+
+  // جدول انواع
+  html += '<div class="card" style="margin-top:20px"><h3 class="card-title">جدول تخلفات</h3><div class="table-wrap" style="border:none;background:transparent"><table><thead><tr><th style="width:60px">#</th><th>عنوان</th><th style="width:160px">امتیاز</th></tr></thead><tbody>';
+  DB.violationTypes.forEach(function(t,i){
+    html += '<tr><td>'+fa(i+1)+'</td>'
+      + '<td><input data-tid="'+t.id+'" data-field="label" value="'+esc(t.label)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
+      + '<td><input data-tid="'+t.id+'" data-field="points" type="number" min="1" value="'+t.points+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;text-align:center"></td></tr>';
+  });
+  html += '</tbody></table></div><button class="btn btn-primary" id="saveTypes" style="margin-top:14px">ذخیره</button></div>';
+
+  // ایستگاه‌ها
+  html += '<div class="card" style="margin-top:20px"><h3 class="card-title">ایستگاه‌ها</h3><div class="table-wrap" style="border:none;background:transparent"><table><thead><tr><th style="width:60px">#</th><th>عنوان</th><th style="width:120px">حدنصاب</th><th>ورزش/اردو</th></tr></thead><tbody>';
+  DB.stations.forEach(function(st,i){
+    html += '<tr><td>'+fa(i+1)+'</td>'
+      + '<td><input data-sid="'+st.id+'" data-field="name" value="'+esc(st.name)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td>'
+      + '<td><input data-sid="'+st.id+'" data-field="threshold" type="number" value="'+st.threshold+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;text-align:center"></td>'
+      + '<td><input data-sid="'+st.id+'" data-field="sports" value="'+esc(st.sports)+'" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px"></td></tr>';
+  });
+  html += '</tbody></table></div><button class="btn btn-primary" id="saveStations" style="margin-top:14px">ذخیره</button></div>';
+
+  document.getElementById('view').innerHTML = html;
+
+  // mode cards
+  $$('[data-mode]').forEach(function(el){
+    el.onclick = function(){
+      var target = el.dataset.mode;
+      if (target === 'local'){
+        var p = Promise.resolve();
+        if (fileHandle) p = p.then(disconnectFile);
+        p.then(function(){
+          if (CFG.cloud) delete CFG.cloud;
+          CFG.mode = 'local'; saveCFG();
+          if (pollTimer) clearInterval(pollTimer);
+          cloudOnline = false;
+          setupMode = null;
+          toast('حالت لوکال','success');
+          render();
+        });
+      } else if (target === 'file'){
+        if (CFG.cloud){ delete CFG.cloud; if (pollTimer) clearInterval(pollTimer); }
+        setupMode = 'file';
+        connectFile();
+      } else if (target === 'cloud'){
+        setupMode = 'cloud';
+        render();
+        setTimeout(function(){ var f = document.getElementById('cloudForm'); if (f) f.scrollIntoView({behavior:'smooth', block:'start'}); }, 150);
+      }
+    };
+  });
+
+  if (document.getElementById('disconnectFileBtn')) document.getElementById('disconnectFileBtn').onclick = disconnectFile;
+  if (document.getElementById('disconnectCloudBtn')) document.getElementById('disconnectCloudBtn').onclick = disconnectCloud;
+  if (document.getElementById('connectFileBtn')) document.getElementById('connectFileBtn').onclick = connectFile;
+  if (document.getElementById('cancelCloudBtn')) document.getElementById('cancelCloudBtn').onclick = function(){ setupMode = null; render(); };
+  if (document.getElementById('testCloudBtn')){
+    document.getElementById('testCloudBtn').onclick = function(){
+      var k = document.getElementById('cloudKey').value.trim();
+      var b = document.getElementById('cloudBin').value.trim();
+      var s = document.getElementById('cloudTestStatus');
+      s.textContent = 'در حال تست…'; s.style.color = 'var(--text-dim)';
+      testCloud(k, b).then(function(){ s.textContent = '✓ اتصال موفق'; s.style.color = 'var(--green)'; })
+        .catch(function(e){ s.textContent = '✕ '+e.message; s.style.color = 'var(--red)'; });
+    };
+  }
+  if (document.getElementById('createBinBtn')){
+    document.getElementById('createBinBtn').onclick = function(){
+      var k = document.getElementById('cloudKey').value.trim();
+      if (!k){ toast('اول کلید API را وارد کن','error'); return; }
+      var s = document.getElementById('cloudTestStatus');
+      s.textContent = 'در حال ساخت…'; s.style.color = 'var(--yellow)';
+      createBin(k).then(function(id){
+        document.getElementById('cloudBin').value = id;
+        s.textContent = '✓ Bin ساخته شد — حالا «اتصال» را بزن'; s.style.color = 'var(--green)';
+      }).catch(function(e){ s.textContent = '✕ '+e.message; s.style.color = 'var(--red)'; });
+    };
+  }
+  if (document.getElementById('saveCloudBtn')){
+    document.getElementById('saveCloudBtn').onclick = function(){
+      var k = document.getElementById('cloudKey').value.trim();
+      var b = document.getElementById('cloudBin').value.trim();
+      if (!k || !b){ toast('کلید و Bin ID الزامی است','error'); return; }
+      connectCloud(k, b).catch(function(e){ toast(e.message,'error'); });
+    };
+  }
+
+  document.getElementById('saveSettings').onclick = function(){
+    DB.settings.schoolName = document.getElementById('setSchool').value;
+    DB.settings.academicYear = document.getElementById('setYear').value;
+    DB.settings.resetMonths = Number(document.getElementById('setReset').value) || 2;
+    var ys = document.getElementById('setYearStart').value;
+    DB.settings.yearStartISO = ys ? new Date(ys).toISOString() : null;
+    CFG.userName = document.getElementById('setUserName').value.trim();
+    saveCFG();
+    saveDB().then(function(){ toast('ذخیره شد','success'); render(); });
   };
-  $('#saveTypes').onclick = () => {
-    DB.violationTypes = DB.violationTypes.map(t => {
-      const lbl = document.querySelector(`[data-tid="${t.id}"][data-field="label"]`).value;
-      const pts = Number(document.querySelector(`[data-tid="${t.id}"][data-field="points"]`).value) || 1;
-      return {...t, label:lbl, points:pts};
+  document.getElementById('saveTypes').onclick = function(){
+    DB.violationTypes = DB.violationTypes.map(function(t){
+      var lbl = document.querySelector('[data-tid="'+t.id+'"][data-field="label"]').value;
+      var pts = Number(document.querySelector('[data-tid="'+t.id+'"][data-field="points"]').value) || 1;
+      return Object.assign({}, t, { label:lbl, points:pts });
     });
-    saveDB(); toast('جدول تخلفات ذخیره شد', 'success');
+    saveDB().then(function(){ toast('ذخیره شد','success'); });
   };
-  $('#saveStations').onclick = () => {
-    DB.stations = DB.stations.map(st => {
-      const nm  = document.querySelector(`[data-sid="${st.id}"][data-field="name"]`).value;
-      const thr = Number(document.querySelector(`[data-sid="${st.id}"][data-field="threshold"]`).value) || st.threshold;
-      const sp  = document.querySelector(`[data-sid="${st.id}"][data-field="sports"]`).value;
-      return {...st, name:nm, threshold:thr, sports:sp};
-    }).sort((a,b) => a.threshold - b.threshold);
-    saveDB(); toast('ایستگاه‌ها ذخیره شد', 'success'); render();
+  document.getElementById('saveStations').onclick = function(){
+    DB.stations = DB.stations.map(function(st){
+      return Object.assign({}, st, {
+        name: document.querySelector('[data-sid="'+st.id+'"][data-field="name"]').value,
+        threshold: Number(document.querySelector('[data-sid="'+st.id+'"][data-field="threshold"]').value) || st.threshold,
+        sports: document.querySelector('[data-sid="'+st.id+'"][data-field="sports"]').value
+      });
+    }).sort(function(a,b){ return a.threshold - b.threshold; });
+    saveDB().then(function(){ toast('ذخیره شد','success'); render(); });
   };
+
+  document.getElementById('setSchool').value = DB.settings.schoolName || '';
+  document.getElementById('setYear').value = DB.settings.academicYear || '';
+  document.getElementById('setReset').value = DB.settings.resetMonths || 2;
+  document.getElementById('setYearStart').value = DB.settings.yearStartISO ? DB.settings.yearStartISO.slice(0,10) : '';
+  document.getElementById('setUserName').value = CFG.userName || '';
+  if (showCloudForm){
+    document.getElementById('cloudKey').value = (CFG.cloud && CFG.cloud.apiKey) || '';
+    document.getElementById('cloudBin').value = (CFG.cloud && CFG.cloud.binId) || '';
+  }
+}
+
+function renderCloudConfig(){
+  return '<div class="card" id="cloudForm" style="margin-bottom:20px;border-color:rgba(0,229,255,.4)">'
+    + '<h3 class="card-title">☁️ اتصال ابری (JSONBin)</h3>'
+    + '<div style="font-size:12.5px;color:var(--text-dim);line-height:1.9;margin-bottom:16px;padding:14px;background:rgba(0,229,255,.04);border-radius:10px;border:1px solid rgba(0,229,255,.2)">'
+    + '<b style="color:var(--cyan)">راهنما:</b><br>'
+    + '۱. برو به <a href="https://jsonbin.io" target="_blank" style="color:var(--cyan)">jsonbin.io</a> و ثبت‌نام کن (رایگان).<br>'
+    + '۲. از منو <b>API Keys</b> → کلید <b>X-Master-Key</b> را کپی کن.<br>'
+    + '۳. کلید را در فیلد زیر پیست کن و روی «ساخت Bin جدید» بزن.<br>'
+    + '۴. بعد «اتصال و ذخیره» را بزن. تمام!'
+    + '</div>'
+    + '<div class="field"><label>کلید API (X-Master-Key)</label><input id="cloudKey" placeholder="$2a$10$…" dir="ltr" autocomplete="off"></div>'
+    + '<div class="field" style="margin-top:12px"><label>Bin ID</label><input id="cloudBin" placeholder="بعد از ساخت Bin خودکار پر می‌شود" dir="ltr" autocomplete="off"></div>'
+    + '<div id="cloudTestStatus" style="margin-top:12px;font-size:12px;color:var(--text-dim)">وضعیت: —</div>'
+    + '<div class="row" style="margin-top:16px">'
+    + '<button class="btn" id="createBinBtn">🔨 ساخت Bin جدید</button>'
+    + '<button class="btn" id="testCloudBtn">🔌 تست اتصال</button>'
+    + '<button class="btn btn-primary" id="saveCloudBtn">✓ اتصال و ذخیره</button>'
+    + '<button class="btn btn-ghost" id="cancelCloudBtn" style="margin-right:auto">انصراف</button>'
+    + '</div></div>';
+}
+
+function renderFileConnectBtn(){
+  return '<div class="card" style="margin-bottom:20px"><h3 class="card-title">📁 اتصال به فایل داده</h3>'
+    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">یه فایل <code>discipline-data.json</code> روی دیسک انتخاب کن. هر تغییر خودکار در فایل ذخیره می‌شود.</p>'
+    + '<button class="btn btn-primary" id="connectFileBtn">انتخاب / ساخت فایل</button>'
+    + '<div style="margin-top:12px;font-size:11.5px;color:var(--text-mute)">⚠️ فقط Chrome و Edge</div></div>';
 }
 
 /* ============================================================
    Backup
    ============================================================ */
 function renderBackup(){
-  $('#view').innerHTML = `
-    <div class="grid-2">
-      <div class="card">
-        <h3 class="card-title">پشتیبان‌گیری</h3>
-        <p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">
-          فایل پشتیبان شامل تمام دانش‌آموزان، سوابق تخلفات و تنظیمات است. آن را در جای امن نگهداری کنید.
-        </p>
-        <div class="row">
-          <button class="btn btn-primary" id="expJson">⤓ دانلود JSON</button>
-          <button class="btn" id="expCsvS">⤓ CSV دانش‌آموزان</button>
-          <button class="btn" id="expCsvV">⤓ CSV تخلفات</button>
-        </div>
-      </div>
+  var backups = [];
+  try { backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '[]'); } catch(e){}
 
-      <div class="card">
-        <h3 class="card-title">بازیابی</h3>
-        <p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">
-          با بارگذاری فایل پشتیبان، کل دیتابیس فعلی جایگزین می‌شود. این عمل قابل بازگشت نیست.
-        </p>
-        <input type="file" id="importFile" accept=".json" style="display:none">
-        <button class="btn" id="impBtn">⤒ بارگذاری فایل پشتیبان</button>
-      </div>
-    </div>
+  var html = '<div class="grid-2">'
+    + '<div class="card"><h3 class="card-title">پشتیبان‌گیری</h3>'
+    + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">فایل پشتیبان شامل تمام داده‌ها است.</p>'
+    + '<div class="row"><button class="btn btn-primary" id="expJson">⤓ JSON</button>'
+    + '<button class="btn" id="expCsvS">⤓ CSV دانش‌آموزان</button>'
+    + '<button class="btn" id="expCsvV">⤓ CSV تخلفات</button></div></div>'
 
-    <div class="card" style="margin-top:20px;border-color:rgba(255,58,94,.35)">
-      <h3 class="card-title" style="color:var(--red)">منطقه خطر</h3>
-      <p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">
-        این گزینه کل سوابق تخلفات را آرشیو می‌کند (حذف نمی‌شود). برای شروع سال تحصیلی جدید مناسب است.
-      </p>
-      <button class="btn btn-danger" id="resetAll">↺ آرشیو کل سوابق</button>
-    </div>
-  `;
-  $('#expJson').onclick = () => download(`discipline-backup-${Date.now()}.json`, JSON.stringify(DB, null, 2), 'application/json');
-  $('#expCsvS').onclick = () => {
-    const rows = [['نام','کد ملی','پایه','کلاس','تلفن ولی','امتیاز منفی','ایستگاه']];
-    for (const s of DB.students) {
-      const pts = totalPointsOf(s.id);
-      const st = currentStation(pts);
+    + '<div class="card"><h3 class="card-title">بازیابی از فایل</h3>'
+    + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">با بارگذاری فایل، کل دیتابیس جایگزین می‌شود.</p>'
+    + '<input type="file" id="importFile" accept=".json" style="display:none">'
+    + '<button class="btn" id="impBtn">⤒ بارگذاری فایل</button></div></div>';
+
+  html += '<div class="card" style="margin-top:20px"><h3 class="card-title">🗄️ نسخه‌های پشتیبان محلی ('+fa(backups.length)+')</h3>'
+    + '<p style="font-size:12.5px;color:var(--text-dim);line-height:1.8;margin:0 0 14px">در هر تغییر یک نسخه در مرورگر ذخیره می‌شود (حداکثر '+fa(MAX_BACKUPS)+').</p>';
+  if (backups.length){
+    html += '<div style="display:flex;flex-direction:column;gap:8px">';
+    backups.forEach(function(b, i){
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;gap:10px">'
+        + '<div style="min-width:0"><div style="font-size:12.5px;font-weight:600">'+(b._backedUpAt ? fmt(b._backedUpAt) : '—')+'</div>'
+        + '<div style="font-size:11px;color:var(--text-dim);margin-top:3px">'+fa((b.students||[]).length)+' دانش‌آموز · '+fa((b.violations||[]).length)+' تخلف</div></div>'
+        + '<button class="btn btn-sm" data-restore="'+i+'">بازیابی</button></div>';
+    });
+    html += '</div>';
+  } else html += '<div style="color:var(--text-mute);font-size:13px">هنوز نسخه‌ای نیست</div>';
+  html += '</div>';
+
+  html += '<div class="card" style="margin-top:20px;border-color:rgba(255,58,94,.35)">'
+    + '<h3 class="card-title" style="color:var(--red)">منطقه خطر</h3>'
+    + '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;margin:0 0 16px">کل سوابق آرشیو می‌شود (حذف نمی‌شود).</p>'
+    + '<button class="btn btn-danger" id="resetAll">↺ آرشیو کل سوابق</button></div>';
+
+  document.getElementById('view').innerHTML = html;
+
+  $$('[data-restore]').forEach(function(btn){
+    btn.onclick = function(){
+      var i = Number(btn.dataset.restore);
+      var b = backups[i];
+      if (!b) return;
+      if (!confirm('دیتابیس فعلی با این نسخه جایگزین شود؟')) return;
+      DB = normalizeDB(JSON.parse(JSON.stringify(b)));
+      delete DB._backedUpAt;
+      DB.meta.lastModified = new Date().toISOString();
+      saveDB().then(function(){ toast('بازیابی انجام شد','success'); render(); });
+    };
+  });
+
+  document.getElementById('expJson').onclick = function(){ download('discipline-backup-'+Date.now()+'.json', JSON.stringify(DB, null, 2), 'application/json'); };
+  document.getElementById('expCsvS').onclick = function(){
+    var rows = [['نام','کد ملی','پایه','کلاس','تلفن ولی','امتیاز','ایستگاه']];
+    DB.students.forEach(function(s){
+      var pts = totalPointsOf(s.id);
+      var st = currentStation(pts);
       rows.push([fullName(s), s.nationalId, s.grade, s.className, s.parentPhone, pts, st?st.name:'—']);
-    }
-    download('students.csv', '\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\n'), 'text/csv');
+    });
+    download('students.csv', '\uFEFF'+rows.map(function(r){ return r.map(csvCell).join(','); }).join('\n'), 'text/csv');
   };
-  $('#expCsvV').onclick = () => {
-    const rows = [['تاریخ','دانش‌آموز','کد ملی','نوع تخلف','ضریب','امتیاز','یادداشت']];
-    for (const v of [...DB.violations].sort((a,b)=>new Date(b.occurredAt)-new Date(a.occurredAt))) {
-      const s = DB.students.find(x=>x.id===v.studentId);
-      const t = DB.violationTypes.find(x=>x.id===v.typeId);
+  document.getElementById('expCsvV').onclick = function(){
+    var rows = [['تاریخ','دانش‌آموز','کد ملی','نوع','ضریب','امتیاز','یادداشت']];
+    DB.violations.slice().sort(function(a,b){ return new Date(b.occurredAt) - new Date(a.occurredAt); }).forEach(function(v){
+      var s = DB.students.filter(function(x){ return x.id === v.studentId; })[0];
+      var t = DB.violationTypes.filter(function(x){ return x.id === v.typeId; })[0];
       rows.push([new Date(v.occurredAt).toLocaleString('fa-IR'), s?fullName(s):'—', s?s.nationalId:'', t?t.label:'', v.multiplier, v.pointsApplied, v.note||'']);
-    }
-    download('violations.csv', '\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\n'), 'text/csv');
+    });
+    download('violations.csv', '\uFEFF'+rows.map(function(r){ return r.map(csvCell).join(','); }).join('\n'), 'text/csv');
   };
-  $('#impBtn').onclick = () => $('#importFile').click();
-  $('#importFile').onchange = async (e) => {
-    const f = e.target.files[0]; if (!f) return;
-    if (!confirm('کل دیتابیس با فایل انتخاب‌شده جایگزین شود؟')) return;
-    const text = await f.text();
-    try {
-      const data = JSON.parse(text);
-      if (!Array.isArray(data.students)) throw new Error('فایل نامعتبر');
-      DB = data;
-      DB.violationTypes ||= JSON.parse(JSON.stringify(DEFAULT_TYPES));
-      DB.stations ||= JSON.parse(JSON.stringify(DEFAULT_STATIONS));
-      DB.settings ||= defaultDB().settings;
-      DB.violations ||= [];
-      saveDB(); toast('بازیابی انجام شد', 'success'); render();
-    } catch(err){ toast('فایل نامعتبر: '+err.message, 'error'); }
+  document.getElementById('impBtn').onclick = function(){ document.getElementById('importFile').click(); };
+  document.getElementById('importFile').onchange = function(e){
+    var f = e.target.files[0]; if (!f) return;
+    if (!confirm('کل دیتابیس جایگزین شود؟')) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      try {
+        var data = JSON.parse(reader.result);
+        if (!Array.isArray(data.students)) throw new Error('فایل نامعتبر');
+        DB = normalizeDB(data);
+        saveDB().then(function(){ toast('بازیابی انجام شد','success'); render(); });
+      } catch(err){ toast('خطا: '+err.message, 'error'); }
+    };
+    reader.readAsText(f);
   };
-  $('#resetAll').onclick = () => {
-    if (!confirm('آیا مطمئنید؟ کل سوابق آرشیو می‌شود.')) return;
-    const now = new Date().toISOString();
-    DB.violations.forEach(v => { v.archived = true; v.archivedAt = now; v.archiveReason = 'manual-reset'; });
-    saveDB(); toast('کل سوابق آرشیو شد', 'success'); render();
+  document.getElementById('resetAll').onclick = function(){
+    if (!confirm('مطمئنی؟')) return;
+    var now = new Date().toISOString();
+    DB.violations.forEach(function(v){ v.archived = true; v.archivedAt = now; v.archiveReason = 'manual-reset'; });
+    saveDB().then(function(){ toast('آرشیو شد','success'); render(); });
   };
 }
-function csvCell(c){
-  const s = String(c ?? '');
-  return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
-}
+function csvCell(c){ var s = String(c==null?'':c); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
 function download(name, content, type){
-  const blob = new Blob([content], {type});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], {type:type}));
+  a.download = name; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
 }
 
 /* ============================================================
    Student form
    ============================================================ */
 function openStudentForm(student){
-  const isEdit = !!student;
-  const body = `
-    <div class="field-row">
-      <div class="field"><label>نام *</label><input id="fFirstName" value="${esc(student?.firstName||'')}"></div>
-      <div class="field"><label>نام خانوادگی *</label><input id="fLastName" value="${esc(student?.lastName||'')}"></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>کد ملی</label><input id="fNationalId" value="${esc(student?.nationalId||'')}"></div>
-      <div class="field"><label>تلفن دانش‌آموز</label><input id="fStudentPhone" value="${esc(student?.studentPhone||'')}"></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>پایه</label><input id="fGrade" value="${esc(student?.grade||'')}" placeholder="مثلاً دهم"></div>
-      <div class="field"><label>کلاس</label><input id="fClassName" value="${esc(student?.className||'')}" placeholder="مثلاً ۱۰۲"></div>
-    </div>
-    <div class="field"><label>تلفن ولی</label><input id="fParentPhone" value="${esc(student?.parentPhone||'')}"></div>
-    <div class="field"><label>آدرس</label><input id="fAddress" value="${esc(student?.address||'')}"></div>
-    <div class="field"><label>یادداشت</label><textarea id="fNotes">${esc(student?.notes||'')}</textarea></div>
-  `;
-  const footer = `
-    <button class="btn" data-cancel>انصراف</button>
-    <button class="btn btn-primary" data-save>${isEdit?'ذخیره تغییرات':'ثبت دانش‌آموز'}</button>
-  `;
-  const { root, close } = openModal({ title: isEdit?'ویرایش دانش‌آموز':'دانش‌آموز جدید', body, footer });
+  var isEdit = !!student;
+  var body = '<div class="field-row">'
+    + '<div class="field"><label>نام *</label><input id="fFirstName" value="'+esc(student?student.firstName:'')+'"></div>'
+    + '<div class="field"><label>نام خانوادگی *</label><input id="fLastName" value="'+esc(student?student.lastName:'')+'"></div>'
+    + '</div>'
+    + '<div class="field-row">'
+    + '<div class="field"><label>کد ملی</label><input id="fNationalId" value="'+esc(student?student.nationalId:'')+'"></div>'
+    + '<div class="field"><label>تلفن دانش‌آموز</label><input id="fStudentPhone" value="'+esc(student?student.studentPhone:'')+'"></div>'
+    + '</div>'
+    + '<div class="field-row">'
+    + '<div class="field"><label>پایه</label><input id="fGrade" value="'+esc(student?student.grade:'')+'"></div>'
+    + '<div class="field"><label>کلاس</label><input id="fClassName" value="'+esc(student?student.className:'')+'"></div>'
+    + '</div>'
+    + '<div class="field"><label>تلفن ولی</label><input id="fParentPhone" value="'+esc(student?student.parentPhone:'')+'"></div>'
+    + '<div class="field"><label>آدرس</label><input id="fAddress" value="'+esc(student?student.address:'')+'"></div>'
+    + '<div class="field"><label>یادداشت</label><textarea id="fNotes">'+esc(student?student.notes:'')+'</textarea></div>';
 
-  root.querySelector('[data-cancel]').onclick = close;
-  root.querySelector('[data-save]').onclick = () => {
-    const payload = {
-      firstName: $('#fFirstName').value.trim(),
-      lastName:  $('#fLastName').value.trim(),
-      nationalId:$('#fNationalId').value.trim(),
-      grade:     $('#fGrade').value.trim(),
-      className: $('#fClassName').value.trim(),
-      parentPhone:$('#fParentPhone').value.trim(),
-      studentPhone:$('#fStudentPhone').value.trim(),
-      address:   $('#fAddress').value.trim(),
-      notes:     $('#fNotes').value.trim(),
+  var footer = '<button class="btn" data-cancel>انصراف</button><button class="btn btn-primary" data-save>'+(isEdit?'ذخیره':'ثبت')+'</button>';
+  var m = openModal({ title: isEdit?'ویرایش':'دانش‌آموز جدید', body: body, footer: footer });
+
+  m.root.querySelector('[data-cancel]').onclick = m.close;
+  m.root.querySelector('[data-save]').onclick = function(){
+    var p = {
+      firstName: document.getElementById('fFirstName').value.trim(),
+      lastName: document.getElementById('fLastName').value.trim(),
+      nationalId: document.getElementById('fNationalId').value.trim(),
+      grade: document.getElementById('fGrade').value.trim(),
+      className: document.getElementById('fClassName').value.trim(),
+      parentPhone: document.getElementById('fParentPhone').value.trim(),
+      studentPhone: document.getElementById('fStudentPhone').value.trim(),
+      address: document.getElementById('fAddress').value.trim(),
+      notes: document.getElementById('fNotes').value.trim()
     };
-    if (!payload.firstName && !payload.lastName) { toast('نام الزامی است','error'); return; }
-    if (isEdit) {
-      Object.assign(student, payload);
-    } else {
-      const s = { id: uid('stu'), ...payload, createdAt: new Date().toISOString() };
-      DB.students.push(s);
-    }
-    saveDB(); close(); toast(isEdit?'ویرایش شد':'دانش‌آموز ثبت شد','success');
-    if (!isEdit) { if (getRoute().route === 'students') render(); else navigate('students'); }
-    else render();
+    if (!p.firstName && !p.lastName){ toast('نام الزامی است','error'); return; }
+    if (isEdit) Object.assign(student, p);
+    else DB.students.push(Object.assign({ id: uid('stu'), createdAt: new Date().toISOString() }, p));
+    saveDB().then(function(){
+      m.close();
+      toast(isEdit?'ویرایش شد':'ثبت شد','success');
+      if (!isEdit && getRoute().route !== 'students') navigate('students'); else render();
+    });
   };
 }
 
 /* ============================================================
-   Wiring
+   Wiring + Init
    ============================================================ */
-document.addEventListener('click', (e) => {
-  const nav = e.target.closest('.nav a');
-  if (nav) { navigate(nav.dataset.route); }
+document.addEventListener('click', function(e){
+  var nav = e.target.closest ? e.target.closest('.nav a') : null;
+  if (nav) navigate(nav.dataset.route);
 });
-$('#addStudentBtn').onclick = () => openStudentForm(null);
-$('#menuBtn').onclick = () => $('#sidebar').classList.toggle('open');
+
+document.getElementById('addStudentBtn').onclick = function(){ openStudentForm(null); };
+document.getElementById('menuBtn').onclick = function(){ document.getElementById('sidebar').classList.toggle('open'); };
 window.addEventListener('hashchange', render);
 
-// Global search
-const gs = $('#globalSearch');
-const gsResults = $('#searchResults');
-gs.addEventListener('input', () => {
-  const q = gs.value.trim().toLowerCase();
-  if (!q) { gsResults.classList.add('hidden'); return; }
-  const items = DB.students.filter(s => (fullName(s)+' '+s.nationalId).toLowerCase().includes(q)).slice(0, 8);
-  if (!items.length) {
-    gsResults.innerHTML = `<div class="search-item" style="cursor:default;color:var(--text-mute)">نتیجه‌ای یافت نشد</div>`;
-  } else {
-    gsResults.innerHTML = items.map(s => `
-      <div class="search-item" data-sid="${s.id}">
-        <div>
-          <div style="font-weight:600">${esc(fullName(s))}</div>
-          <div style="font-size:11px;color:var(--text-mute);margin-top:2px">${esc(s.grade||'')}${s.className?' / '+esc(s.className):''} ${s.nationalId?'· '+esc(s.nationalId):''}</div>
-        </div>
-        <div class="pill ${scorePillClass(totalPointsOf(s.id))}">−${fa(totalPointsOf(s.id))}</div>
-      </div>
-    `).join('');
-    gsResults.querySelectorAll('[data-sid]').forEach(el => el.onclick = () => {
-      navigate('student', el.dataset.sid);
-      gsResults.classList.add('hidden'); gs.value = '';
-    });
-  }
+var gs = document.getElementById('globalSearch');
+var gsResults = document.getElementById('searchResults');
+gs.addEventListener('input', function(){
+  var q = gs.value.trim().toLowerCase();
+  if (!q){ gsResults.classList.add('hidden'); return; }
+  var items = DB.students.filter(function(s){ return (fullName(s)+' '+s.nationalId).toLowerCase().indexOf(q) >= 0; }).slice(0, 8);
+  gsResults.innerHTML = items.length ? items.map(function(s){
+    return '<div class="search-item" data-sid="'+s.id+'"><div><div style="font-weight:600">'+esc(fullName(s))+'</div>'
+      + '<div style="font-size:11px;color:var(--text-mute);margin-top:2px">'+esc(s.grade||'')+(s.nationalId?' · '+esc(s.nationalId):'')+'</div></div>'
+      + '<div class="pill '+scorePillClass(totalPointsOf(s.id))+'">−'+fa(totalPointsOf(s.id))+'</div></div>';
+  }).join('') : '<div class="search-item" style="cursor:default;color:var(--text-mute)">نتیجه‌ای یافت نشد</div>';
+  $$('[data-sid]', gsResults).forEach(function(el){
+    el.onclick = function(){ navigate('student', el.dataset.sid); gsResults.classList.add('hidden'); gs.value = ''; };
+  });
   gsResults.classList.remove('hidden');
 });
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-wrap')) gsResults.classList.add('hidden');
+document.addEventListener('click', function(e){
+  if (!e.target.closest || !e.target.closest('.search-wrap')) gsResults.classList.add('hidden');
 });
 
-// Expose to inline handlers
 window.navigate = navigate;
 window.undoViolation = undoViolation;
 
-// Init
-(function init(){
-  applyAutoReset();
-  if (!location.hash) location.hash = '#/dashboard';
-  render();
+/* init */
+(function(){
+  tryRestoreFileHandle()
+    .then(loadDB)
+    .then(function(){
+      if (!DB) DB = defaultDB();
+      if (!location.hash) location.hash = '#/dashboard';
+      document.getElementById('boot').style.display = 'none';
+      render();
+      startPolling();
+      window.addEventListener('online', function(){
+        if (activeMode() === 'cloud' && DB.meta.pendingSync){
+          pushToCloud().then(function(ok){
+            if (ok){
+              DB.meta.pendingSync = false;
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e){}
+              toast('اینترنت برگشت — همگام شد','success');
+              updateStorageBadge();
+            }
+          });
+        }
+      });
+    })
+    .catch(function(e){
+      document.getElementById('boot').innerHTML = '<div style="text-align:center;padding:30px">'
+        + '<h2 style="color:#ff3a5e">خطا در راه‌اندازی</h2>'
+        + '<p style="color:#8d97b0;margin:20px 0">'+esc(e.message||e)+'</p>'
+        + '<button onclick="localStorage.clear();location.reload()" style="padding:12px 24px;background:#00e5ff;color:#000;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:700">پاک کردن و شروع مجدد</button>'
+        + '</div>';
+    });
 })();
 </script>
 </body>
